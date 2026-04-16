@@ -1,0 +1,252 @@
+/* ============================================================
+   tokens.css — Universal Design Token System
+   ============================================================
+   Single source of truth for every visual decision.
+   Import this file first, then build anything on top.
+   ============================================================ */
+
+:root {
+
+  /* ==========================================================
+     1. COLOR PRIMITIVES
+     ========================================================== */
+
+  /* Neutrals (warm-tinted) */
+  --gray-50:  #FAFAF9;
+  --gray-100: #F5F3F1;
+  --gray-200: #EBE5E2;
+  --gray-300: #D6D0CD;
+  --gray-400: #B5AFAC;
+  --gray-500: #9B9B9B;
+  --gray-600: #706D6C;
+  --gray-700: #524F4E;
+  --gray-800: #343132;
+  --gray-900: #1C1A1B;
+
+  /* Brand / Accent */
+  --purple-500: #7263FF;   --purple-100: #EEEAFD;   --purple-700: #5A4DD4;
+  --blue-500:   #00B4FF;   --blue-100:   #E4F4FD;   --blue-700:   #0090CC;
+  --green-500:  #00C461;   --green-100:  #E8F7EC;   --green-700:  #00994D;
+  --yellow-500: #FFB905;   --yellow-100: #FFF8EB;   --yellow-700: #CC9400;
+  --red-500:    #FF564A;   --red-100:    #FDF3F4;   --red-700:    #D63A30;
+
+  /* ==========================================================
+     2. SEMANTIC COLORS
+     ========================================================== */
+
+  /* Surfaces */
+  --color-page-bg:        var(--gray-200);
+  --color-surface:        var(--gray-100);
+  --color-surface-raised: var(--gray-50);
+  --color-surface-sunken: var(--gray-300);
+  --color-overlay:        rgba(28, 26, 27, 0.45);
+
+  /* Text */
+  --color-text:        var(--gray-800);
+  --color-text-muted:  var(--gray-500);
+  --color-text-subtle: var(--gray-400);
+  --color-text-invert: var(--gray-50);
+
+  /* Borders */
+  --color-border:       var(--gray-300);
+  --color-border-light: var(--gray-200);
+  --color-border-focus: var(--purple-500);
+
+  /* Interactive — Primary (CTA) */
+  --cta-bg:       var(--purple-100);
+  --cta-fg:       var(--purple-500);
+  --cta-hover-bg: var(--purple-500);
+  --cta-hover-fg: var(--gray-50);
+
+  /* Interactive — Secondary */
+  --secondary-bg:       var(--gray-100);
+  --secondary-fg:       var(--gray-800);
+  --secondary-hover-bg: var(--gray-300);
+  --secondary-hover-fg: var(--gray-800);
+
+  /* Interactive — Destructive */
+  --destructive-bg:       var(--gray-100);
+  --destructive-fg:       var(--gray-800);
+  --destructive-hover-bg: var(--red-500);
+  --destructive-hover-fg: var(--gray-50);
+
+  /* Interactive — Ghost */
+  --ghost-bg:       transparent;
+  --ghost-fg:       var(--gray-600);
+  --ghost-hover-bg: var(--gray-200);
+  --ghost-hover-fg: var(--gray-800);
+
+  /* Status */
+  --color-success:      var(--green-500);
+  --color-success-soft: var(--green-100);
+  --color-warning:      var(--yellow-500);
+  --color-warning-soft: var(--yellow-100);
+  --color-error:        var(--red-500);
+  --color-error-soft:   var(--red-100);
+  --color-info:         var(--blue-500);
+  --color-info-soft:    var(--blue-100);
+
+  /* ==========================================================
+     3. TYPOGRAPHY
+     ========================================================== */
+
+  --font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+  /* Scale (modular — ~1.25 ratio) */
+  --text-xs:      0.75rem;   /* 12px */
+  --text-sm:      0.875rem;  /* 14px */
+  --text-base:    1rem;      /* 16px */
+  --text-lg:      1.125rem;  /* 18px */
+  --text-xl:      1.25rem;   /* 20px */
+  --text-2xl:     1.5rem;    /* 24px */
+  --text-3xl:     2rem;      /* 32px */
+  --text-4xl:     2.5rem;    /* 40px */
+  --text-5xl:     3.5rem;    /* 56px */
+
+  /* Line-heights */
+  --leading-tight:  1.2;
+  --leading-normal: 1.5;
+  --leading-loose:  1.75;
+
+  /* Weights */
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semi:   600;
+  --weight-bold:   700;
+  --weight-heavy:  800;
+
+  /* Letter-spacing */
+  --tracking-tight:  -0.02em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-caps:    0.08em;
+
+  /* ==========================================================
+     4. SPACING
+     ========================================================== */
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ==========================================================
+     5. GEOMETRY
+     ========================================================== */
+
+  /* Border-radius */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-full: 999px;
+
+  /* Shadows */
+  --shadow-xs:  0 1px 2px rgba(52,49,50,0.05);
+  --shadow-sm:  0 2px 6px rgba(52,49,50,0.07);
+  --shadow-md:  0 4px 12px rgba(52,49,50,0.08);
+  --shadow-lg:  0 10px 30px rgba(52,49,50,0.10);
+  --shadow-xl:  0 20px 40px rgba(52,49,50,0.12);
+
+  /* Borders */
+  --border-thin:  1px solid var(--color-border);
+  --border-light: 1px solid var(--color-border-light);
+
+  /* ==========================================================
+     6. MOTION
+     ========================================================== */
+
+  --duration-fast:   120ms;
+  --duration-normal: 200ms;
+  --duration-slow:   350ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --transition-colors: color var(--duration-normal) var(--ease-default),
+                        background-color var(--duration-normal) var(--ease-default),
+                        border-color var(--duration-normal) var(--ease-default);
+  --transition-all:    all var(--duration-normal) var(--ease-default);
+
+  /* ==========================================================
+     7. Z-INDEX SCALE
+     ========================================================== */
+
+  --z-base:    0;
+  --z-raised:  10;
+  --z-dropdown:100;
+  --z-sticky:  200;
+  --z-overlay: 300;
+  --z-modal:   400;
+  --z-toast:   500;
+
+  /* ==========================================================
+     8. FOCUS & ACCESSIBILITY
+     ========================================================== */
+
+  --focus-ring: 0 0 0 3px var(--purple-100), 0 0 0 5px var(--purple-500);
+
+  /* ==========================================================
+     9. SIZES & CONTAINERS
+     ========================================================== */
+
+  --size-container-sm: 640px;
+  --size-container-md: 768px;
+  --size-container-lg: 1024px;
+  --size-container-xl: 1280px;
+
+  --size-input-h:  44px;
+  --size-btn-h:    44px;
+  --size-icon:     20px;
+  --size-avatar:   40px;
+}
+
+
+/* ============================================================
+   GLOBAL RESET
+   ============================================================ */
+
+html {
+  font-size: 16px;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+  background-color: var(--color-page-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font: inherit; }
+input, textarea, select { font: inherit; }
+
+/* Focus-visible for keyboard navigation only */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}

@@ -1,0 +1,3453 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Agentic Blueprint — Design Token Studio. Build, preview, and export your design system.">
+    <title>Agentic Blueprint — Design Token Studio</title>
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ================================================================
+       APP LAYOUT
+       ================================================================ */
+        .app__main {
+            margin-right: 350px;
+            min-height: 100vh;
+            transition: margin-right var(--duration-slow) var(--ease-default);
+        }
+
+        /* ================================================================
+       SIDEBAR
+       ================================================================ */
+        .app__sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 350px;
+            z-index: var(--z-sticky);
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-left: var(--border-light);
+            background: var(--color-surface-raised-alpha, var(--color-surface-raised));
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            transition: transform var(--duration-slow) var(--ease-default);
+        }
+
+        .app__sidebar.is-collapsed {
+            transform: translateX(100%);
+        }
+
+        /* Scrollbar styling */
+        .app__sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .app__sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .app__sidebar::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 2px;
+        }
+
+        /* --- Sidebar Header --- */
+        .sb-header {
+            padding: var(--space-5) var(--space-5) var(--space-4);
+            border-bottom: var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: transparent;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .sb-brand {
+            font-size: var(--text-base);
+            font-weight: var(--weight-bold);
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .sb-brand__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            background: var(--purple-500);
+            display: inline-block;
+        }
+
+        .sb-subtitle {
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+            letter-spacing: var(--tracking-wide);
+        }
+
+        /* --- Sidebar Actions Bar --- */
+        .sb-actions {
+            display: flex;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-5);
+            border-bottom: var(--border-light);
+        }
+
+        .sb-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-1);
+            height: 34px;
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            border: var(--border-thin);
+            border-radius: var(--radius-sm);
+            background: var(--color-surface);
+            color: var(--color-text);
+            cursor: pointer;
+            transition: var(--transition-colors);
+        }
+
+        .sb-action-btn:hover {
+            background: var(--gray-200);
+        }
+
+        .sb-action-btn--accent {
+            background: var(--cta-bg);
+            color: var(--cta-fg);
+            border-color: transparent;
+        }
+
+        .sb-action-btn--accent:hover {
+            background: var(--cta-hover-bg);
+            color: var(--cta-hover-fg);
+        }
+
+        /* --- Sidebar Sections --- */
+        .sb-section {
+            padding: var(--space-4) var(--space-5);
+            border-bottom: var(--border-light);
+        }
+
+        .sb-section__title {
+            font-size: 10px;
+            font-weight: var(--weight-semi);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-caps);
+            color: var(--color-text-subtle);
+            margin-bottom: var(--space-4);
+        }
+
+        /* --- Color Control --- */
+        .sb-color {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-3);
+        }
+
+        .sb-color:last-child {
+            margin-bottom: 0;
+        }
+
+        .sb-color__label {
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+            flex: 1;
+        }
+
+        .sb-color__controls {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .sb-color__picker {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            border: var(--border-thin);
+            padding: 0;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            background: none;
+            overflow: hidden;
+        }
+
+        .sb-color__picker::-webkit-color-swatch-wrapper {
+            padding: 2px;
+        }
+
+        .sb-color__picker::-webkit-color-swatch {
+            border: none;
+            border-radius: 4px;
+        }
+
+        .sb-color__picker::-moz-color-swatch {
+            border: none;
+            border-radius: 4px;
+        }
+
+        .sb-color__hex {
+            width: 76px;
+            height: 32px;
+            padding: 0 var(--space-2);
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            border: var(--border-thin);
+            border-radius: var(--radius-sm);
+            background: var(--color-surface);
+            color: var(--color-text);
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .sb-color__hex:focus {
+            outline: none;
+            border-color: var(--color-border-focus);
+            box-shadow: var(--focus-ring);
+        }
+
+        /* --- Range Slider --- */
+        .sb-slider {
+            margin-bottom: var(--space-4);
+        }
+
+        .sb-slider:last-child {
+            margin-bottom: 0;
+        }
+
+        .sb-slider__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+
+        .sb-slider__label {
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+        }
+
+        .sb-slider__value {
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            color: var(--color-text-muted);
+            background: var(--color-surface);
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+        }
+
+        .sb-range {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: var(--radius-full);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .sb-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--purple-500);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--color-surface-raised);
+            transition: transform var(--duration-fast) var(--ease-spring);
+        }
+
+        .sb-range::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .sb-range::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--purple-500);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--color-surface-raised);
+        }
+
+        /* --- Select --- */
+        .sb-select-wrap {
+            margin-bottom: var(--space-4);
+        }
+
+        .sb-select-wrap:last-child {
+            margin-bottom: 0;
+        }
+
+        .sb-select__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+
+        .sb-select__label {
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+        }
+
+        .sb-select {
+            width: 100%;
+            height: 34px;
+            padding: 0 var(--space-3);
+            padding-right: var(--space-8);
+            font-size: var(--text-sm);
+            border: var(--border-thin);
+            border-radius: var(--radius-sm);
+            background: var(--color-surface);
+            color: var(--color-text);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%239B9B9B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            cursor: pointer;
+        }
+
+        .sb-select:focus {
+            outline: none;
+            border-color: var(--color-border-focus);
+            box-shadow: var(--focus-ring);
+        }
+
+        /* --- Font Input --- */
+        .sb-font {
+            margin-bottom: var(--space-4);
+        }
+
+        .sb-font:last-child {
+            margin-bottom: 0;
+        }
+
+        .sb-font__label {
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+            margin-bottom: var(--space-2);
+            display: block;
+        }
+
+        .sb-font__input {
+            width: 100%;
+            height: 34px;
+            padding: 0 var(--space-3);
+            font-size: var(--text-sm);
+            border: var(--border-thin);
+            border-radius: var(--radius-sm);
+            background: var(--color-surface);
+            color: var(--color-text);
+        }
+
+        .sb-font__input:focus {
+            outline: none;
+            border-color: var(--color-border-focus);
+            box-shadow: var(--focus-ring);
+        }
+
+        /* --- Revert Button --- */
+        .sb-revert {
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: none;
+            color: var(--color-text-subtle);
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--duration-fast), color var(--duration-fast), background-color var(--duration-fast);
+            flex-shrink: 0;
+        }
+
+        .sb-revert.is-changed {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sb-revert:hover {
+            color: var(--purple-500);
+            background: var(--purple-100);
+        }
+
+        /* --- Export Bar --- */
+        .sb-export {
+            padding: var(--space-5);
+        }
+
+        .sb-export-btn {
+            width: 100%;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            font-weight: var(--weight-semi);
+            border: none;
+            border-radius: var(--radius-md);
+            background: var(--gray-800);
+            color: var(--gray-50);
+            cursor: pointer;
+            transition: var(--transition-colors);
+        }
+
+        .sb-export-btn:hover {
+            background: var(--gray-900);
+        }
+
+        /* --- Sidebar Toggle (visible on narrow) --- */
+        .sidebar-toggle {
+            position: fixed;
+            bottom: var(--space-5);
+            right: var(--space-5);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: var(--purple-500);
+            color: #fff;
+            font-size: var(--text-lg);
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: var(--z-overlay);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-all);
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--purple-700);
+            transform: scale(1.08);
+        }
+
+        @media (max-width: 1200px) {
+            .app__main {
+                margin-right: 0;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+            }
+        }
+
+        /* ================================================================
+       KITCHEN SINK STYLES (demo-only)
+       ================================================================ */
+        .ks-page {
+            max-width: var(--size-container-xl);
+            margin: 0 auto;
+            padding: var(--space-10) var(--space-6);
+        }
+
+        /* --- Hero --- */
+        .ks-hero {
+            text-align: center;
+            padding: var(--space-16) var(--space-6) var(--space-12);
+            margin-bottom: var(--space-16);
+        }
+
+        .ks-hero__badge {
+            display: inline-block;
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            letter-spacing: var(--tracking-caps);
+            text-transform: uppercase;
+            color: var(--cta-fg);
+            background: var(--cta-bg);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            margin-bottom: var(--space-6);
+        }
+
+        .ks-hero h1 {
+            font-size: var(--text-5xl);
+            font-weight: var(--weight-heavy);
+            letter-spacing: var(--tracking-tight);
+            line-height: var(--leading-tight);
+            margin-bottom: var(--space-4);
+        }
+
+        .ks-hero h1 span {
+            background: linear-gradient(135deg, var(--purple-500), var(--blue-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ks-hero p {
+            font-size: var(--text-lg);
+            color: var(--color-text-muted);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* --- Section --- */
+        .ks-section {
+            margin-bottom: var(--space-16);
+        }
+
+        .ks-section__title {
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            letter-spacing: var(--tracking-caps);
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-3);
+            border-bottom: var(--border-thin);
+        }
+
+        /* --- Grids --- */
+        .ks-grid {
+            display: grid;
+            gap: var(--space-6);
+        }
+
+        .ks-grid--2 {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .ks-grid--3 {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .ks-grid--4 {
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        }
+
+        .ks-grid--5 {
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        }
+
+        .ks-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3);
+            align-items: center;
+        }
+
+        /* ===== SWATCHES ===== */
+        .swatch-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .swatch-group__label {
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-caps);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-1);
+        }
+
+        .swatch {
+            height: 52px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: flex-end;
+            padding: var(--space-2) var(--space-3);
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            font-weight: var(--weight-medium);
+            transition: var(--transition-all);
+            border: var(--border-light);
+        }
+
+        .swatch:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .swatch--lg {
+            height: 80px;
+            border-radius: var(--radius-lg);
+        }
+
+        .swatch--g50 {
+            background: var(--gray-50);
+            color: var(--gray-600);
+        }
+
+        .swatch--g100 {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .swatch--g200 {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .swatch--g300 {
+            background: var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .swatch--g400 {
+            background: var(--gray-400);
+            color: var(--gray-800);
+        }
+
+        .swatch--g500 {
+            background: var(--gray-500);
+            color: var(--gray-900);
+        }
+
+        .swatch--g600 {
+            background: var(--gray-600);
+            color: var(--gray-100);
+        }
+
+        .swatch--g700 {
+            background: var(--gray-700);
+            color: var(--gray-100);
+        }
+
+        .swatch--g800 {
+            background: var(--gray-800);
+            color: var(--gray-100);
+        }
+
+        .swatch--g900 {
+            background: var(--gray-900);
+            color: var(--gray-200);
+        }
+
+        .swatch--purple-100 {
+            background: var(--purple-100);
+            color: var(--purple-700);
+        }
+
+        .swatch--purple-500 {
+            background: var(--purple-500);
+            color: #fff;
+        }
+
+        .swatch--purple-700 {
+            background: var(--purple-700);
+            color: #fff;
+        }
+
+        .swatch--blue-100 {
+            background: var(--blue-100);
+            color: var(--blue-700);
+        }
+
+        .swatch--blue-500 {
+            background: var(--blue-500);
+            color: #fff;
+        }
+
+        .swatch--blue-700 {
+            background: var(--blue-700);
+            color: #fff;
+        }
+
+        .swatch--green-100 {
+            background: var(--green-100);
+            color: var(--green-700);
+        }
+
+        .swatch--green-500 {
+            background: var(--green-500);
+            color: #fff;
+        }
+
+        .swatch--green-700 {
+            background: var(--green-700);
+            color: #fff;
+        }
+
+        .swatch--yellow-100 {
+            background: var(--yellow-100);
+            color: var(--yellow-700);
+        }
+
+        .swatch--yellow-500 {
+            background: var(--yellow-500);
+            color: var(--gray-900);
+        }
+
+        .swatch--yellow-700 {
+            background: var(--yellow-700);
+            color: #fff;
+        }
+
+        .swatch--red-100 {
+            background: var(--red-100);
+            color: var(--red-700);
+        }
+
+        .swatch--red-500 {
+            background: var(--red-500);
+            color: #fff;
+        }
+
+        .swatch--red-700 {
+            background: var(--red-700);
+            color: #fff;
+        }
+
+        /* ===== TYPOGRAPHY DEMO ===== */
+        .type-specimen {
+            margin-bottom: var(--space-4);
+        }
+
+        .type-specimen__meta {
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            color: var(--color-text-subtle);
+            margin-bottom: var(--space-1);
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            height: var(--size-btn-h);
+            padding: 0 var(--space-6);
+            font-size: var(--text-sm);
+            font-weight: var(--weight-semi);
+            border: none;
+            border-radius: var(--radius-md);
+            transition: var(--transition-colors);
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .btn:focus-visible {
+            box-shadow: var(--focus-ring);
+        }
+
+        .btn--primary {
+            background: var(--cta-bg);
+            color: var(--cta-fg);
+        }
+
+        .btn--primary:hover {
+            background: var(--cta-hover-bg);
+            color: var(--cta-hover-fg);
+        }
+
+        .btn--secondary {
+            background: var(--secondary-bg);
+            color: var(--secondary-fg);
+            border: var(--border-thin);
+        }
+
+        .btn--secondary:hover {
+            background: var(--secondary-hover-bg);
+            color: var(--secondary-hover-fg);
+        }
+
+        .btn--destructive {
+            background: var(--destructive-bg);
+            color: var(--destructive-fg);
+            border: var(--border-thin);
+        }
+
+        .btn--destructive:hover {
+            background: var(--destructive-hover-bg);
+            color: var(--destructive-hover-fg);
+        }
+
+        .btn--ghost {
+            background: var(--ghost-bg);
+            color: var(--ghost-fg);
+        }
+
+        .btn--ghost:hover {
+            background: var(--ghost-hover-bg);
+            color: var(--ghost-hover-fg);
+        }
+
+        .btn--solid {
+            background: var(--purple-500);
+            color: #fff;
+        }
+
+        .btn--solid:hover {
+            background: var(--purple-700);
+        }
+
+        .btn--sm {
+            height: 32px;
+            padding: 0 var(--space-3);
+            font-size: var(--text-xs);
+            border-radius: var(--radius-sm);
+        }
+
+        .btn--lg {
+            height: 52px;
+            padding: 0 var(--space-8);
+            font-size: var(--text-base);
+            border-radius: var(--radius-lg);
+        }
+
+        .btn--icon {
+            width: var(--size-btn-h);
+            padding: 0;
+        }
+
+        .btn--pill {
+            border-radius: var(--radius-full);
+        }
+
+        .btn[disabled] {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: var(--card-border-width, 1px) solid var(--color-border);
+            padding: var(--space-6);
+            transition: var(--transition-all);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card--raised {
+            background: var(--color-surface-raised);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card--flat {
+            background: var(--color-surface-sunken);
+            border: none;
+            box-shadow: none;
+        }
+
+        .card--flat:hover {
+            box-shadow: none;
+            transform: none;
+        }
+
+        .card__eyebrow {
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-caps);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+        }
+
+        .card__title {
+            font-size: var(--text-xl);
+            font-weight: var(--weight-bold);
+            margin-bottom: var(--space-2);
+        }
+
+        .card__body {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            line-height: var(--leading-normal);
+            margin-bottom: var(--space-4);
+        }
+
+        .card__footer {
+            display: flex;
+            gap: var(--space-3);
+            align-items: center;
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+        }
+
+        .badge--purple {
+            background: var(--purple-100);
+            color: var(--purple-500);
+        }
+
+        .badge--blue {
+            background: var(--blue-100);
+            color: var(--blue-500);
+        }
+
+        .badge--green {
+            background: var(--green-100);
+            color: var(--green-500);
+        }
+
+        .badge--yellow {
+            background: var(--yellow-100);
+            color: var(--yellow-500);
+        }
+
+        .badge--red {
+            background: var(--red-100);
+            color: var(--red-500);
+        }
+
+        .badge--neutral {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .badge__dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* ===== INPUTS ===== */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .input-group__label {
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+        }
+
+        .input-group__hint {
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+
+        .input {
+            height: var(--size-input-h);
+            padding: 0 var(--space-4);
+            background: var(--color-surface-raised);
+            border: var(--border-thin);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            color: var(--color-text);
+            transition: var(--transition-colors);
+        }
+
+        .input::placeholder {
+            color: var(--color-text-subtle);
+        }
+
+        .input:hover {
+            border-color: var(--gray-400);
+        }
+
+        .input:focus {
+            outline: none;
+            box-shadow: var(--focus-ring);
+            border-color: var(--color-border-focus);
+        }
+
+        .input--error {
+            border-color: var(--color-error);
+        }
+
+        .input--error:focus {
+            box-shadow: 0 0 0 3px var(--red-100), 0 0 0 5px var(--red-500);
+        }
+
+        .textarea {
+            min-height: 100px;
+            padding: var(--space-3) var(--space-4);
+            resize: vertical;
+            background: var(--color-surface-raised);
+            border: var(--border-thin);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            color: var(--color-text);
+            transition: var(--transition-colors);
+        }
+
+        .textarea::placeholder {
+            color: var(--color-text-subtle);
+        }
+
+        .textarea:focus {
+            outline: none;
+            box-shadow: var(--focus-ring);
+            border-color: var(--color-border-focus);
+        }
+
+        .select {
+            height: var(--size-input-h);
+            padding: 0 var(--space-4);
+            padding-right: var(--space-10);
+            background: var(--color-surface-raised);
+            border: var(--border-thin);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            color: var(--color-text);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%239B9B9B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right var(--space-4) center;
+            transition: var(--transition-colors);
+        }
+
+        .select:focus {
+            outline: none;
+            box-shadow: var(--focus-ring);
+            border-color: var(--color-border-focus);
+        }
+
+        .check-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            cursor: pointer;
+        }
+
+        .check-group input[type="checkbox"],
+        .check-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--purple-500);
+            cursor: pointer;
+        }
+
+        .check-group__label {
+            font-size: var(--text-sm);
+        }
+
+        /* ===== TOGGLE ===== */
+        .toggle {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+            cursor: pointer;
+        }
+
+        .toggle input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle__track {
+            width: 44px;
+            height: 24px;
+            background: var(--gray-300);
+            border-radius: var(--radius-full);
+            transition: var(--transition-colors);
+            position: relative;
+        }
+
+        .toggle__track::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform var(--duration-normal) var(--ease-spring);
+            box-shadow: var(--shadow-xs);
+        }
+
+        .toggle input:checked+.toggle__track {
+            background: var(--purple-500);
+        }
+
+        .toggle input:checked+.toggle__track::after {
+            transform: translateX(20px);
+        }
+
+        .toggle input:focus-visible+.toggle__track {
+            box-shadow: var(--focus-ring);
+        }
+
+        .toggle__label {
+            font-size: var(--text-sm);
+        }
+
+        /* ===== AVATARS ===== */
+        .avatar {
+            width: var(--size-avatar);
+            height: var(--size-avatar);
+            border-radius: 50%;
+            background: var(--purple-100);
+            color: var(--purple-500);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-sm);
+            font-weight: var(--weight-bold);
+            flex-shrink: 0;
+        }
+
+        .avatar--sm {
+            width: 28px;
+            height: 28px;
+            font-size: var(--text-xs);
+        }
+
+        .avatar--lg {
+            width: 56px;
+            height: 56px;
+            font-size: var(--text-lg);
+        }
+
+        .avatar--blue {
+            background: var(--blue-100);
+            color: var(--blue-500);
+        }
+
+        .avatar--green {
+            background: var(--green-100);
+            color: var(--green-500);
+        }
+
+        .avatar--red {
+            background: var(--red-100);
+            color: var(--red-500);
+        }
+
+        .avatar--yellow {
+            background: var(--yellow-100);
+            color: var(--yellow-500);
+        }
+
+        .avatar-stack {
+            display: flex;
+        }
+
+        .avatar-stack .avatar {
+            margin-left: -8px;
+            border: 2px solid var(--color-page-bg);
+        }
+
+        .avatar-stack .avatar:first-child {
+            margin-left: 0;
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            display: flex;
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            line-height: var(--leading-normal);
+            align-items: flex-start;
+        }
+
+        .alert__icon {
+            font-size: var(--text-lg);
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .alert__content {
+            flex: 1;
+        }
+
+        .alert__title {
+            font-weight: var(--weight-semi);
+            margin-bottom: var(--space-1);
+        }
+
+        .alert--info {
+            background: var(--color-info-soft);
+            color: var(--blue-500);
+        }
+
+        .alert--success {
+            background: var(--color-success-soft);
+            color: var(--green-500);
+        }
+
+        .alert--warning {
+            background: var(--color-warning-soft);
+            color: var(--yellow-500);
+        }
+
+        .alert--error {
+            background: var(--color-error-soft);
+            color: var(--red-500);
+        }
+
+        /* ===== PROGRESS ===== */
+        .progress {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress__bar {
+            height: 100%;
+            border-radius: var(--radius-full);
+            transition: width var(--duration-slow) var(--ease-default);
+        }
+
+        .progress__bar--purple {
+            background: var(--purple-500);
+        }
+
+        .progress__bar--blue {
+            background: var(--blue-500);
+        }
+
+        .progress__bar--green {
+            background: var(--green-500);
+        }
+
+        .progress__bar--red {
+            background: var(--red-500);
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            gap: var(--space-1);
+            border-bottom: var(--border-thin);
+        }
+
+        .tab {
+            padding: var(--space-3) var(--space-5);
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+            color: var(--color-text-muted);
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: var(--transition-colors);
+            cursor: pointer;
+        }
+
+        .tab:hover {
+            color: var(--color-text);
+        }
+
+        .tab--active {
+            color: var(--purple-500);
+            border-bottom-color: var(--purple-500);
+            font-weight: var(--weight-semi);
+        }
+
+        /* ===== TABLE ===== */
+        .table-wrap {
+            overflow-x: auto;
+            border: var(--border-light);
+            border-radius: var(--radius-lg);
+            background: var(--color-surface-raised);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--text-sm);
+        }
+
+        thead {
+            background: var(--color-surface);
+        }
+
+        th {
+            text-align: left;
+            padding: var(--space-3) var(--space-4);
+            font-weight: var(--weight-semi);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-caps);
+            color: var(--color-text-muted);
+            border-bottom: var(--border-thin);
+        }
+
+        td {
+            padding: var(--space-3) var(--space-4);
+            border-bottom: var(--border-light);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: var(--gray-50);
+        }
+
+        /* ===== TAGS ===== */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            padding: var(--space-1) var(--space-3);
+            font-size: var(--text-xs);
+            font-weight: var(--weight-medium);
+            border-radius: var(--radius-sm);
+            border: var(--border-thin);
+            background: var(--color-surface-raised);
+            color: var(--color-text);
+            transition: var(--transition-colors);
+        }
+
+        .tag:hover {
+            background: var(--gray-200);
+        }
+
+        .tag__remove {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition-colors);
+        }
+
+        .tag__remove:hover {
+            background: var(--gray-300);
+            color: var(--color-text);
+        }
+
+        /* ===== DIVIDER ===== */
+        .divider {
+            border: none;
+            border-top: var(--border-thin);
+            margin: var(--space-6) 0;
+        }
+
+        /* ===== TOOLTIPS ===== */
+        .tooltip-wrap {
+            position: relative;
+            display: inline-flex;
+        }
+
+        .tooltip-wrap .tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            background: var(--gray-900);
+            color: var(--gray-100);
+            font-size: var(--text-xs);
+            font-weight: var(--weight-medium);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default);
+        }
+
+        .tooltip-wrap:hover .tooltip {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* ===== SKELETONS ===== */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.8s ease-in-out infinite;
+            border-radius: var(--radius-sm);
+        }
+
+        .skeleton--text {
+            height: 14px;
+            width: 80%;
+            margin-bottom: var(--space-2);
+        }
+
+        .skeleton--title {
+            height: 22px;
+            width: 55%;
+            margin-bottom: var(--space-3);
+        }
+
+        .skeleton--circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .skeleton--rect {
+            height: 120px;
+            width: 100%;
+            border-radius: var(--radius-md);
+        }
+
+        /* ===== SHADOW DEMO ===== */
+        .shadow-box {
+            background: var(--color-surface-raised);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            text-align: center;
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            color: var(--color-text-muted);
+        }
+
+        /* ===== RADIUS DEMO ===== */
+        .radius-box {
+            width: 80px;
+            height: 80px;
+            background: var(--purple-100);
+            border: 2px solid var(--purple-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            color: var(--purple-500);
+            font-weight: var(--weight-medium);
+        }
+
+        /* ===== SPACING DEMO ===== */
+        .space-bar {
+            height: 20px;
+            background: var(--purple-100);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            padding-left: var(--space-2);
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            color: var(--purple-500);
+            font-weight: var(--weight-medium);
+            margin-bottom: var(--space-2);
+        }
+
+        /* ===== MODAL PREVIEW ===== */
+        .modal-preview {
+            background: var(--color-overlay);
+            border-radius: var(--radius-lg);
+            padding: var(--space-10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: var(--color-surface-raised);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            padding: var(--space-8);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .modal__title {
+            font-size: var(--text-xl);
+            font-weight: var(--weight-bold);
+            margin-bottom: var(--space-2);
+        }
+
+        .modal__body {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-6);
+            line-height: var(--leading-normal);
+        }
+
+        .modal__actions {
+            display: flex;
+            gap: var(--space-3);
+            justify-content: flex-end;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-3) var(--space-5);
+            background: var(--color-surface-raised);
+            border-radius: var(--radius-lg);
+            border: var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar__brand {
+            font-weight: var(--weight-bold);
+            font-size: var(--text-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .navbar__brand-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--purple-500);
+        }
+
+        .navbar__links {
+            display: flex;
+            gap: var(--space-1);
+            list-style: none;
+        }
+
+        .navbar__link {
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+            color: var(--color-text-muted);
+            border-radius: var(--radius-sm);
+            transition: var(--transition-colors);
+        }
+
+        .navbar__link:hover {
+            color: var(--color-text);
+            background: var(--gray-100);
+        }
+
+        .navbar__link--active {
+            color: var(--purple-500);
+            background: var(--purple-100);
+        }
+
+        /* ===== STAT CARDS ===== */
+        .stat-card {
+            padding: var(--space-5);
+        }
+
+        .stat-card__value {
+            font-size: var(--text-3xl);
+            font-weight: var(--weight-heavy);
+            letter-spacing: var(--tracking-tight);
+            margin-bottom: var(--space-1);
+        }
+
+        .stat-card__label {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .stat-card__trend {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            margin-top: var(--space-2);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+        }
+
+        .stat-card__trend--up {
+            background: var(--green-100);
+            color: var(--green-500);
+        }
+
+        .stat-card__trend--down {
+            background: var(--red-100);
+            color: var(--red-500);
+        }
+
+        /* ===== LIST ITEMS ===== */
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            transition: var(--transition-colors);
+        }
+
+        .list-item:hover {
+            background: var(--gray-100);
+        }
+
+        .list-item__text {
+            flex: 1;
+        }
+
+        .list-item__title {
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+        }
+
+        .list-item__subtitle {
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .breadcrumb a {
+            transition: var(--transition-colors);
+        }
+
+        .breadcrumb a:hover {
+            color: var(--color-text);
+        }
+
+        .breadcrumb__current {
+            color: var(--color-text);
+            font-weight: var(--weight-medium);
+        }
+
+        .breadcrumb__sep {
+            font-size: var(--text-xs);
+        }
+
+        /* ===== CODE ===== */
+        .code-block {
+            background: var(--gray-900);
+            color: var(--gray-200);
+            padding: var(--space-5);
+            border-radius: var(--radius-lg);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            line-height: var(--leading-loose);
+            overflow-x: auto;
+        }
+
+        .code-block .kw {
+            color: var(--purple-500);
+        }
+
+        .code-block .str {
+            color: var(--green-500);
+        }
+
+        .code-block .cm {
+            color: var(--gray-500);
+        }
+
+        .code-block .fn {
+            color: var(--blue-500);
+        }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.875em;
+            background: var(--gray-200);
+            color: var(--purple-700);
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* ===== PAGINATION ===== */
+        .pagination {
+            display: flex;
+            gap: var(--space-1);
+            align-items: center;
+        }
+
+        .page-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--color-text-muted);
+            transition: var(--transition-colors);
+            cursor: pointer;
+        }
+
+        .page-btn:hover {
+            background: var(--gray-200);
+            color: var(--color-text);
+        }
+
+        .page-btn--active {
+            background: var(--purple-500);
+            color: #fff;
+        }
+
+        .page-btn--active:hover {
+            background: var(--purple-700);
+            color: #fff;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .ks-hero h1 {
+                font-size: var(--text-3xl);
+            }
+
+            .ks-hero p {
+                font-size: var(--text-base);
+            }
+
+            .ks-grid--2,
+            .ks-grid--3,
+            .ks-grid--4,
+            .ks-grid--5 {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar__links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+       MAIN CONTENT — KITCHEN SINK DEMO
+       ============================================================ -->
+    <main class="app__main">
+        <div class="ks-page">
+
+            <!-- HERO -->
+            <header class="ks-hero" id="hero">
+                <div class="ks-hero__badge">Agentic Blueprint v1.0</div>
+                <h1>Design Token <span>Tech Demo</span></h1>
+                <p>Every token, every component, every state — live preview. Adjust the sidebar to build your custom
+                    design system.</p>
+            </header>
+
+            <!-- COLORS — NEUTRALS -->
+            <section class="ks-section" id="section-colors">
+                <h2 class="ks-section__title">Color Palette — Neutrals</h2>
+                <div class="ks-grid ks-grid--5" style="margin-bottom: var(--space-8);">
+                    <div class="swatch swatch--lg swatch--g50">50</div>
+                    <div class="swatch swatch--lg swatch--g100">100</div>
+                    <div class="swatch swatch--lg swatch--g200">200</div>
+                    <div class="swatch swatch--lg swatch--g300">300</div>
+                    <div class="swatch swatch--lg swatch--g400">400</div>
+                    <div class="swatch swatch--lg swatch--g500">500</div>
+                    <div class="swatch swatch--lg swatch--g600">600</div>
+                    <div class="swatch swatch--lg swatch--g700">700</div>
+                    <div class="swatch swatch--lg swatch--g800">800</div>
+                    <div class="swatch swatch--lg swatch--g900">900</div>
+                </div>
+                <h2 class="ks-section__title">Color Palette — Accents</h2>
+                <div class="ks-grid ks-grid--5">
+                    <div class="swatch-group">
+                        <div class="swatch-group__label">Accent</div>
+                        <div class="swatch swatch--purple-100">100</div>
+                        <div class="swatch swatch--purple-500">500</div>
+                        <div class="swatch swatch--purple-700">700</div>
+                    </div>
+                    <div class="swatch-group">
+                        <div class="swatch-group__label">Blue</div>
+                        <div class="swatch swatch--blue-100">100</div>
+                        <div class="swatch swatch--blue-500">500</div>
+                        <div class="swatch swatch--blue-700">700</div>
+                    </div>
+                    <div class="swatch-group">
+                        <div class="swatch-group__label">Green</div>
+                        <div class="swatch swatch--green-100">100</div>
+                        <div class="swatch swatch--green-500">500</div>
+                        <div class="swatch swatch--green-700">700</div>
+                    </div>
+                    <div class="swatch-group">
+                        <div class="swatch-group__label">Yellow</div>
+                        <div class="swatch swatch--yellow-100">100</div>
+                        <div class="swatch swatch--yellow-500">500</div>
+                        <div class="swatch swatch--yellow-700">700</div>
+                    </div>
+                    <div class="swatch-group">
+                        <div class="swatch-group__label">Red</div>
+                        <div class="swatch swatch--red-100">100</div>
+                        <div class="swatch swatch--red-500">500</div>
+                        <div class="swatch swatch--red-700">700</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TYPOGRAPHY -->
+            <section class="ks-section" id="section-typography">
+                <h2 class="ks-section__title">Typography Scale</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-5xl · 56px · Heavy</div>
+                        <div
+                            style="font-size:var(--text-5xl);font-weight:var(--weight-heavy);letter-spacing:var(--tracking-tight);line-height:var(--leading-tight);">
+                            Display Heading</div>
+                    </div>
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-4xl · 40px · Bold</div>
+                        <div
+                            style="font-size:var(--text-4xl);font-weight:var(--weight-bold);letter-spacing:var(--tracking-tight);line-height:var(--leading-tight);">
+                            Page Title</div>
+                    </div>
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-3xl · 32px · Bold</div>
+                        <div
+                            style="font-size:var(--text-3xl);font-weight:var(--weight-bold);line-height:var(--leading-tight);">
+                            Section Heading</div>
+                    </div>
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-2xl · 24px · Semi</div>
+                        <div style="font-size:var(--text-2xl);font-weight:var(--weight-semi);">Card Title</div>
+                    </div>
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-xl · 20px · Semi</div>
+                        <div style="font-size:var(--text-xl);font-weight:var(--weight-semi);">Subsection Heading</div>
+                    </div>
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-lg · 18px · Medium</div>
+                        <div style="font-size:var(--text-lg);font-weight:var(--weight-medium);">Lead paragraph or
+                            subtitle</div>
+                    </div>
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-base · 16px · Normal</div>
+                        <div>Body text — the default reading size for comfortable reading across all screens.</div>
+                    </div>
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-sm · 14px</div>
+                        <div style="font-size:var(--text-sm);color:var(--color-text-muted);">Small text for labels,
+                            captions, and secondary info.</div>
+                    </div>
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--text-xs · 12px · Caps</div>
+                        <div
+                            style="font-size:var(--text-xs);font-weight:var(--weight-medium);text-transform:uppercase;letter-spacing:var(--tracking-caps);color:var(--color-text-subtle);">
+                            Overline / Eyebrow Label</div>
+                    </div>
+                    <hr class="divider">
+                    <div class="type-specimen">
+                        <div class="type-specimen__meta">--font-mono · Monospace</div>
+                        <div style="font-family:var(--font-mono);font-size:var(--text-sm);">const designSystem = {
+                            tokens: true, ready: true };</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUTTONS -->
+            <section class="ks-section" id="section-buttons">
+                <h2 class="ks-section__title">Buttons — Variants</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <div class="ks-flex" style="margin-bottom: var(--space-6);">
+                        <button class="btn btn--primary">Primary CTA</button>
+                        <button class="btn btn--solid">Solid</button>
+                        <button class="btn btn--secondary">Secondary</button>
+                        <button class="btn btn--ghost">Ghost</button>
+                        <button class="btn btn--destructive">Delete</button>
+                    </div>
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Sizes</h3>
+                    <div class="ks-flex" style="margin-bottom: var(--space-6);">
+                        <button class="btn btn--primary btn--sm">Small</button>
+                        <button class="btn btn--primary">Default</button>
+                        <button class="btn btn--primary btn--lg">Large</button>
+                    </div>
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Modifiers</h3>
+                    <div class="ks-flex">
+                        <button class="btn btn--primary btn--pill">Pill Shape</button>
+                        <button class="btn btn--secondary btn--icon" aria-label="Settings">⚙</button>
+                        <button class="btn btn--primary" disabled>Disabled</button>
+                        <button class="btn btn--destructive btn--pill">🗑 Remove</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARDS -->
+            <section class="ks-section" id="section-cards">
+                <h2 class="ks-section__title">Cards</h2>
+                <div class="ks-grid ks-grid--3">
+                    <div class="card">
+                        <div class="card__eyebrow">Feature</div>
+                        <div class="card__title">Default Card</div>
+                        <div class="card__body">Standard surface with subtle border. Elevates on hover.</div>
+                        <div class="card__footer">
+                            <button class="btn btn--primary btn--sm">Action</button>
+                            <button class="btn btn--ghost btn--sm">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="card card--raised">
+                        <div class="card__eyebrow">Premium</div>
+                        <div class="card__title">Raised Card</div>
+                        <div class="card__body">White surface with shadow. Feels elevated from the page.</div>
+                        <div class="card__footer">
+                            <button class="btn btn--solid btn--sm">Upgrade</button>
+                            <button class="btn btn--ghost btn--sm">Details</button>
+                        </div>
+                    </div>
+                    <div class="card card--flat">
+                        <div class="card__eyebrow">Info</div>
+                        <div class="card__title">Flat / Sunken</div>
+                        <div class="card__body">Sunken surface for grouped content zones. No hover lift.</div>
+                        <div class="card__footer"><span class="badge badge--neutral">Passive</span></div>
+                    </div>
+                    <div class="card card--raised stat-card">
+                        <div class="card__eyebrow">Revenue</div>
+                        <div class="stat-card__value">$48,295</div>
+                        <div class="stat-card__label">This month</div>
+                        <div class="stat-card__trend stat-card__trend--up">↑ 12.5%</div>
+                    </div>
+                    <div class="card card--raised stat-card">
+                        <div class="card__eyebrow">Users</div>
+                        <div class="stat-card__value">3,842</div>
+                        <div class="stat-card__label">Active now</div>
+                        <div class="stat-card__trend stat-card__trend--up">↑ 8.2%</div>
+                    </div>
+                    <div class="card card--raised stat-card">
+                        <div class="card__eyebrow">Churn</div>
+                        <div class="stat-card__value">2.4%</div>
+                        <div class="stat-card__label">Last 30 days</div>
+                        <div class="stat-card__trend stat-card__trend--down">↓ 0.3%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BADGES & TAGS -->
+            <section class="ks-section" id="section-badges">
+                <h2 class="ks-section__title">Badges & Tags</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Badges</h3>
+                    <div class="ks-flex" style="margin-bottom: var(--space-6);">
+                        <span class="badge badge--purple"><span class="badge__dot"></span>Accent</span>
+                        <span class="badge badge--blue"><span class="badge__dot"></span>Info</span>
+                        <span class="badge badge--green"><span class="badge__dot"></span>Active</span>
+                        <span class="badge badge--yellow"><span class="badge__dot"></span>Pending</span>
+                        <span class="badge badge--red"><span class="badge__dot"></span>Critical</span>
+                        <span class="badge badge--neutral">Neutral</span>
+                    </div>
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Tags</h3>
+                    <div class="ks-flex">
+                        <span class="tag">Design <button class="tag__remove" aria-label="Remove">×</button></span>
+                        <span class="tag">Tokens <button class="tag__remove" aria-label="Remove">×</button></span>
+                        <span class="tag">CSS <button class="tag__remove" aria-label="Remove">×</button></span>
+                        <span class="tag">System</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FORM INPUTS -->
+            <section class="ks-section" id="section-inputs">
+                <h2 class="ks-section__title">Form Inputs</h2>
+                <div class="ks-grid ks-grid--2">
+                    <div class="card card--raised" style="padding: var(--space-8);">
+                        <div class="input-group" style="margin-bottom:var(--space-5);">
+                            <label class="input-group__label" for="input-name">Full Name</label>
+                            <input class="input" type="text" id="input-name" placeholder="Jan Novák">
+                        </div>
+                        <div class="input-group" style="margin-bottom:var(--space-5);">
+                            <label class="input-group__label" for="input-email">Email</label>
+                            <input class="input" type="email" id="input-email" placeholder="jan@example.com">
+                            <span class="input-group__hint">We'll never share your email.</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom:var(--space-5);">
+                            <label class="input-group__label" for="input-error">Error State</label>
+                            <input class="input input--error" type="text" id="input-error" value="bad-input">
+                            <span class="input-group__hint" style="color:var(--color-error);">This field is
+                                required.</span>
+                        </div>
+                        <div class="input-group" style="margin-bottom:var(--space-5);">
+                            <label class="input-group__label" for="input-disabled">Disabled</label>
+                            <input class="input" type="text" id="input-disabled" disabled value="Cannot edit"
+                                style="opacity:0.5;">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-group__label" for="input-select">Select</label>
+                            <select class="select" id="input-select">
+                                <option>Choose an option…</option>
+                                <option>Design</option>
+                                <option>Engineering</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card card--raised" style="padding: var(--space-8);">
+                        <div class="input-group" style="margin-bottom:var(--space-5);">
+                            <label class="input-group__label" for="input-textarea">Message</label>
+                            <textarea class="textarea" id="input-textarea" placeholder="Write something…"></textarea>
+                        </div>
+                        <h3
+                            style="font-size:var(--text-sm);font-weight:var(--weight-semi);margin-bottom:var(--space-3);">
+                            Checkboxes</h3>
+                        <div
+                            style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-5);">
+                            <label class="check-group"><input type="checkbox" checked><span
+                                    class="check-group__label">Accept terms</span></label>
+                            <label class="check-group"><input type="checkbox"><span class="check-group__label">Subscribe
+                                    to newsletter</span></label>
+                        </div>
+                        <h3
+                            style="font-size:var(--text-sm);font-weight:var(--weight-semi);margin-bottom:var(--space-3);">
+                            Radio</h3>
+                        <div
+                            style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-5);">
+                            <label class="check-group"><input type="radio" name="plan" checked><span
+                                    class="check-group__label">Free Plan</span></label>
+                            <label class="check-group"><input type="radio" name="plan"><span
+                                    class="check-group__label">Pro — $19/mo</span></label>
+                        </div>
+                        <h3
+                            style="font-size:var(--text-sm);font-weight:var(--weight-semi);margin-bottom:var(--space-3);">
+                            Toggles</h3>
+                        <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+                            <label class="toggle"><input type="checkbox" checked><span
+                                    class="toggle__track"></span><span class="toggle__label">Dark mode</span></label>
+                            <label class="toggle"><input type="checkbox"><span class="toggle__track"></span><span
+                                    class="toggle__label">Notifications</span></label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ALERTS -->
+            <section class="ks-section" id="section-alerts">
+                <h2 class="ks-section__title">Alerts</h2>
+                <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+                    <div class="alert alert--info"><span class="alert__icon">ℹ</span>
+                        <div class="alert__content">
+                            <div class="alert__title">Information</div>A new version is available.
+                        </div>
+                    </div>
+                    <div class="alert alert--success"><span class="alert__icon">✓</span>
+                        <div class="alert__content">
+                            <div class="alert__title">Success</div>Changes saved successfully.
+                        </div>
+                    </div>
+                    <div class="alert alert--warning"><span class="alert__icon">⚠</span>
+                        <div class="alert__content">
+                            <div class="alert__title">Warning</div>Trial expires in 3 days.
+                        </div>
+                    </div>
+                    <div class="alert alert--error"><span class="alert__icon">✕</span>
+                        <div class="alert__content">
+                            <div class="alert__title">Error</div>Payment processing failed.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROGRESS -->
+            <section class="ks-section" id="section-progress">
+                <h2 class="ks-section__title">Progress Bars</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <div style="margin-bottom:var(--space-5);">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);"><span
+                                style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Storage</span><span
+                                style="font-size:var(--text-sm);color:var(--color-text-muted);">72%</span></div>
+                        <div class="progress">
+                            <div class="progress__bar progress__bar--purple" style="width:72%"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:var(--space-5);">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);"><span
+                                style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Upload</span><span
+                                style="font-size:var(--text-sm);color:var(--color-text-muted);">45%</span></div>
+                        <div class="progress">
+                            <div class="progress__bar progress__bar--blue" style="width:45%"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:var(--space-5);">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);"><span
+                                style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Complete</span><span
+                                style="font-size:var(--text-sm);color:var(--color-text-muted);">100%</span></div>
+                        <div class="progress">
+                            <div class="progress__bar progress__bar--green" style="width:100%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);"><span
+                                style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Critical</span><span
+                                style="font-size:var(--text-sm);color:var(--color-text-muted);">91%</span></div>
+                        <div class="progress">
+                            <div class="progress__bar progress__bar--red" style="width:91%"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AVATARS -->
+            <section class="ks-section" id="section-avatars">
+                <h2 class="ks-section__title">Avatars</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Sizes & Colors</h3>
+                    <div class="ks-flex" style="margin-bottom:var(--space-6);">
+                        <span class="avatar avatar--sm">S</span><span class="avatar">JN</span><span
+                            class="avatar avatar--lg">A</span>
+                        <span class="avatar avatar--blue">PK</span><span class="avatar avatar--green">MZ</span>
+                        <span class="avatar avatar--red">ER</span><span class="avatar avatar--yellow">TL</span>
+                    </div>
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Stack</h3>
+                    <div class="avatar-stack">
+                        <span class="avatar">A</span><span class="avatar avatar--blue">B</span><span
+                            class="avatar avatar--green">C</span><span class="avatar avatar--red">D</span><span
+                            class="avatar avatar--yellow">E</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TABS -->
+            <section class="ks-section" id="section-tabs">
+                <h2 class="ks-section__title">Tabs</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <nav class="tabs" style="margin-bottom:var(--space-5);">
+                        <button class="tab tab--active">Overview</button>
+                        <button class="tab">Analytics</button>
+                        <button class="tab">Settings</button>
+                        <button class="tab">Billing</button>
+                    </nav>
+                    <p style="font-size:var(--text-sm);color:var(--color-text-muted);">Click tabs to see active state
+                        with accent underline.</p>
+                </div>
+            </section>
+
+            <!-- TABLE -->
+            <section class="ks-section" id="section-table">
+                <h2 class="ks-section__title">Table</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Revenue</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                        class="avatar avatar--sm">AN</span>Anna Nováková</td>
+                                <td style="color:var(--color-text-muted);">Designer</td>
+                                <td><span class="badge badge--green"><span class="badge__dot"></span>Active</span></td>
+                                <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$12,400</td>
+                                <td><button class="btn btn--ghost btn--sm">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                        class="avatar avatar--sm avatar--blue">PK</span>Pavel Kovář</td>
+                                <td style="color:var(--color-text-muted);">Engineer</td>
+                                <td><span class="badge badge--green"><span class="badge__dot"></span>Active</span></td>
+                                <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$18,750</td>
+                                <td><button class="btn btn--ghost btn--sm">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                        class="avatar avatar--sm avatar--yellow">MH</span>Marie Horská</td>
+                                <td style="color:var(--color-text-muted);">PM</td>
+                                <td><span class="badge badge--yellow"><span class="badge__dot"></span>Pending</span>
+                                </td>
+                                <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$9,200</td>
+                                <td><button class="btn btn--ghost btn--sm">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                        class="avatar avatar--sm avatar--red">TK</span>Tomáš Kříž</td>
+                                <td style="color:var(--color-text-muted);">Marketing</td>
+                                <td><span class="badge badge--red"><span class="badge__dot"></span>Inactive</span></td>
+                                <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$3,100</td>
+                                <td><button class="btn btn--destructive btn--sm">Remove</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- NAVIGATION -->
+            <section class="ks-section" id="section-navigation">
+                <h2 class="ks-section__title">Navigation</h2>
+                <div style="margin-bottom:var(--space-6);">
+                    <nav class="navbar">
+                        <div class="navbar__brand"><span class="navbar__brand-dot"></span>Acme App</div>
+                        <ul class="navbar__links">
+                            <li><a class="navbar__link navbar__link--active" href="#">Dashboard</a></li>
+                            <li><a class="navbar__link" href="#">Projects</a></li>
+                            <li><a class="navbar__link" href="#">Team</a></li>
+                        </ul>
+                        <div class="ks-flex"><span class="avatar avatar--sm">JN</span></div>
+                    </nav>
+                </div>
+                <div class="card card--raised" style="padding:var(--space-5);margin-bottom:var(--space-6);">
+                    <nav class="breadcrumb"><a href="#">Home</a><span class="breadcrumb__sep">›</span><a
+                            href="#">Projects</a><span class="breadcrumb__sep">›</span><span
+                            class="breadcrumb__current">Tokens</span></nav>
+                </div>
+                <div class="card card--raised" style="padding:var(--space-5);display:flex;justify-content:center;">
+                    <nav class="pagination">
+                        <button class="page-btn">‹</button><button class="page-btn">1</button>
+                        <button class="page-btn page-btn--active">2</button><button class="page-btn">3</button>
+                        <button class="page-btn">4</button><button class="page-btn">›</button>
+                    </nav>
+                </div>
+            </section>
+
+            <!-- LIST ITEMS -->
+            <section class="ks-section" id="section-lists">
+                <h2 class="ks-section__title">List Items</h2>
+                <div class="card card--raised" style="padding: var(--space-4);">
+                    <div class="list-item"><span class="avatar avatar--blue">DS</span>
+                        <div class="list-item__text">
+                            <div class="list-item__title">Design System v2.0</div>
+                            <div class="list-item__subtitle">Updated 2 hours ago</div>
+                        </div><span class="badge badge--green"><span class="badge__dot"></span>Live</span><button
+                            class="btn btn--ghost btn--sm btn--icon" aria-label="More">⋯</button>
+                    </div>
+                    <div class="list-item"><span class="avatar avatar--green">AP</span>
+                        <div class="list-item__text">
+                            <div class="list-item__title">API Integration</div>
+                            <div class="list-item__subtitle">Updated yesterday</div>
+                        </div><span class="badge badge--yellow"><span class="badge__dot"></span>In
+                            Progress</span><button class="btn btn--ghost btn--sm btn--icon" aria-label="More">⋯</button>
+                    </div>
+                    <div class="list-item"><span class="avatar avatar--red">BF</span>
+                        <div class="list-item__text">
+                            <div class="list-item__title">Bug Fixes Sprint 14</div>
+                            <div class="list-item__subtitle">Updated 3 days ago</div>
+                        </div><span class="badge badge--red"><span class="badge__dot"></span>Blocked</span><button
+                            class="btn btn--ghost btn--sm btn--icon" aria-label="More">⋯</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODAL -->
+            <section class="ks-section" id="section-modal">
+                <h2 class="ks-section__title">Modal / Dialog</h2>
+                <div class="modal-preview">
+                    <div class="modal">
+                        <div class="modal__title">Confirm Deletion</div>
+                        <div class="modal__body">Are you sure you want to delete this project? This action cannot be
+                            undone.</div>
+                        <div class="modal__actions">
+                            <button class="btn btn--secondary">Cancel</button>
+                            <button class="btn btn--destructive">Delete Project</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CODE -->
+            <section class="ks-section" id="section-code">
+                <h2 class="ks-section__title">Code</h2>
+                <p style="font-size:var(--text-sm);margin-bottom:var(--space-4);">Use <code>--color-surface</code> for
+                    cards and <code>--radius-lg</code> for corners.</p>
+                <div class="code-block">
+                    <span class="cm">/* Import tokens */</span>
+                    <span class="kw">@import</span> <span class="str">'tokens.css'</span>;
+
+                    .<span class="fn">card</span> {
+                    <span class="kw">background</span>: <span class="fn">var</span>(<span
+                        class="str">--color-surface</span>);
+                    <span class="kw">border-radius</span>: <span class="fn">var</span>(<span
+                        class="str">--radius-lg</span>);
+                    <span class="kw">box-shadow</span>: <span class="fn">var</span>(<span
+                        class="str">--shadow-md</span>);
+                    }
+                </div>
+            </section>
+
+            <!-- TOOLTIPS -->
+            <section class="ks-section" id="section-tooltips">
+                <h2 class="ks-section__title">Tooltips</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <div class="ks-flex" style="gap:var(--space-8);">
+                        <div class="tooltip-wrap"><button class="btn btn--secondary">Hover me</button><span
+                                class="tooltip">This is a tooltip</span></div>
+                        <div class="tooltip-wrap"><button class="btn btn--primary btn--icon"
+                                aria-label="Info">?</button><span class="tooltip">Help & docs</span></div>
+                        <div class="tooltip-wrap"><span class="badge badge--purple" style="cursor:help;">Pro
+                                Feature</span><span class="tooltip">Requires Pro plan</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SKELETONS -->
+            <section class="ks-section" id="section-skeleton">
+                <h2 class="ks-section__title">Skeleton Loaders</h2>
+                <div class="ks-grid ks-grid--3">
+                    <div class="card card--raised" style="padding:var(--space-6);">
+                        <div class="skeleton skeleton--title"></div>
+                        <div class="skeleton skeleton--text"></div>
+                        <div class="skeleton skeleton--text" style="width:60%;"></div>
+                    </div>
+                    <div class="card card--raised" style="padding:var(--space-6);">
+                        <div class="skeleton skeleton--rect" style="margin-bottom:var(--space-4);"></div>
+                        <div class="skeleton skeleton--title"></div>
+                        <div class="skeleton skeleton--text"></div>
+                    </div>
+                    <div class="card card--raised" style="padding:var(--space-6);">
+                        <div style="display:flex;gap:var(--space-4);align-items:center;margin-bottom:var(--space-4);">
+                            <div class="skeleton skeleton--circle"></div>
+                            <div style="flex:1;">
+                                <div class="skeleton skeleton--text" style="width:50%;margin-bottom:var(--space-2);">
+                                </div>
+                                <div class="skeleton skeleton--text" style="width:30%;margin-bottom:0;"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton skeleton--text"></div>
+                        <div class="skeleton skeleton--text" style="width:70%;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SHADOWS -->
+            <section class="ks-section" id="section-shadows">
+                <h2 class="ks-section__title">Elevation / Shadows</h2>
+                <div class="ks-grid ks-grid--5">
+                    <div class="shadow-box" style="box-shadow:var(--shadow-xs);">xs</div>
+                    <div class="shadow-box" style="box-shadow:var(--shadow-sm);">sm</div>
+                    <div class="shadow-box" style="box-shadow:var(--shadow-md);">md</div>
+                    <div class="shadow-box" style="box-shadow:var(--shadow-lg);">lg</div>
+                    <div class="shadow-box" style="box-shadow:var(--shadow-xl);">xl</div>
+                </div>
+            </section>
+
+            <!-- RADIUS -->
+            <section class="ks-section" id="section-radius">
+                <h2 class="ks-section__title">Border Radius</h2>
+                <div class="ks-flex" style="gap:var(--space-6);">
+                    <div class="radius-box" style="border-radius:var(--radius-sm);">sm</div>
+                    <div class="radius-box" style="border-radius:var(--radius-md);">md</div>
+                    <div class="radius-box" style="border-radius:var(--radius-lg);">lg</div>
+                    <div class="radius-box" style="border-radius:var(--radius-xl);">xl</div>
+                    <div class="radius-box" style="border-radius:var(--radius-full);">full</div>
+                </div>
+            </section>
+
+            <!-- SPACING -->
+            <section class="ks-section" id="section-spacing">
+                <h2 class="ks-section__title">Spacing Scale</h2>
+                <div class="card card--raised" style="padding:var(--space-6);">
+                    <div class="space-bar" style="width:calc(var(--space-1)*5);">1 · 4px</div>
+                    <div class="space-bar" style="width:calc(var(--space-2)*5);">2 · 8px</div>
+                    <div class="space-bar" style="width:calc(var(--space-3)*5);">3 · 12px</div>
+                    <div class="space-bar" style="width:calc(var(--space-4)*5);">4 · 16px</div>
+                    <div class="space-bar" style="width:calc(var(--space-6)*5);">6 · 24px</div>
+                    <div class="space-bar" style="width:calc(var(--space-8)*5);">8 · 32px</div>
+                    <div class="space-bar" style="width:calc(var(--space-10)*5);">10 · 40px</div>
+                    <div class="space-bar" style="width:calc(var(--space-12)*5);">12 · 48px</div>
+                    <div class="space-bar" style="width:calc(var(--space-16)*5);">16 · 64px</div>
+                </div>
+            </section>
+
+            <!-- COMPOSITE PATTERNS -->
+            <section class="ks-section" id="section-patterns">
+                <h2 class="ks-section__title">Composite Patterns</h2>
+                <div class="ks-grid ks-grid--2">
+                    <div class="card card--raised" style="padding: var(--space-8);">
+                        <span class="badge badge--purple" style="margin-bottom:var(--space-4);">Most Popular</span>
+                        <div
+                            style="font-size:var(--text-2xl);font-weight:var(--weight-bold);margin-bottom:var(--space-1);">
+                            Pro Plan</div>
+                        <div
+                            style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-5);">
+                            Everything you need to scale</div>
+                        <div style="display:flex;align-items:baseline;gap:var(--space-1);margin-bottom:var(--space-6);">
+                            <span
+                                style="font-size:var(--text-4xl);font-weight:var(--weight-heavy);letter-spacing:var(--tracking-tight);">$29</span>
+                            <span style="font-size:var(--text-sm);color:var(--color-text-muted);">/month</span>
+                        </div>
+                        <div
+                            style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-6);font-size:var(--text-sm);">
+                            <div style="display:flex;align-items:center;gap:var(--space-2);"><span
+                                    style="color:var(--color-success);font-weight:var(--weight-bold);">✓</span>Unlimited
+                                projects</div>
+                            <div style="display:flex;align-items:center;gap:var(--space-2);"><span
+                                    style="color:var(--color-success);font-weight:var(--weight-bold);">✓</span>Advanced
+                                analytics</div>
+                            <div style="display:flex;align-items:center;gap:var(--space-2);"><span
+                                    style="color:var(--color-success);font-weight:var(--weight-bold);">✓</span>Priority
+                                support</div>
+                        </div>
+                        <button class="btn btn--solid btn--lg" style="width:100%;">Get Started</button>
+                    </div>
+                    <div class="card card--raised" style="padding: var(--space-8);">
+                        <div style="display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-6);">
+                            <span class="avatar avatar--lg">JN</span>
+                            <div>
+                                <div style="font-size:var(--text-lg);font-weight:var(--weight-bold);">Jan Novák</div>
+                                <div style="font-size:var(--text-sm);color:var(--color-text-muted);">Senior Designer ·
+                                    Prague</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:var(--space-6);margin-bottom:var(--space-6);text-align:center;">
+                            <div style="flex:1;">
+                                <div style="font-size:var(--text-xl);font-weight:var(--weight-bold);">142</div>
+                                <div
+                                    style="font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:var(--tracking-caps);">
+                                    Projects</div>
+                            </div>
+                            <div style="flex:1;">
+                                <div style="font-size:var(--text-xl);font-weight:var(--weight-bold);">8.2k</div>
+                                <div
+                                    style="font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:var(--tracking-caps);">
+                                    Followers</div>
+                            </div>
+                            <div style="flex:1;">
+                                <div style="font-size:var(--text-xl);font-weight:var(--weight-bold);">97%</div>
+                                <div
+                                    style="font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:var(--tracking-caps);">
+                                    Rating</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:var(--space-3);">
+                            <button class="btn btn--primary" style="flex:1;">Follow</button>
+                            <button class="btn btn--secondary" style="flex:1;">Message</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer
+                style="text-align:center;padding:var(--space-10) 0 var(--space-6);border-top:var(--border-thin);margin-top:var(--space-16);">
+                <p style="font-size:var(--text-sm);color:var(--color-text-muted);">Agentic Blueprint — Design Token
+                    Studio</p>
+                <p style="font-size:var(--text-xs);color:var(--color-text-subtle);margin-top:var(--space-2);">Every
+                    element powered by <code>tokens.css</code> custom properties.</p>
+            </footer>
+
+        </div>
+    </main>
+
+
+    <!-- ============================================================
+       SIDEBAR — THEME EDITOR
+       ============================================================ -->
+    <aside class="app__sidebar" id="sidebar">
+
+        <!-- Header -->
+        <div class="sb-header">
+            <div class="sb-brand"><span class="sb-brand__dot"></span> Agentic Blueprint</div>
+            <div class="sb-subtitle">Theme Editor</div>
+        </div>
+
+        <!-- Actions -->
+        <div class="sb-actions">
+            <button class="sb-action-btn" onclick="saveTheme()" title="Save theme as JSON">💾 Save</button>
+            <button class="sb-action-btn" onclick="document.getElementById('fileInput').click()"
+                title="Load theme JSON">📂 Load</button>
+            <button class="sb-action-btn" onclick="resetToDefault()" title="Reset to defaults">↺ Reset</button>
+        </div>
+
+        <!-- BASE COLORS -->
+        <div class="sb-section">
+            <div class="sb-section__title">Base Colors</div>
+            <div class="sb-color">
+                <span class="sb-color__label">Page Background</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-pageBg" value="#EBE5E2">
+                    <input type="text" class="sb-color__hex" id="hex-pageBg" value="#EBE5E2" maxlength="7">
+                    <button class="sb-revert" id="revert-pageBg" onclick="revertKey('pageBg')" title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Accent</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-accent" value="#7263FF">
+                    <input type="text" class="sb-color__hex" id="hex-accent" value="#7263FF" maxlength="7">
+                    <button class="sb-revert" id="revert-accent" onclick="revertKey('accent')" title="Revert">↩</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SURFACES & BORDERS -->
+        <div class="sb-section">
+            <div class="sb-section__title">Surfaces & Borders</div>
+            <div class="sb-color">
+                <span class="sb-color__label">Card Surface</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-surface" value="#F5F3F1">
+                    <input type="text" class="sb-color__hex" id="hex-surface" value="#F5F3F1" maxlength="7">
+                    <button class="sb-revert" id="revert-surface" onclick="revertKey('surface')"
+                        title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Card Raised</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-surfaceRaised" value="#FAFAF9">
+                    <input type="text" class="sb-color__hex" id="hex-surfaceRaised" value="#FAFAF9" maxlength="7">
+                    <button class="sb-revert" id="revert-surfaceRaised" onclick="revertKey('surfaceRaised')"
+                        title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Text Color</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-textColor" value="#343132">
+                    <input type="text" class="sb-color__hex" id="hex-textColor" value="#343132" maxlength="7">
+                    <button class="sb-revert" id="revert-textColor" onclick="revertKey('textColor')"
+                        title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Text Muted</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-textMuted" value="#9B9B9B">
+                    <input type="text" class="sb-color__hex" id="hex-textMuted" value="#9B9B9B" maxlength="7">
+                    <button class="sb-revert" id="revert-textMuted" onclick="revertKey('textMuted')"
+                        title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Border Color</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-borderColor" value="#D6D0CD">
+                    <input type="text" class="sb-color__hex" id="hex-borderColor" value="#D6D0CD" maxlength="7">
+                    <button class="sb-revert" id="revert-borderColor" onclick="revertKey('borderColor')"
+                        title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-slider">
+                <div class="sb-slider__header">
+                    <span class="sb-slider__label">Global Border Width</span>
+                    <div style="display:flex;align-items:center;gap:var(--space-1);">
+                        <span class="sb-slider__value" id="val-borderWidth">1px</span>
+                        <button class="sb-revert" id="revert-borderWidth" onclick="revertKey('borderWidth')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+                <input type="range" class="sb-range" id="ctrl-borderWidth" min="0" max="3" value="1" step="0.5">
+            </div>
+            <div class="sb-slider">
+                <div class="sb-slider__header">
+                    <span class="sb-slider__label">Card Border Width</span>
+                    <div style="display:flex;align-items:center;gap:var(--space-1);">
+                        <span class="sb-slider__value" id="val-cardBorderWidth">1px</span>
+                        <button class="sb-revert" id="revert-cardBorderWidth" onclick="revertKey('cardBorderWidth')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+                <input type="range" class="sb-range" id="ctrl-cardBorderWidth" min="0" max="4" value="1" step="0.5">
+            </div>
+        </div>
+
+        <!-- STATUS COLORS -->
+        <div class="sb-section">
+            <div class="sb-section__title">Status Colors</div>
+            <div class="sb-color">
+                <span class="sb-color__label">Red / Error</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-red" value="#FF564A">
+                    <input type="text" class="sb-color__hex" id="hex-red" value="#FF564A" maxlength="7">
+                    <button class="sb-revert" id="revert-red" onclick="revertKey('red')" title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Green / Success</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-green" value="#00C461">
+                    <input type="text" class="sb-color__hex" id="hex-green" value="#00C461" maxlength="7">
+                    <button class="sb-revert" id="revert-green" onclick="revertKey('green')" title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Blue / Info</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-blue" value="#00B4FF">
+                    <input type="text" class="sb-color__hex" id="hex-blue" value="#00B4FF" maxlength="7">
+                    <button class="sb-revert" id="revert-blue" onclick="revertKey('blue')" title="Revert">↩</button>
+                </div>
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Yellow / Warning</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-yellow" value="#FFB905">
+                    <input type="text" class="sb-color__hex" id="hex-yellow" value="#FFB905" maxlength="7">
+                    <button class="sb-revert" id="revert-yellow" onclick="revertKey('yellow')" title="Revert">↩</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GEOMETRY -->
+        <div class="sb-section">
+            <div class="sb-section__title">Geometry</div>
+            <div class="sb-slider">
+                <div class="sb-slider__header">
+                    <span class="sb-slider__label">Corner Radius</span>
+                    <div style="display:flex;align-items:center;gap:var(--space-1);">
+                        <span class="sb-slider__value" id="val-radius">12px</span>
+                        <button class="sb-revert" id="revert-radius" onclick="revertKey('radius')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+                <input type="range" class="sb-range" id="ctrl-radius" min="0" max="40" value="12" step="1">
+            </div>
+            <div class="sb-select-wrap">
+                <div class="sb-select__header">
+                    <span class="sb-select__label">Shadow Style</span>
+                    <button class="sb-revert" id="revert-shadow" onclick="revertKey('shadow')" title="Revert">↩</button>
+                </div>
+                <select class="sb-select" id="ctrl-shadow">
+                    <option value="none">None</option>
+                    <option value="subtle">Subtle</option>
+                    <option value="soft" selected>Soft & Airy</option>
+                    <option value="dramatic">Dramatic</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- TYPOGRAPHY -->
+        <div class="sb-section">
+            <div class="sb-section__title">Typography</div>
+            <div class="sb-font">
+                <div
+                    style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-2);">
+                    <label class="sb-font__label" for="ctrl-fontSans" style="margin-bottom:0;">Font Sans</label>
+                    <button class="sb-revert" id="revert-fontSans" onclick="revertKey('fontSans')"
+                        title="Revert">↩</button>
+                </div>
+                <input type="text" class="sb-font__input" id="ctrl-fontSans" value="Inter">
+            </div>
+            <div class="sb-font">
+                <div
+                    style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-2);">
+                    <label class="sb-font__label" for="ctrl-fontMono" style="margin-bottom:0;">Font Mono</label>
+                    <button class="sb-revert" id="revert-fontMono" onclick="revertKey('fontMono')"
+                        title="Revert">↩</button>
+                </div>
+                <input type="text" class="sb-font__input" id="ctrl-fontMono" value="JetBrains Mono">
+            </div>
+            <div class="sb-slider">
+                <div class="sb-slider__header">
+                    <span class="sb-slider__label">Base Font Size</span>
+                    <div style="display:flex;align-items:center;gap:var(--space-1);">
+                        <span class="sb-slider__value" id="val-fontSize">16px</span>
+                        <button class="sb-revert" id="revert-fontSize" onclick="revertKey('fontSize')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+                <input type="range" class="sb-range" id="ctrl-fontSize" min="12" max="22" value="16" step="1">
+            </div>
+        </div>
+
+        <!-- EXPORT -->
+        <div class="sb-export">
+            <button class="sb-export-btn" onclick="exportTokensCSS()">↓ Export tokens.css</button>
+        </div>
+
+    </aside>
+
+    <!-- Sidebar toggle for narrow viewports -->
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()"
+        aria-label="Toggle theme editor">⚙</button>
+
+    <!-- Hidden file input for Load -->
+    <input type="file" id="fileInput" accept=".json" style="display:none;">
+
+
+    <!-- ============================================================
+       JAVASCRIPT — Theme Engine
+       ============================================================ -->
+    <script>
+        /* ============================================================
+           CONFIG & DEFAULTS
+           ============================================================ */
+        const DEFAULT_CONFIG = {
+            pageBg: '#EBE5E2',
+            accent: '#7263FF',
+            surface: '#F5F3F1',
+            surfaceRaised: '#FAFAF9',
+            textColor: '#343132',
+            textMuted: '#9B9B9B',
+            borderColor: '#D6D0CD',
+            borderWidth: 1,
+            cardBorderWidth: 1,
+            red: '#FF564A',
+            green: '#00C461',
+            blue: '#00B4FF',
+            yellow: '#FFB905',
+            radius: 12,
+            shadow: 'soft',
+            fontSans: 'Inter',
+            fontMono: 'JetBrains Mono',
+            fontSize: 16,
+        };
+
+        let referenceConfig = { ...DEFAULT_CONFIG };
+        let currentConfig = { ...DEFAULT_CONFIG };
+
+        const SHADOW_PRESETS = {
+            none: {
+                xs: 'none', sm: 'none', md: 'none', lg: 'none', xl: 'none',
+            },
+            subtle: {
+                xs: '0 1px 2px rgba(0,0,0,0.03)',
+                sm: '0 1px 3px rgba(0,0,0,0.04)',
+                md: '0 2px 8px rgba(0,0,0,0.05)',
+                lg: '0 4px 16px rgba(0,0,0,0.06)',
+                xl: '0 8px 24px rgba(0,0,0,0.08)',
+            },
+            soft: {
+                xs: '0 1px 2px rgba(52,49,50,0.05)',
+                sm: '0 2px 6px rgba(52,49,50,0.07)',
+                md: '0 4px 12px rgba(52,49,50,0.08)',
+                lg: '0 10px 30px rgba(52,49,50,0.10)',
+                xl: '0 20px 40px rgba(52,49,50,0.12)',
+            },
+            dramatic: {
+                xs: '0 1px 3px rgba(0,0,0,0.08)',
+                sm: '0 3px 8px rgba(0,0,0,0.12)',
+                md: '0 6px 20px rgba(0,0,0,0.15)',
+                lg: '0 15px 40px rgba(0,0,0,0.18)',
+                xl: '0 25px 60px rgba(0,0,0,0.22)',
+            },
+        };
+
+
+        /* ============================================================
+           COLOR MATH UTILITIES
+           ============================================================ */
+        function hexToRgb(hex) {
+            hex = hex.replace('#', '');
+            return {
+                r: parseInt(hex.substr(0, 2), 16),
+                g: parseInt(hex.substr(2, 2), 16),
+                b: parseInt(hex.substr(4, 2), 16),
+            };
+        }
+
+        function rgbToHex(r, g, b) {
+            return '#' + [r, g, b].map(v =>
+                Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')
+            ).join('');
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return { h: h * 360, s: s * 100, l: l * 100 };
+        }
+
+        function hslToRgb(h, s, l) {
+            h /= 360; s /= 100; l /= 100;
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
+            }
+            return {
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255),
+            };
+        }
+
+        /** Generate a 10-step neutral scale from a single background color */
+        function generateNeutralScale(bgHex) {
+            const { r, g, b } = hexToRgb(bgHex);
+            const { h, s } = rgbToHsl(r, g, b);
+
+            const steps = [
+                { step: '50', l: 97.5, sf: 0.15 },
+                { step: '100', l: 95, sf: 0.20 },
+                { step: '200', l: 90, sf: 0.25 },
+                { step: '300', l: 83, sf: 0.22 },
+                { step: '400', l: 70, sf: 0.18 },
+                { step: '500', l: 62, sf: 0.15 },
+                { step: '600', l: 44, sf: 0.12 },
+                { step: '700', l: 33, sf: 0.10 },
+                { step: '800', l: 20, sf: 0.08 },
+                { step: '900', l: 11, sf: 0.06 },
+            ];
+
+            const scale = {};
+            for (const { step, l, sf } of steps) {
+                const rgb = hslToRgb(h, s * sf, l);
+                scale[step] = rgbToHex(rgb.r, rgb.g, rgb.b);
+            }
+            return scale;
+        }
+
+        /** Generate 100/500/700 variants from a single accent color */
+        function generateAccentVariants(hex) {
+            const { r, g, b } = hexToRgb(hex);
+            const { h, s, l } = rgbToHsl(r, g, b);
+
+            // 100: Light tint. High lightness, preserves a good amount of the vibe.
+            const light = hslToRgb(h, Math.max(s * 0.8, 8), 95.5);
+            const c100 = rgbToHex(light.r, light.g, light.b);
+
+            // 700: Darker shade. Reduces saturation slightly and lowers lightness.
+            const dark = hslToRgb(h, Math.max(s * 0.65, 10), l * 0.82);
+            const c700 = rgbToHex(dark.r, dark.g, dark.b);
+
+            return { '100': c100, '500': hex.toUpperCase(), '700': c700 };
+        }
+
+
+        /* ============================================================
+           APPLY CONFIG → LIVE CSS VARIABLES
+           ============================================================ */
+        function applyConfig(cfg) {
+            const root = document.documentElement;
+
+            // 1. Neutral scale from page background
+            const neutrals = generateNeutralScale(cfg.pageBg);
+            for (const [step, hex] of Object.entries(neutrals)) {
+                root.style.setProperty(`--gray-${step}`, hex);
+            }
+
+            // 2. Accent color
+            const accent = generateAccentVariants(cfg.accent);
+            root.style.setProperty('--purple-100', accent['100']);
+            root.style.setProperty('--purple-500', accent['500']);
+            root.style.setProperty('--purple-700', accent['700']);
+
+            // 3. Status colors
+            for (const name of ['red', 'green', 'blue', 'yellow']) {
+                const v = generateAccentVariants(cfg[name]);
+                root.style.setProperty(`--${name}-100`, v['100']);
+                root.style.setProperty(`--${name}-500`, v['500']);
+                root.style.setProperty(`--${name}-700`, v['700']);
+            }
+
+            // 4. Surfaces (direct overrides)
+            root.style.setProperty('--color-surface', cfg.surface);
+            root.style.setProperty('--color-surface-raised', cfg.surfaceRaised);
+            
+            // Glass effect for sidebar
+            const { r: sr, g: sg, b: sb } = hexToRgb(cfg.surfaceRaised);
+            root.style.setProperty('--color-surface-raised-alpha', `rgba(${sr}, ${sg}, ${sb}, 0.88)`);
+
+            // 5. Text (direct overrides)
+            root.style.setProperty('--color-text', cfg.textColor);
+            root.style.setProperty('--color-text-muted', cfg.textMuted);
+
+            // 6. Border color + width
+            root.style.setProperty('--color-border', cfg.borderColor);
+            const bw = cfg.borderWidth;
+            root.style.setProperty('--border-thin', bw ? `${bw}px solid var(--color-border)` : 'none');
+            root.style.setProperty('--border-light', bw ? `${bw}px solid var(--color-border-light)` : 'none');
+            root.style.setProperty('--card-border-width', (cfg.cardBorderWidth ?? 1) + 'px');
+
+            // 7. Radius
+            const r = cfg.radius;
+            root.style.setProperty('--radius-sm', `${Math.round(r * 0.5)}px`);
+            root.style.setProperty('--radius-md', `${r}px`);
+            root.style.setProperty('--radius-lg', `${Math.round(r * 1.67)}px`);
+            root.style.setProperty('--radius-xl', `${Math.round(r * 2.33)}px`);
+
+            // 8. Shadows
+            const shadows = SHADOW_PRESETS[cfg.shadow] || SHADOW_PRESETS.soft;
+            for (const [size, val] of Object.entries(shadows)) {
+                root.style.setProperty(`--shadow-${size}`, val);
+            }
+
+            // 9. Typography
+            root.style.setProperty('--font-sans', `'${cfg.fontSans}', system-ui, -apple-system, sans-serif`);
+            root.style.setProperty('--font-mono', `'${cfg.fontMono}', ui-monospace, monospace`);
+            root.style.fontSize = `${cfg.fontSize}px`;
+
+            // 10. Focus ring adapts to accent
+            root.style.setProperty('--focus-ring',
+                `0 0 0 3px ${accent['100']}, 0 0 0 5px ${accent['500']}`);
+
+            // Update revert button visibility
+            updateRevertStates();
+        }
+
+
+        /* ============================================================
+           UI CONTROLS → CONFIG BINDING
+           ============================================================ */
+        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'textMuted', 'borderColor', 'red', 'green', 'blue', 'yellow'];
+
+        // Bind all color pickers + hex inputs
+        COLOR_KEYS.forEach(key => {
+            const picker = document.getElementById(`ctrl-${key}`);
+            const hex = document.getElementById(`hex-${key}`);
+            if (!picker || !hex) return;
+
+            picker.addEventListener('input', () => {
+                const val = picker.value.toUpperCase();
+                hex.value = val;
+                currentConfig[key] = val;
+                applyConfig(currentConfig);
+            });
+
+            hex.addEventListener('change', () => {
+                let val = hex.value.trim().toUpperCase();
+                if (!val.startsWith('#')) val = '#' + val;
+                if (/^#[0-9A-F]{6}$/.test(val)) {
+                    picker.value = val;
+                    hex.value = val;
+                    currentConfig[key] = val;
+                    applyConfig(currentConfig);
+                } else {
+                    hex.value = currentConfig[key];
+                }
+            });
+        });
+
+        // Bind radius slider
+        const radiusCtrl = document.getElementById('ctrl-radius');
+        const radiusVal = document.getElementById('val-radius');
+        radiusCtrl.addEventListener('input', () => {
+            const v = parseInt(radiusCtrl.value);
+            radiusVal.textContent = v + 'px';
+            currentConfig.radius = v;
+            applyConfig(currentConfig);
+        });
+
+        // Bind border width slider
+        const bwCtrl = document.getElementById('ctrl-borderWidth');
+        const bwVal = document.getElementById('val-borderWidth');
+        bwCtrl.addEventListener('input', () => {
+            const v = parseFloat(bwCtrl.value);
+            bwVal.textContent = v + 'px';
+            currentConfig.borderWidth = v;
+            applyConfig(currentConfig);
+        });
+
+        // Bind card border width slider
+        const cbwCtrl = document.getElementById('ctrl-cardBorderWidth');
+        const cbwVal = document.getElementById('val-cardBorderWidth');
+        cbwCtrl.addEventListener('input', () => {
+            const v = parseFloat(cbwCtrl.value);
+            cbwVal.textContent = v + 'px';
+            currentConfig.cardBorderWidth = v;
+            applyConfig(currentConfig);
+        });
+
+        // Bind shadow select
+        const shadowCtrl = document.getElementById('ctrl-shadow');
+        shadowCtrl.addEventListener('change', () => {
+            currentConfig.shadow = shadowCtrl.value;
+            applyConfig(currentConfig);
+        });
+
+        // Bind font inputs (debounced)
+        let fontTimer;
+        function bindFontInput(id, key) {
+            const el = document.getElementById(id);
+            el.addEventListener('input', () => {
+                clearTimeout(fontTimer);
+                fontTimer = setTimeout(() => {
+                    currentConfig[key] = el.value.trim() || DEFAULT_CONFIG[key];
+                    loadGoogleFont(currentConfig[key]);
+                    applyConfig(currentConfig);
+                }, 600);
+            });
+        }
+        bindFontInput('ctrl-fontSans', 'fontSans');
+        bindFontInput('ctrl-fontMono', 'fontMono');
+
+        // Bind font size slider
+        const fontSizeCtrl = document.getElementById('ctrl-fontSize');
+        const fontSizeVal = document.getElementById('val-fontSize');
+        fontSizeCtrl.addEventListener('input', () => {
+            const v = parseInt(fontSizeCtrl.value);
+            fontSizeVal.textContent = v + 'px';
+            currentConfig.fontSize = v;
+            applyConfig(currentConfig);
+        });
+
+
+        /* ============================================================
+           GOOGLE FONTS LOADER
+           ============================================================ */
+        const loadedFonts = new Set(['Inter', 'JetBrains Mono']);
+
+        function loadGoogleFont(fontName) {
+            if (!fontName || loadedFonts.has(fontName)) return;
+            loadedFonts.add(fontName);
+
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, '+')
+                }:wght@400;500;600;700;800&display=swap`;
+            document.head.appendChild(link);
+        }
+
+
+        /* ============================================================
+           REVERT SYSTEM
+           ============================================================ */
+        function updateRevertStates() {
+            for (const key of Object.keys(currentConfig)) {
+                const btn = document.getElementById(`revert-${key}`);
+                if (!btn) continue;
+                const current = typeof currentConfig[key] === 'string'
+                    ? currentConfig[key].toUpperCase()
+                    : currentConfig[key];
+                const ref = typeof referenceConfig[key] === 'string'
+                    ? referenceConfig[key].toUpperCase()
+                    : referenceConfig[key];
+                if (current !== ref) {
+                    btn.classList.add('is-changed');
+                } else {
+                    btn.classList.remove('is-changed');
+                }
+            }
+        }
+
+        function revertKey(key) {
+            currentConfig[key] = referenceConfig[key];
+            syncUIFromConfig(currentConfig);
+            applyConfig(currentConfig);
+        }
+
+
+        /* ============================================================
+           SAVE / LOAD / RESET
+           ============================================================ */
+        function saveTheme() {
+            const data = {
+                name: 'Custom Theme',
+                version: '1.0',
+                generator: 'Agentic Blueprint',
+                config: { ...currentConfig },
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'theme.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    const cfg = data.config || data;
+                    currentConfig = { ...DEFAULT_CONFIG, ...cfg };
+                    referenceConfig = { ...currentConfig };
+                    syncUIFromConfig(currentConfig);
+                    if (currentConfig.fontSans !== DEFAULT_CONFIG.fontSans) {
+                        loadGoogleFont(currentConfig.fontSans);
+                    }
+                    if (currentConfig.fontMono !== DEFAULT_CONFIG.fontMono) {
+                        loadGoogleFont(currentConfig.fontMono);
+                    }
+                    applyConfig(currentConfig);
+                } catch (err) {
+                    alert('Failed to parse theme file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        function resetToDefault() {
+            referenceConfig = { ...DEFAULT_CONFIG };
+            currentConfig = { ...DEFAULT_CONFIG };
+            syncUIFromConfig(currentConfig);
+            applyConfig(currentConfig);
+        }
+
+        /** Sync all sidebar controls from a config object */
+        function syncUIFromConfig(cfg) {
+            COLOR_KEYS.forEach(key => {
+                const picker = document.getElementById(`ctrl-${key}`);
+                const hex = document.getElementById(`hex-${key}`);
+                if (picker && hex) {
+                    picker.value = cfg[key];
+                    hex.value = cfg[key].toUpperCase();
+                }
+            });
+            document.getElementById('ctrl-radius').value = cfg.radius;
+            document.getElementById('val-radius').textContent = cfg.radius + 'px';
+            document.getElementById('ctrl-borderWidth').value = cfg.borderWidth;
+            document.getElementById('val-borderWidth').textContent = cfg.borderWidth + 'px';
+            document.getElementById('ctrl-cardBorderWidth').value = cfg.cardBorderWidth ?? 1;
+            document.getElementById('val-cardBorderWidth').textContent = (cfg.cardBorderWidth ?? 1) + 'px';
+            document.getElementById('ctrl-shadow').value = cfg.shadow;
+            document.getElementById('ctrl-fontSans').value = cfg.fontSans;
+            document.getElementById('ctrl-fontMono').value = cfg.fontMono;
+            document.getElementById('ctrl-fontSize').value = cfg.fontSize;
+            document.getElementById('val-fontSize').textContent = cfg.fontSize + 'px';
+        }
+
+
+        /* ============================================================
+           EXPORT FULL tokens.css
+           ============================================================ */
+        function exportTokensCSS() {
+            const cfg = currentConfig;
+            const n = generateNeutralScale(cfg.pageBg);
+            const a = generateAccentVariants(cfg.accent);
+            const red = generateAccentVariants(cfg.red);
+            const grn = generateAccentVariants(cfg.green);
+            const blu = generateAccentVariants(cfg.blue);
+            const yel = generateAccentVariants(cfg.yellow);
+            const r = cfg.radius;
+            const sh = SHADOW_PRESETS[cfg.shadow] || SHADOW_PRESETS.soft;
+
+            const css = `/* ============================================================
+   tokens.css — Generated by Agentic Blueprint
+   ============================================================ */
+
+:root {
+
+  /* ==========================================================
+     1. COLOR PRIMITIVES
+     ========================================================== */
+
+  /* Neutrals */
+  --gray-50:  ${n['50']};
+  --gray-100: ${n['100']};
+  --gray-200: ${n['200']};
+  --gray-300: ${n['300']};
+  --gray-400: ${n['400']};
+  --gray-500: ${n['500']};
+  --gray-600: ${n['600']};
+  --gray-700: ${n['700']};
+  --gray-800: ${n['800']};
+  --gray-900: ${n['900']};
+
+  /* Accent */
+  --purple-500: ${a['500']};   --purple-100: ${a['100']};   --purple-700: ${a['700']};
+
+  /* Blue */
+  --blue-500:   ${blu['500']};   --blue-100:   ${blu['100']};   --blue-700:   ${blu['700']};
+
+  /* Green */
+  --green-500:  ${grn['500']};   --green-100:  ${grn['100']};   --green-700:  ${grn['700']};
+
+  /* Yellow */
+  --yellow-500: ${yel['500']};   --yellow-100: ${yel['100']};   --yellow-700: ${yel['700']};
+
+  /* Red */
+  --red-500:    ${red['500']};   --red-100:    ${red['100']};   --red-700:    ${red['700']};
+
+  /* ==========================================================
+     2. SEMANTIC COLORS
+     ========================================================== */
+
+  /* Surfaces */
+  --color-page-bg:        var(--gray-200);
+  --color-surface:        ${cfg.surface};
+  --color-surface-raised: ${cfg.surfaceRaised};
+  --color-surface-sunken: var(--gray-300);
+  --color-overlay:        rgba(28, 26, 27, 0.45);
+
+  /* Text */
+  --color-text:        ${cfg.textColor};
+  --color-text-muted:  ${cfg.textMuted};
+  --color-text-subtle: var(--gray-400);
+  --color-text-invert: var(--gray-50);
+
+  /* Borders */
+  --color-border:       ${cfg.borderColor};
+  --color-border-light: var(--gray-200);
+  --color-border-focus: var(--purple-500);
+
+  /* Interactive — Primary (CTA) */
+  --cta-bg:       var(--purple-100);
+  --cta-fg:       var(--purple-500);
+  --cta-hover-bg: var(--purple-500);
+  --cta-hover-fg: var(--gray-50);
+
+  /* Interactive — Secondary */
+  --secondary-bg:       var(--gray-100);
+  --secondary-fg:       var(--gray-800);
+  --secondary-hover-bg: var(--gray-300);
+  --secondary-hover-fg: var(--gray-800);
+
+  /* Interactive — Destructive */
+  --destructive-bg:       var(--gray-100);
+  --destructive-fg:       var(--gray-800);
+  --destructive-hover-bg: var(--red-500);
+  --destructive-hover-fg: var(--gray-50);
+
+  /* Interactive — Ghost */
+  --ghost-bg:       transparent;
+  --ghost-fg:       var(--gray-600);
+  --ghost-hover-bg: var(--gray-200);
+  --ghost-hover-fg: var(--gray-800);
+
+  /* Status */
+  --color-success:      var(--green-500);
+  --color-success-soft: var(--green-100);
+  --color-warning:      var(--yellow-500);
+  --color-warning-soft: var(--yellow-100);
+  --color-error:        var(--red-500);
+  --color-error-soft:   var(--red-100);
+  --color-info:         var(--blue-500);
+  --color-info-soft:    var(--blue-100);
+
+  /* ==========================================================
+     3. TYPOGRAPHY
+     ========================================================== */
+
+  --font-sans:  '${cfg.fontSans}', system-ui, -apple-system, sans-serif;
+  --font-mono:  '${cfg.fontMono}', 'Fira Code', ui-monospace, monospace;
+
+  --text-xs:      0.75rem;
+  --text-sm:      0.875rem;
+  --text-base:    1rem;
+  --text-lg:      1.125rem;
+  --text-xl:      1.25rem;
+  --text-2xl:     1.5rem;
+  --text-3xl:     2rem;
+  --text-4xl:     2.5rem;
+  --text-5xl:     3.5rem;
+
+  --leading-tight:  1.2;
+  --leading-normal: 1.5;
+  --leading-loose:  1.75;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semi:   600;
+  --weight-bold:   700;
+  --weight-heavy:  800;
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-caps:    0.08em;
+
+  /* ==========================================================
+     4. SPACING
+     ========================================================== */
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ==========================================================
+     5. GEOMETRY
+     ========================================================== */
+
+  --radius-sm:   ${Math.round(r * 0.5)}px;
+  --radius-md:   ${r}px;
+  --radius-lg:   ${Math.round(r * 1.67)}px;
+  --radius-xl:   ${Math.round(r * 2.33)}px;
+  --radius-full: 999px;
+
+  --shadow-xs:  ${sh.xs};
+  --shadow-sm:  ${sh.sm};
+  --shadow-md:  ${sh.md};
+  --shadow-lg:  ${sh.lg};
+  --shadow-xl:  ${sh.xl};
+
+  --border-thin:  ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border)' : 'none'};
+  --border-light: ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border-light)' : 'none'};
+  --card-border-width: ${cfg.cardBorderWidth ?? 1}px;
+
+  /* ==========================================================
+     6. MOTION
+     ========================================================== */
+
+  --duration-fast:   120ms;
+  --duration-normal: 200ms;
+  --duration-slow:   350ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --transition-colors: color var(--duration-normal) var(--ease-default),
+                        background-color var(--duration-normal) var(--ease-default),
+                        border-color var(--duration-normal) var(--ease-default);
+  --transition-all:    all var(--duration-normal) var(--ease-default);
+
+  /* ==========================================================
+     7. Z-INDEX SCALE
+     ========================================================== */
+
+  --z-base:    0;
+  --z-raised:  10;
+  --z-dropdown:100;
+  --z-sticky:  200;
+  --z-overlay: 300;
+  --z-modal:   400;
+  --z-toast:   500;
+
+  /* ==========================================================
+     8. FOCUS & ACCESSIBILITY
+     ========================================================== */
+
+  --focus-ring: 0 0 0 3px ${a['100']}, 0 0 0 5px ${a['500']};
+
+  /* ==========================================================
+     9. SIZES & CONTAINERS
+     ========================================================== */
+
+  --size-container-sm: 640px;
+  --size-container-md: 768px;
+  --size-container-lg: 1024px;
+  --size-container-xl: 1280px;
+
+  --size-input-h:  44px;
+  --size-btn-h:    44px;
+  --size-icon:     20px;
+  --size-avatar:   40px;
+}
+
+
+/* ============================================================
+   GLOBAL RESET
+   ============================================================ */
+
+html {
+  font-size: ${cfg.fontSize}px;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+  background-color: var(--color-page-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font: inherit; }
+input, textarea, select { font: inherit; }
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+`;
+
+            const blob = new Blob([css], { type: 'text/css' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'tokens.css';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+
+        /* ============================================================
+           SIDEBAR TOGGLE
+           ============================================================ */
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('is-collapsed');
+        }
+
+
+        /* ============================================================
+           TAB SWITCHING (demo interactivity)
+           ============================================================ */
+        document.querySelectorAll('.tabs').forEach(tabsEl => {
+            tabsEl.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabsEl.querySelectorAll('.tab').forEach(t => t.classList.remove('tab--active'));
+                    tab.classList.add('tab--active');
+                });
+            });
+        });
+
+        /* ============================================================
+           INIT — Apply default config on load
+           ============================================================ */
+        applyConfig(currentConfig);
+    </script>
+</body>
+
+</html>
