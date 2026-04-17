@@ -503,7 +503,8 @@
         .ks-hero p {
             font-size: var(--text-lg);
             color: var(--color-text-muted);
-            max-width: 660px; /* original 560px */
+            max-width: 660px;
+            /* original 560px */
             margin: 0 auto;
         }
 
@@ -556,7 +557,7 @@
         .swatch-group {
             display: flex;
             flex-direction: column;
-            gap: var(--space-1);
+            gap: var(--space-2);
         }
 
         .swatch-group__label {
@@ -565,7 +566,7 @@
             text-transform: uppercase;
             letter-spacing: var(--tracking-caps);
             color: var(--color-text-muted);
-            margin-bottom: var(--space-1);
+            margin-bottom: var(--space-2);
         }
 
         .swatch {
@@ -578,7 +579,7 @@
             font-family: var(--font-mono);
             font-weight: var(--weight-medium);
             transition: var(--transition-all);
-            border: var(--border-light);
+            border: var(--card-border-width, 1px) solid var(--card-border-color, var(--color-border));
         }
 
         .swatch:hover {
@@ -1763,8 +1764,9 @@
                 <p> Adjust the sidebar to build your custom design system.</p>
                 <p>Cut the noise. Keep the precision. <code>Set essentials. Export. Done.</code></p>
                 <p>It is so simple that even you can't fuck it up.</p>
-                
-                <div style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center;">
+
+                <div
+                    style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center;">
                     <span class="badge badge--green"><span class="badge__dot"></span>Open Source</span>
                     <span class="badge badge--blue"><span class="badge__dot"></span>Sloth friendly</span>
                     <span class="badge badge--red"><span class="badge__dot"></span>Made with ❤️</span>
@@ -1822,7 +1824,7 @@
                 </div>
             </section>
 
-             <!-- CARDS -->
+            <!-- CARDS -->
             <section class="ks-section" id="section-cards">
                 <h2 class="ks-section__title">Cards</h2>
                 <div class="ks-grid ks-grid--3">
@@ -1995,7 +1997,7 @@
                 </div>
             </section>
 
-             <!-- TYPOGRAPHY -->
+            <!-- TYPOGRAPHY -->
             <section class="ks-section" id="section-typography">
                 <h2 class="ks-section__title">Typography Scale</h2>
                 <div class="card card--raised" style="padding: var(--space-8);">
@@ -2109,24 +2111,30 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><div style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                        class="avatar avatar--sm">AN</span>Anna Nováková</div></td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                            class="avatar avatar--sm">AN</span>Anna Nováková</div>
+                                </td>
                                 <td style="color:var(--color-text-muted);">Designer</td>
                                 <td><span class="badge badge--green"><span class="badge__dot"></span>Active</span></td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$12,400</td>
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
                             </tr>
                             <tr>
-                                <td><div style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                        class="avatar avatar--sm avatar--blue">PK</span>Pavel Kovář</div></td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                            class="avatar avatar--sm avatar--blue">PK</span>Pavel Kovář</div>
+                                </td>
                                 <td style="color:var(--color-text-muted);">Engineer</td>
                                 <td><span class="badge badge--green"><span class="badge__dot"></span>Active</span></td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$18,750</td>
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
                             </tr>
                             <tr>
-                                <td><div style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                        class="avatar avatar--sm avatar--yellow">MH</span>Marie Horská</div></td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                            class="avatar avatar--sm avatar--yellow">MH</span>Marie Horská</div>
+                                </td>
                                 <td style="color:var(--color-text-muted);">PM</td>
                                 <td><span class="badge badge--yellow"><span class="badge__dot"></span>Pending</span>
                                 </td>
@@ -2134,8 +2142,10 @@
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
                             </tr>
                             <tr>
-                                <td><div style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                        class="avatar avatar--sm avatar--red">TK</span>Tomáš Kříž</div></td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                            class="avatar avatar--sm avatar--red">TK</span>Tomáš Kříž</div>
+                                </td>
                                 <td style="color:var(--color-text-muted);">Marketing</td>
                                 <td><span class="badge badge--red"><span class="badge__dot"></span>Inactive</span></td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$3,100</td>
@@ -2713,7 +2723,7 @@
 
     <!-- Sidebar toggle for narrow viewports -->
     <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()"
-        aria-label="Toggle theme editor">⚙</button>
+        aria-label="Toggle theme editor">⚙️</button>
 
     <!-- Hidden file input for Load -->
     <input type="file" id="fileInput" accept=".json" style="display:none;">
