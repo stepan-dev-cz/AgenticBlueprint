@@ -215,7 +215,7 @@
         .sb-color__hex:focus {
             outline: none;
             border-color: var(--color-border-focus);
-            box-shadow: 0 0 0 2px var(--color-border-focus);
+            box-shadow: var(--focus-ring);
         }
 
         /* --- Range Slider --- */
@@ -326,7 +326,7 @@
         .sb-select:focus {
             outline: none;
             border-color: var(--color-border-focus);
-            box-shadow: 0 0 0 2px var(--color-border-focus);
+            box-shadow: var(--focus-ring);
         }
 
         /* --- Font Input --- */
@@ -359,7 +359,7 @@
         .sb-font__input:focus {
             outline: none;
             border-color: var(--color-border-focus);
-            box-shadow: 0 0 0 2px var(--color-border-focus);
+            box-shadow: var(--focus-ring);
         }
 
         /* --- Revert Button --- */
@@ -474,6 +474,29 @@
             outline-offset: -1px;
         }
 
+        /* --- Dark Mode Indicator --- */
+        .sb-dark-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            margin-top: var(--space-3);
+            transition: var(--transition-colors);
+        }
+
+        .sb-dark-indicator--light {
+            background: var(--yellow-100);
+            color: var(--yellow-700);
+        }
+
+        .sb-dark-indicator--dark {
+            background: var(--blue-100);
+            color: var(--blue-700);
+        }
+
         @media (max-width: 1200px) {
             .app__main {
                 margin-right: 0;
@@ -532,7 +555,6 @@
             font-size: var(--text-lg);
             color: var(--color-text-muted);
             max-width: 660px;
-            /* original 560px */
             margin: 0 auto;
         }
 
@@ -788,6 +810,11 @@
             color: var(--cta-hover-fg);
         }
 
+        .btn--primary:active {
+            background: var(--cta-active-bg);
+            color: var(--cta-active-fg);
+        }
+
         .btn--secondary {
             background: var(--secondary-bg);
             color: var(--secondary-fg);
@@ -797,6 +824,11 @@
         .btn--secondary:hover {
             background: var(--secondary-hover-bg);
             color: var(--secondary-hover-fg);
+        }
+
+        .btn--secondary:active {
+            background: var(--secondary-active-bg);
+            color: var(--secondary-active-fg);
         }
 
         .btn--destructive {
@@ -810,6 +842,11 @@
             color: var(--destructive-hover-fg);
         }
 
+        .btn--destructive:active {
+            background: var(--destructive-active-bg);
+            color: var(--destructive-active-fg);
+        }
+
         .btn--ghost {
             background: var(--ghost-bg);
             color: var(--ghost-fg);
@@ -820,24 +857,30 @@
             color: var(--ghost-hover-fg);
         }
 
+        .btn--ghost:active {
+            background: var(--ghost-active-bg);
+            color: var(--ghost-active-fg);
+        }
+
         .btn--solid {
             background: var(--accent-500);
-            color: #fff;
+            color: var(--accent-500-fg, #fff);
         }
 
         .btn--solid:hover {
             background: var(--accent-700);
+            color: var(--accent-700-fg, #fff);
         }
 
         .btn--sm {
-            height: 32px;
+            height: var(--size-sm);
             padding: 0 var(--space-3);
             font-size: var(--text-xs);
             border-radius: var(--radius-sm);
         }
 
         .btn--lg {
-            height: 52px;
+            height: var(--size-lg);
             padding: 0 var(--space-8);
             font-size: var(--text-base);
             border-radius: var(--radius-lg);
@@ -852,8 +895,12 @@
             border-radius: var(--radius-full);
         }
 
-        .btn[disabled] {
-            opacity: 0.45;
+        .btn[disabled],
+        .btn--disabled {
+            background: var(--disabled-bg) !important;
+            color: var(--disabled-fg) !important;
+            border-color: var(--disabled-border) !important;
+            cursor: not-allowed;
             pointer-events: none;
         }
 
@@ -867,23 +914,23 @@
         }
 
         .card:hover {
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--elevation-3);
             transform: translateY(-2px);
         }
 
         .card--raised {
             background: var(--color-surface-raised);
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--elevation-2);
         }
 
         .card--flat {
             background: var(--color-surface-sunken);
             border: none;
-            box-shadow: none;
+            box-shadow: var(--elevation-0);
         }
 
         .card--flat:hover {
-            box-shadow: none;
+            box-shadow: var(--elevation-0);
             transform: none;
         }
 
@@ -931,29 +978,29 @@
             color: var(--status-accent-fg);
         }
 
-        .badge--blue {
-            background: var(--status-blue-bg);
-            color: var(--status-blue-fg);
+        .badge--info {
+            background: var(--status-info-bg);
+            color: var(--status-info-fg);
         }
 
-        .badge--green {
-            background: var(--status-green-bg);
-            color: var(--status-green-fg);
+        .badge--success {
+            background: var(--status-success-bg);
+            color: var(--status-success-fg);
         }
 
-        .badge--yellow {
-            background: var(--status-yellow-bg);
-            color: var(--status-yellow-fg);
+        .badge--warning {
+            background: var(--status-warning-bg);
+            color: var(--status-warning-fg);
         }
 
-        .badge--red {
-            background: var(--status-red-bg);
-            color: var(--status-red-fg);
+        .badge--error {
+            background: var(--status-error-bg);
+            color: var(--status-error-fg);
         }
 
         .badge--neutral {
-            background: var(--gray-200);
-            color: var(--gray-700);
+            background: var(--status-neutral-bg);
+            color: var(--status-neutral-fg);
         }
 
         .badge__dot {
@@ -996,7 +1043,7 @@
         }
 
         .input:hover {
-            border-color: var(--gray-400);
+            border-color: var(--color-border-strong);
         }
 
         .input:focus {
@@ -1011,7 +1058,15 @@
 
         .input--error:focus {
             border-color: var(--color-error);
-            box-shadow: 0 0 0 2px var(--color-error);
+            box-shadow: var(--focus-ring-error);
+        }
+
+        .input[disabled],
+        .input--disabled {
+            background: var(--disabled-bg);
+            color: var(--disabled-fg);
+            border-color: var(--disabled-border);
+            cursor: not-allowed;
         }
 
         .textarea {
@@ -1147,35 +1202,35 @@
         }
 
         .avatar--sm {
-            width: 28px;
-            height: 28px;
+            width: var(--size-avatar-sm);
+            height: var(--size-avatar-sm);
             font-size: var(--text-xs);
         }
 
         .avatar--lg {
-            width: 56px;
-            height: 56px;
+            width: var(--size-avatar-lg);
+            height: var(--size-avatar-lg);
             font-size: var(--text-lg);
         }
 
-        .avatar--blue {
-            background: var(--status-blue-bg);
-            color: var(--status-blue-fg);
+        .avatar--info {
+            background: var(--status-info-bg);
+            color: var(--status-info-fg);
         }
 
-        .avatar--green {
-            background: var(--status-green-bg);
-            color: var(--status-green-fg);
+        .avatar--success {
+            background: var(--status-success-bg);
+            color: var(--status-success-fg);
         }
 
-        .avatar--red {
-            background: var(--status-red-bg);
-            color: var(--status-red-fg);
+        .avatar--error {
+            background: var(--status-error-bg);
+            color: var(--status-error-fg);
         }
 
-        .avatar--yellow {
-            background: var(--status-yellow-bg);
-            color: var(--status-yellow-fg);
+        .avatar--warning {
+            background: var(--status-warning-bg);
+            color: var(--status-warning-fg);
         }
 
         .avatar-stack {
@@ -1218,23 +1273,23 @@
         }
 
         .alert--info {
-            background: var(--status-blue-bg);
-            color: var(--status-blue-fg);
+            background: var(--status-info-bg);
+            color: var(--status-info-fg);
         }
 
         .alert--success {
-            background: var(--status-green-bg);
-            color: var(--status-green-fg);
+            background: var(--status-success-bg);
+            color: var(--status-success-fg);
         }
 
         .alert--warning {
-            background: var(--status-yellow-bg);
-            color: var(--status-yellow-fg);
+            background: var(--status-warning-bg);
+            color: var(--status-warning-fg);
         }
 
         .alert--error {
-            background: var(--status-red-bg);
-            color: var(--status-red-fg);
+            background: var(--status-error-bg);
+            color: var(--status-error-fg);
         }
 
         /* ===== PROGRESS ===== */
@@ -1255,15 +1310,15 @@
             background: var(--accent-500);
         }
 
-        .progress__bar--blue {
+        .progress__bar--info {
             background: var(--blue-500);
         }
 
-        .progress__bar--green {
+        .progress__bar--success {
             background: var(--green-500);
         }
 
-        .progress__bar--red {
+        .progress__bar--error {
             background: var(--red-500);
         }
 
@@ -1336,7 +1391,7 @@
         }
 
         tr:hover td {
-            background: var(--color-hover-row, var(--gray-100));
+            background: var(--color-hover-surface);
         }
 
         /* ===== TAGS ===== */
@@ -1455,7 +1510,7 @@
             border-radius: var(--radius-md);
         }
 
-        /* ===== SHADOW DEMO ===== */
+        /* ===== SHADOW / ELEVATION DEMO ===== */
         .shadow-box {
             background: var(--color-surface-raised);
             border-radius: var(--radius-lg);
@@ -1511,7 +1566,7 @@
         .modal {
             background: var(--color-surface-raised);
             border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-xl);
+            box-shadow: var(--elevation-5);
             padding: var(--space-8);
             max-width: 400px;
             width: 100%;
@@ -1545,7 +1600,7 @@
             background: var(--color-surface-raised);
             border-radius: var(--radius-lg);
             border: var(--border-light);
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--elevation-2);
         }
 
         .navbar__brand {
@@ -1617,13 +1672,13 @@
         }
 
         .stat-card__trend--up {
-            background: var(--status-green-bg);
-            color: var(--status-green-fg);
+            background: var(--status-success-bg);
+            color: var(--status-success-fg);
         }
 
         .stat-card__trend--down {
-            background: var(--status-red-bg);
-            color: var(--status-red-fg);
+            background: var(--status-error-bg);
+            color: var(--status-error-fg);
         }
 
         /* ===== LIST ITEMS ===== */
@@ -1637,7 +1692,7 @@
         }
 
         .list-item:hover {
-            background: var(--color-hover-row, var(--gray-100));
+            background: var(--color-hover-surface);
         }
 
         .list-item__text {
@@ -1747,12 +1802,44 @@
 
         .page-btn--active {
             background: var(--accent-500);
-            color: #fff;
+            color: var(--accent-500-fg, #fff);
         }
 
         .page-btn--active:hover {
             background: var(--accent-700);
-            color: #fff;
+            color: var(--accent-700-fg, #fff);
+        }
+
+        /* ===== BORDER DEMO ===== */
+        .border-demo-box {
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            background: var(--color-surface-raised);
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            color: var(--color-text-muted);
+            text-align: center;
+        }
+
+        /* ===== SIZE DEMO ===== */
+        .size-demo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            flex-wrap: wrap;
+        }
+
+        .size-demo__item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-100);
+            border: 2px solid var(--accent-500);
+            border-radius: var(--radius-md);
+            font-size: var(--text-xs);
+            font-family: var(--font-mono);
+            color: var(--accent-500);
+            font-weight: var(--weight-medium);
         }
 
         /* ===== RESPONSIVE ===== */
@@ -1821,7 +1908,7 @@
             border: var(--border-thin);
             border-radius: var(--radius-lg);
             padding: var(--space-2);
-            box-shadow: var(--shadow-xl);
+            box-shadow: var(--elevation-5);
             display: flex;
             flex-direction: column;
             gap: 2px;
@@ -1913,6 +2000,7 @@
             <a href="#section-cards" class="quick-nav__item">Cards</a>
             <a href="#section-badges" class="quick-nav__item">Badges & Tags</a>
             <a href="#section-buttons" class="quick-nav__item">Buttons</a>
+            <a href="#section-disabled" class="quick-nav__item">Disabled States</a>
             <a href="#section-alerts" class="quick-nav__item">Alerts</a>
             <a href="#section-progress" class="quick-nav__item">Progress Bars</a>
             <a href="#section-typography" class="quick-nav__item">Typography</a>
@@ -1925,7 +2013,9 @@
             <a href="#section-code" class="quick-nav__item">Code</a>
             <a href="#section-tooltips" class="quick-nav__item">Tooltips</a>
             <a href="#section-skeleton" class="quick-nav__item">Skeletons</a>
-            <a href="#section-shadows" class="quick-nav__item">Shadows</a>
+            <a href="#section-elevation" class="quick-nav__item">Elevation</a>
+            <a href="#section-borders" class="quick-nav__item">Border System</a>
+            <a href="#section-sizes" class="quick-nav__item">Size Scale</a>
             <a href="#section-radius" class="quick-nav__item">Border Radius</a>
             <a href="#section-spacing" class="quick-nav__item">Spacing</a>
             <a href="#section-inputs" class="quick-nav__item">Forms & Inputs</a>
@@ -1938,20 +2028,21 @@
 
             <!-- HERO -->
             <header class="ks-hero" id="hero">
-                <div class="ks-hero__badge">Agentic Blueprint v2.0</div>
+                <div class="ks-hero__badge">Agentic Blueprint v3.0</div>
                 <h1>Agentic Blueprint: <span>Kitchen Sink</span></h1>
-                <p>Every token, every component, every state - live preview.</p>
+                <p>Every token, every component, every state — live preview.</p>
                 <p> Adjust the sidebar to build your custom design system.</p>
                 <p>Cut the noise. Keep the precision. <code>Set essentials. Export. Done.</code></p>
+                <p>9 colors in, 60+ tokens out.</p>
                 <p>It is so simple that even you can't f*ck it up.</p>
 
                 <div
                     style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center;">
                     <span class="badge badge--accent"><span class="badge__dot"></span>Easy to use</span>
-                    <span class="badge badge--green"><span class="badge__dot"></span>Open Source</span>
-                    <span class="badge badge--blue"><span class="badge__dot"></span>Sloth friendly</span>
-                    <span class="badge badge--yellow"><span class="badge__dot"></span>Minimalistic</span>
-                    <span class="badge badge--red"><span class="badge__dot"></span>Made with ❤️</span>
+                    <span class="badge badge--success"><span class="badge__dot"></span>Open Source</span>
+                    <span class="badge badge--info"><span class="badge__dot"></span>Sloth friendly</span>
+                    <span class="badge badge--warning"><span class="badge__dot"></span>Minimalistic</span>
+                    <span class="badge badge--error"><span class="badge__dot"></span>Made with ❤️</span>
                 </div>
 
             </header>
@@ -1971,7 +2062,7 @@
                     <div class="swatch swatch--lg swatch--g800">800</div>
                     <div class="swatch swatch--lg swatch--g900">900</div>
                 </div>
-                <h2 class="ks-section__title">Color Palette — Accents</h2>
+                <h2 class="ks-section__title">Color Palette — Accents & Status</h2>
                 <div class="ks-grid ks-grid--5">
                     <div class="swatch-group">
                         <div class="swatch-group__label">Accent</div>
@@ -1980,25 +2071,25 @@
                         <div class="swatch swatch--accent-700">700</div>
                     </div>
                     <div class="swatch-group">
-                        <div class="swatch-group__label">Blue</div>
+                        <div class="swatch-group__label">Info</div>
                         <div class="swatch swatch--blue-100">100</div>
                         <div class="swatch swatch--blue-500">500</div>
                         <div class="swatch swatch--blue-700">700</div>
                     </div>
                     <div class="swatch-group">
-                        <div class="swatch-group__label">Green</div>
+                        <div class="swatch-group__label">Success</div>
                         <div class="swatch swatch--green-100">100</div>
                         <div class="swatch swatch--green-500">500</div>
                         <div class="swatch swatch--green-700">700</div>
                     </div>
                     <div class="swatch-group">
-                        <div class="swatch-group__label">Yellow</div>
+                        <div class="swatch-group__label">Warning</div>
                         <div class="swatch swatch--yellow-100">100</div>
                         <div class="swatch swatch--yellow-500">500</div>
                         <div class="swatch swatch--yellow-700">700</div>
                     </div>
                     <div class="swatch-group">
-                        <div class="swatch-group__label">Red</div>
+                        <div class="swatch-group__label">Error</div>
                         <div class="swatch swatch--red-100">100</div>
                         <div class="swatch swatch--red-500">500</div>
                         <div class="swatch swatch--red-700">700</div>
@@ -2064,10 +2155,10 @@
                         Badges</h3>
                     <div class="ks-flex" style="margin-bottom: var(--space-6);">
                         <span class="badge badge--accent"><span class="badge__dot"></span>Accent</span>
-                        <span class="badge badge--blue"><span class="badge__dot"></span>Info</span>
-                        <span class="badge badge--green"><span class="badge__dot"></span>Active</span>
-                        <span class="badge badge--yellow"><span class="badge__dot"></span>Pending</span>
-                        <span class="badge badge--red"><span class="badge__dot"></span>Critical</span>
+                        <span class="badge badge--info"><span class="badge__dot"></span>Info</span>
+                        <span class="badge badge--success"><span class="badge__dot"></span>Active</span>
+                        <span class="badge badge--warning"><span class="badge__dot"></span>Pending</span>
+                        <span class="badge badge--error"><span class="badge__dot"></span>Critical</span>
                         <span class="badge badge--neutral">Neutral</span>
                     </div>
                     <h3
@@ -2084,8 +2175,11 @@
 
             <!-- BUTTONS -->
             <section class="ks-section" id="section-buttons">
-                <h2 class="ks-section__title">Buttons — Variants</h2>
+                <h2 class="ks-section__title">Buttons — Variants & States</h2>
                 <div class="card card--raised" style="padding: var(--space-8);">
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Variants</h3>
                     <div class="ks-flex" style="margin-bottom: var(--space-6);">
                         <button class="btn btn--primary">Primary CTA</button>
                         <button class="btn btn--solid">Solid</button>
@@ -2095,7 +2189,7 @@
                     </div>
                     <h3
                         style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
-                        Sizes</h3>
+                        Sizes (sm / md / lg)</h3>
                     <div class="ks-flex" style="margin-bottom: var(--space-6);">
                         <button class="btn btn--primary btn--sm">Small</button>
                         <button class="btn btn--primary">Default</button>
@@ -2107,8 +2201,42 @@
                     <div class="ks-flex">
                         <button class="btn btn--primary btn--pill">Pill Shape</button>
                         <button class="btn btn--secondary btn--icon" aria-label="Settings">⚙</button>
-                        <button class="btn btn--primary" disabled>Disabled</button>
                         <button class="btn btn--destructive btn--pill">🗑 Remove</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DISABLED STATES -->
+            <section class="ks-section" id="section-disabled">
+                <h2 class="ks-section__title">Disabled States</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Disabled Buttons</h3>
+                    <div class="ks-flex" style="margin-bottom: var(--space-6);">
+                        <button class="btn btn--primary" disabled>Primary</button>
+                        <button class="btn btn--solid" disabled>Solid</button>
+                        <button class="btn btn--secondary" disabled>Secondary</button>
+                        <button class="btn btn--ghost" disabled>Ghost</button>
+                        <button class="btn btn--destructive" disabled>Destructive</button>
+                    </div>
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Disabled Inputs</h3>
+                    <div style="display:flex;gap:var(--space-4);flex-wrap:wrap;">
+                        <div class="input-group" style="flex:1;min-width:200px;">
+                            <label class="input-group__label">Disabled Input</label>
+                            <input class="input" type="text" disabled value="Cannot edit">
+                        </div>
+                        <div class="input-group" style="flex:1;min-width:200px;">
+                            <label class="input-group__label">Disabled Toggle</label>
+                            <label class="toggle" style="margin-top:var(--space-2);">
+                                <input type="checkbox" disabled>
+                                <span class="toggle__track"
+                                    style="opacity:var(--disabled-opacity);cursor:not-allowed;"></span>
+                                <span class="toggle__label" style="color:var(--color-text-disabled);">Unavailable</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -2157,7 +2285,7 @@
                                 style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Upload</span><span
                                 style="font-size:var(--text-sm);color:var(--color-text-muted);">45%</span></div>
                         <div class="progress">
-                            <div class="progress__bar progress__bar--blue" style="width:45%"></div>
+                            <div class="progress__bar progress__bar--info" style="width:45%"></div>
                         </div>
                     </div>
                     <div style="margin-bottom:var(--space-5);">
@@ -2165,7 +2293,7 @@
                                 style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Complete</span><span
                                 style="font-size:var(--text-sm);color:var(--color-text-muted);">100%</span></div>
                         <div class="progress">
-                            <div class="progress__bar progress__bar--green" style="width:100%"></div>
+                            <div class="progress__bar progress__bar--success" style="width:100%"></div>
                         </div>
                     </div>
                     <div>
@@ -2173,7 +2301,7 @@
                                 style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Critical</span><span
                                 style="font-size:var(--text-sm);color:var(--color-text-muted);">91%</span></div>
                         <div class="progress">
-                            <div class="progress__bar progress__bar--red" style="width:91%"></div>
+                            <div class="progress__bar progress__bar--error" style="width:91%"></div>
                         </div>
                     </div>
                 </div>
@@ -2248,16 +2376,16 @@
                     <div class="ks-flex" style="margin-bottom:var(--space-6);">
                         <span class="avatar avatar--sm">S</span><span class="avatar">JN</span><span
                             class="avatar avatar--lg">A</span>
-                        <span class="avatar avatar--blue">PK</span><span class="avatar avatar--green">MZ</span>
-                        <span class="avatar avatar--red">ER</span><span class="avatar avatar--yellow">TL</span>
+                        <span class="avatar avatar--info">PK</span><span class="avatar avatar--success">MZ</span>
+                        <span class="avatar avatar--error">ER</span><span class="avatar avatar--warning">TL</span>
                     </div>
                     <h3
                         style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
                         Stack</h3>
                     <div class="avatar-stack">
-                        <span class="avatar">A</span><span class="avatar avatar--blue">B</span><span
-                            class="avatar avatar--green">C</span><span class="avatar avatar--red">D</span><span
-                            class="avatar avatar--yellow">E</span>
+                        <span class="avatar">A</span><span class="avatar avatar--info">B</span><span
+                            class="avatar avatar--success">C</span><span class="avatar avatar--error">D</span><span
+                            class="avatar avatar--warning">E</span>
                     </div>
                 </div>
             </section>
@@ -2298,27 +2426,29 @@
                                             class="avatar avatar--sm">AN</span>Anna Nováková</div>
                                 </td>
                                 <td style="color:var(--color-text-muted);">Designer</td>
-                                <td><span class="badge badge--green"><span class="badge__dot"></span>Active</span></td>
+                                <td><span class="badge badge--success"><span class="badge__dot"></span>Active</span>
+                                </td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$12,400</td>
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
                             </tr>
                             <tr>
                                 <td>
                                     <div style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                            class="avatar avatar--sm avatar--blue">PK</span>Pavel Kovář</div>
+                                            class="avatar avatar--sm avatar--info">PK</span>Pavel Kovář</div>
                                 </td>
                                 <td style="color:var(--color-text-muted);">Engineer</td>
-                                <td><span class="badge badge--green"><span class="badge__dot"></span>Active</span></td>
+                                <td><span class="badge badge--success"><span class="badge__dot"></span>Active</span>
+                                </td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$18,750</td>
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
                             </tr>
                             <tr>
                                 <td>
                                     <div style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                            class="avatar avatar--sm avatar--yellow">MH</span>Marie Horská</div>
+                                            class="avatar avatar--sm avatar--warning">MH</span>Marie Horská</div>
                                 </td>
                                 <td style="color:var(--color-text-muted);">PM</td>
-                                <td><span class="badge badge--yellow"><span class="badge__dot"></span>Pending</span>
+                                <td><span class="badge badge--warning"><span class="badge__dot"></span>Pending</span>
                                 </td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$9,200</td>
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
@@ -2326,10 +2456,11 @@
                             <tr>
                                 <td>
                                     <div style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                            class="avatar avatar--sm avatar--red">TK</span>Tomáš Kříž</div>
+                                            class="avatar avatar--sm avatar--error">TK</span>Tomáš Kříž</div>
                                 </td>
                                 <td style="color:var(--color-text-muted);">Marketing</td>
-                                <td><span class="badge badge--red"><span class="badge__dot"></span>Inactive</span></td>
+                                <td><span class="badge badge--error"><span class="badge__dot"></span>Inactive</span>
+                                </td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$3,100</td>
                                 <td><button class="btn btn--destructive btn--sm">Remove</button></td>
                             </tr>
@@ -2370,25 +2501,25 @@
             <section class="ks-section" id="section-lists">
                 <h2 class="ks-section__title">List Items</h2>
                 <div class="card card--raised" style="padding: var(--space-4);">
-                    <div class="list-item"><span class="avatar avatar--blue">DS</span>
+                    <div class="list-item"><span class="avatar avatar--info">DS</span>
                         <div class="list-item__text">
                             <div class="list-item__title">Design System v2.0</div>
                             <div class="list-item__subtitle">Updated 2 hours ago</div>
-                        </div><span class="badge badge--green"><span class="badge__dot"></span>Live</span><button
+                        </div><span class="badge badge--success"><span class="badge__dot"></span>Live</span><button
                             class="btn btn--ghost btn--sm btn--icon" aria-label="More">⋯</button>
                     </div>
-                    <div class="list-item"><span class="avatar avatar--green">AP</span>
+                    <div class="list-item"><span class="avatar avatar--success">AP</span>
                         <div class="list-item__text">
                             <div class="list-item__title">API Integration</div>
                             <div class="list-item__subtitle">Updated yesterday</div>
-                        </div><span class="badge badge--yellow"><span class="badge__dot"></span>In
+                        </div><span class="badge badge--warning"><span class="badge__dot"></span>In
                             Progress</span><button class="btn btn--ghost btn--sm btn--icon" aria-label="More">⋯</button>
                     </div>
-                    <div class="list-item"><span class="avatar avatar--red">BF</span>
+                    <div class="list-item"><span class="avatar avatar--error">BF</span>
                         <div class="list-item__text">
                             <div class="list-item__title">Bug Fixes Sprint 14</div>
                             <div class="list-item__subtitle">Updated 3 days ago</div>
-                        </div><span class="badge badge--red"><span class="badge__dot"></span>Blocked</span><button
+                        </div><span class="badge badge--error"><span class="badge__dot"></span>Blocked</span><button
                             class="btn btn--ghost btn--sm btn--icon" aria-label="More">⋯</button>
                     </div>
                 </div>
@@ -2425,7 +2556,7 @@
                     <span class="kw">border-radius</span>: <span class="fn">var</span>(<span
                         class="str">--radius-lg</span>);
                     <span class="kw">box-shadow</span>: <span class="fn">var</span>(<span
-                        class="str">--shadow-md</span>);
+                        class="str">--elevation-2</span>);
                     }
                 </div>
             </section>
@@ -2474,15 +2605,92 @@
                 </div>
             </section>
 
-            <!-- SHADOWS -->
-            <section class="ks-section" id="section-shadows">
-                <h2 class="ks-section__title">Elevation / Shadows</h2>
+            <!-- ELEVATION -->
+            <section class="ks-section" id="section-elevation">
+                <h2 class="ks-section__title">Elevation / Shadows (Semantic)</h2>
+                <div class="ks-grid ks-grid--5" style="margin-bottom:var(--space-6);">
+                    <div class="shadow-box" style="box-shadow:var(--elevation-0);">0 · Flush</div>
+                    <div class="shadow-box" style="box-shadow:var(--elevation-1);">1 · Resting</div>
+                    <div class="shadow-box" style="box-shadow:var(--elevation-2);">2 · Raised</div>
+                    <div class="shadow-box" style="box-shadow:var(--elevation-3);">3 · Hover</div>
+                    <div class="shadow-box" style="box-shadow:var(--elevation-4);">4 · Overlay</div>
+                </div>
                 <div class="ks-grid ks-grid--5">
                     <div class="shadow-box" style="box-shadow:var(--shadow-xs);">xs</div>
                     <div class="shadow-box" style="box-shadow:var(--shadow-sm);">sm</div>
                     <div class="shadow-box" style="box-shadow:var(--shadow-md);">md</div>
                     <div class="shadow-box" style="box-shadow:var(--shadow-lg);">lg</div>
                     <div class="shadow-box" style="box-shadow:var(--shadow-xl);">xl</div>
+                </div>
+            </section>
+
+            <!-- BORDER SYSTEM -->
+            <section class="ks-section" id="section-borders">
+                <h2 class="ks-section__title">Border System</h2>
+                <div class="ks-grid ks-grid--3">
+                    <div class="border-demo-box" style="border: var(--border-light);">--border-light (subtle)</div>
+                    <div class="border-demo-box" style="border: var(--border-thin);">--border-thin (default)</div>
+                    <div class="border-demo-box" style="border: var(--border-strong);">--border-strong</div>
+                </div>
+                <div class="ks-grid ks-grid--3" style="margin-top:var(--space-4);">
+                    <div class="border-demo-box" style="border: var(--border-width-thin) solid var(--color-border);">1px
+                        thin</div>
+                    <div class="border-demo-box" style="border: var(--border-width-medium) solid var(--color-border);">
+                        2px medium</div>
+                    <div class="border-demo-box" style="border: var(--border-width-thick) solid var(--color-border);">
+                        3px thick</div>
+                </div>
+            </section>
+
+            <!-- SIZE SCALE -->
+            <section class="ks-section" id="section-sizes">
+                <h2 class="ks-section__title">Size Scale (sm / md / lg)</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <div class="size-demo" style="margin-bottom:var(--space-6);">
+                        <div class="size-demo__item" style="width:120px;height:var(--size-sm);">sm · 32px</div>
+                        <div class="size-demo__item" style="width:120px;height:var(--size-md);">md · 44px</div>
+                        <div class="size-demo__item" style="width:120px;height:var(--size-lg);">lg · 52px</div>
+                    </div>
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Icon Sizes</h3>
+                    <div class="ks-flex" style="margin-bottom:var(--space-6);">
+                        <div
+                            style="width:var(--size-icon-sm);height:var(--size-icon-sm);background:var(--accent-500);border-radius:4px;">
+                        </div>
+                        <span
+                            style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">icon-sm
+                            16px</span>
+                        <div
+                            style="width:var(--size-icon);height:var(--size-icon);background:var(--accent-500);border-radius:4px;margin-left:var(--space-4);">
+                        </div>
+                        <span
+                            style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">icon
+                            20px</span>
+                        <div
+                            style="width:var(--size-icon-lg);height:var(--size-icon-lg);background:var(--accent-500);border-radius:4px;margin-left:var(--space-4);">
+                        </div>
+                        <span
+                            style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">icon-lg
+                            24px</span>
+                    </div>
+                    <h3
+                        style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
+                        Avatar Sizes</h3>
+                    <div class="ks-flex">
+                        <span class="avatar avatar--sm">S</span>
+                        <span
+                            style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">sm
+                            28px</span>
+                        <span class="avatar" style="margin-left:var(--space-3);">M</span>
+                        <span
+                            style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">md
+                            40px</span>
+                        <span class="avatar avatar--lg" style="margin-left:var(--space-3);">L</span>
+                        <span
+                            style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">lg
+                            56px</span>
+                    </div>
                 </div>
             </section>
 
@@ -2500,7 +2708,7 @@
 
             <!-- SPACING -->
             <section class="ks-section" id="section-spacing">
-                <h2 class="ks-section__title">Spacing Scale</h2>
+                <h2 class="ks-section__title">Spacing Scale (4px grid)</h2>
                 <div class="card card--raised" style="padding:var(--space-6);">
                     <div class="space-bar" style="width:calc(var(--space-1)*8);">1 · 4px</div>
                     <div class="space-bar" style="width:calc(var(--space-2)*8);">2 · 8px</div>
@@ -2536,8 +2744,7 @@
                         </div>
                         <div class="input-group" style="margin-bottom:var(--space-5);">
                             <label class="input-group__label" for="input-disabled">Disabled</label>
-                            <input class="input" type="text" id="input-disabled" disabled value="Cannot edit"
-                                style="opacity:0.5;">
+                            <input class="input" type="text" id="input-disabled" disabled value="Cannot edit">
                         </div>
                         <div class="input-group">
                             <label class="input-group__label" for="input-select">Select</label>
@@ -2663,19 +2870,19 @@
                                 style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-3);background:var(--color-surface);border-radius:var(--radius-md);">
                                 <span style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Critical
                                     Task</span>
-                                <span class="badge badge--red"><span class="badge__dot"></span>High</span>
+                                <span class="badge badge--error"><span class="badge__dot"></span>High</span>
                             </div>
                             <div
                                 style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-3);background:var(--color-surface);border-radius:var(--radius-md);">
                                 <span style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Review
                                     Needed</span>
-                                <span class="badge badge--yellow"><span class="badge__dot"></span>Medium</span>
+                                <span class="badge badge--warning"><span class="badge__dot"></span>Medium</span>
                             </div>
                             <div
                                 style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-3);background:var(--color-surface);border-radius:var(--radius-md);">
                                 <span style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Backlog
                                     Item</span>
-                                <span class="badge badge--blue"><span class="badge__dot"></span>Low</span>
+                                <span class="badge badge--info"><span class="badge__dot"></span>Low</span>
                             </div>
                         </div>
                     </div>
@@ -2746,6 +2953,10 @@
                 <button class="sb-segmented__btn" onclick="setStatusStyle('accent', 'solid')"
                     data-val="solid">Solid</button>
             </div>
+            <!-- Dark mode auto-detection indicator -->
+            <div class="sb-dark-indicator sb-dark-indicator--light" id="darkModeIndicator">
+                ☀️ Light theme detected
+            </div>
         </div>
 
         <!-- SURFACES & BORDERS -->
@@ -2778,33 +2989,6 @@
                         title="Revert">↩</button>
                 </div>
             </div>
-            <div class="sb-color">
-                <span class="sb-color__label">Text Muted</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-textMuted" value="#9B9B9B">
-                    <input type="text" class="sb-color__hex" id="hex-textMuted" value="#9B9B9B" maxlength="7">
-                    <button class="sb-revert" id="revert-textMuted" onclick="revertKey('textMuted')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
-            <div class="sb-color">
-                <span class="sb-color__label">Border Color</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-borderColor" value="#D6D0CD">
-                    <input type="text" class="sb-color__hex" id="hex-borderColor" value="#D6D0CD" maxlength="7">
-                    <button class="sb-revert" id="revert-borderColor" onclick="revertKey('borderColor')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
-            <div class="sb-color">
-                <span class="sb-color__label">Row Hover</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-hoverBg" value="#F5F3F1">
-                    <input type="text" class="sb-color__hex" id="hex-hoverBg" value="#F5F3F1" maxlength="7">
-                    <button class="sb-revert" id="revert-hoverBg" onclick="revertKey('hoverBg')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
             <div class="sb-slider">
                 <div class="sb-slider__header">
                     <span class="sb-slider__label">Global Border Width</span>
@@ -2827,22 +3011,13 @@
                 </div>
                 <input type="range" class="sb-range" id="ctrl-cardBorderWidth" min="0" max="4" value="1" step="0.5">
             </div>
-            <div class="sb-color">
-                <span class="sb-color__label">Card Border Color</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-cardBorderColor" value="#D6D0CD">
-                    <input type="text" class="sb-color__hex" id="hex-cardBorderColor" value="#D6D0CD" maxlength="7">
-                    <button class="sb-revert" id="revert-cardBorderColor" onclick="revertKey('cardBorderColor')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
         </div>
 
         <!-- STATUS COLORS -->
         <div class="sb-section">
             <div class="sb-section__title">Status Colors</div>
             <div class="sb-color">
-                <span class="sb-color__label">Red / Error</span>
+                <span class="sb-color__label">Error (red)</span>
                 <div class="sb-color__controls">
                     <input type="color" class="sb-color__picker" id="ctrl-red" value="#FF564A">
                     <input type="text" class="sb-color__hex" id="hex-red" value="#FF564A" maxlength="7">
@@ -2857,7 +3032,7 @@
             </div>
 
             <div class="sb-color">
-                <span class="sb-color__label">Green / Success</span>
+                <span class="sb-color__label">Success (green)</span>
                 <div class="sb-color__controls">
                     <input type="color" class="sb-color__picker" id="ctrl-green" value="#00C461">
                     <input type="text" class="sb-color__hex" id="hex-green" value="#00C461" maxlength="7">
@@ -2872,7 +3047,7 @@
             </div>
 
             <div class="sb-color">
-                <span class="sb-color__label">Blue / Info</span>
+                <span class="sb-color__label">Info (blue)</span>
                 <div class="sb-color__controls">
                     <input type="color" class="sb-color__picker" id="ctrl-blue" value="#00B4FF">
                     <input type="text" class="sb-color__hex" id="hex-blue" value="#00B4FF" maxlength="7">
@@ -2887,7 +3062,7 @@
             </div>
 
             <div class="sb-color">
-                <span class="sb-color__label">Yellow / Warning</span>
+                <span class="sb-color__label">Warning (yellow)</span>
                 <div class="sb-color__controls">
                     <input type="color" class="sb-color__picker" id="ctrl-yellow" value="#FFB905">
                     <input type="text" class="sb-color__hex" id="hex-yellow" value="#FFB905" maxlength="7">
@@ -2980,7 +3155,7 @@
 
 
     <!-- ============================================================
-       JAVASCRIPT — Theme Engine
+       JAVASCRIPT — Theme Engine v3.0
        ============================================================ -->
     <script>
         /* ============================================================
@@ -2992,12 +3167,8 @@
             surface: '#F5F3F1',
             surfaceRaised: '#FAFAF9',
             textColor: '#343132',
-            textMuted: '#9B9B9B',
-            borderColor: '#D6D0CD',
-            hoverBg: '#F5F3F1',
             borderWidth: 1,
             cardBorderWidth: 1,
-            cardBorderColor: '#D6D0CD',
             red: '#FF564A',
             green: '#00C461',
             blue: '#00B4FF',
@@ -3016,8 +3187,8 @@
             }
         };
 
-        let referenceConfig = { ...DEFAULT_CONFIG };
-        let currentConfig = { ...DEFAULT_CONFIG };
+        let referenceConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        let currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
 
         const SHADOW_PRESETS = {
             none: {
@@ -3110,11 +3281,26 @@
             };
         }
 
+        /** Determine relative luminance (WCAG) */
+        function relativeLuminance(hex) {
+            const { r, g, b } = hexToRgb(hex);
+            return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        }
+
+        /** Is the given background color dark? */
+        function isDarkBackground(hex) {
+            return relativeLuminance(hex) < 0.45;
+        }
+
+        /** Get the best contrast color for text on a given background */
+        function getContrastColorHex(bgHex, lightHex, darkHex) {
+            return relativeLuminance(bgHex) > 0.5 ? darkHex : lightHex;
+        }
+
+        /** Get contrast as CSS var reference */
         function getContrastColor(hex) {
             if (!hex) return 'var(--gray-50)';
-            const { r, g, b } = hexToRgb(hex);
-            const l = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-            return l > 0.6 ? 'var(--gray-900)' : 'var(--gray-50)';
+            return relativeLuminance(hex) > 0.5 ? 'var(--gray-900)' : 'var(--gray-50)';
         }
 
         function setStatusStyle(key, style) {
@@ -3131,12 +3317,17 @@
             applyConfig(currentConfig);
         }
 
-        /** Generate a 10-step neutral scale from a single background color */
+        /** Generate a 10-step neutral scale from a single background color.
+         *  Smart inversion: if background is dark, the scale is inverted so
+         *  gray-50 is the darkest and gray-900 is the lightest. */
         function generateNeutralScale(bgHex) {
             const { r, g, b } = hexToRgb(bgHex);
             const { h, s } = rgbToHsl(r, g, b);
+            const dark = isDarkBackground(bgHex);
 
-            const steps = [
+            // Light theme: 50=lightest, 900=darkest
+            // Dark theme: 50=darkest(near bg), 900=lightest
+            const lightSteps = [
                 { step: '50', l: 97.5, sf: 0.15 },
                 { step: '100', l: 95, sf: 0.20 },
                 { step: '200', l: 90, sf: 0.25 },
@@ -3149,6 +3340,20 @@
                 { step: '900', l: 11, sf: 0.06 },
             ];
 
+            const darkSteps = [
+                { step: '50', l: 10, sf: 0.06 },
+                { step: '100', l: 13, sf: 0.08 },
+                { step: '200', l: 17, sf: 0.10 },
+                { step: '300', l: 22, sf: 0.12 },
+                { step: '400', l: 32, sf: 0.15 },
+                { step: '500', l: 45, sf: 0.15 },
+                { step: '600', l: 62, sf: 0.18 },
+                { step: '700', l: 75, sf: 0.20 },
+                { step: '800', l: 88, sf: 0.22 },
+                { step: '900', l: 95, sf: 0.25 },
+            ];
+
+            const steps = dark ? darkSteps : lightSteps;
             const scale = {};
             for (const { step, l, sf } of steps) {
                 const rgb = hslToRgb(h, s * sf, l);
@@ -3157,20 +3362,57 @@
             return scale;
         }
 
-        /** Generate 100/500/700 variants from a single accent color */
-        function generateAccentVariants(hex) {
+        /** Generate 100/500/700 variants from a single accent color.
+         *  Smart inversion: if dark theme, the "100" tint becomes a dark shade
+         *  so it remains a subtle background even on dark surfaces. */
+        function generateAccentVariants(hex, isDark) {
             const { r, g, b } = hexToRgb(hex);
             const { h, s, l } = rgbToHsl(r, g, b);
 
-            // 100: Light tint. High lightness, preserves a good amount of the vibe.
-            const light = hslToRgb(h, Math.max(s * 0.8, 8), 95.5);
-            const c100 = rgbToHex(light.r, light.g, light.b);
+            if (isDark) {
+                // 100: Deep shade for dark bg. Low lightness, keeps hue.
+                const deep = hslToRgb(h, Math.max(s * 0.5, 8), 15);
+                const c100 = rgbToHex(deep.r, deep.g, deep.b);
 
-            // 700: Darker shade. Reduces saturation slightly and lowers lightness.
-            const dark = hslToRgb(h, Math.max(s * 0.65, 10), l * 0.82);
-            const c700 = rgbToHex(dark.r, dark.g, dark.b);
+                // 700: Brighter tint for dark bg.
+                const bright = hslToRgb(h, Math.max(s * 0.85, 15), Math.min(l * 1.25, 75));
+                const c700 = rgbToHex(bright.r, bright.g, bright.b);
 
-            return { '100': c100, '500': hex.toUpperCase(), '700': c700 };
+                return { '100': c100, '500': hex.toUpperCase(), '700': c700 };
+            } else {
+                // Light theme as before
+                const light = hslToRgb(h, Math.max(s * 0.8, 8), 95.5);
+                const c100 = rgbToHex(light.r, light.g, light.b);
+
+                const dark = hslToRgb(h, Math.max(s * 0.65, 10), l * 0.82);
+                const c700 = rgbToHex(dark.r, dark.g, dark.b);
+
+                return { '100': c100, '500': hex.toUpperCase(), '700': c700 };
+            }
+        }
+
+        /** Auto-derive text and surface colors from page background */
+        function autoDeriveFromBg(cfg) {
+            const dark = isDarkBackground(cfg.pageBg);
+            const n = generateNeutralScale(cfg.pageBg);
+
+            // If user hasn't manually set these, auto-derive them
+            const derived = {};
+
+            // Surface = slightly lighter/darker than page bg
+            if (!cfg._manualSurface) {
+                derived.surface = dark ? n['100'] : n['100'];
+            }
+            // Surface raised = even more contrast
+            if (!cfg._manualSurfaceRaised) {
+                derived.surfaceRaised = dark ? n['200'] : n['50'];
+            }
+            // Text color = high contrast against bg
+            if (!cfg._manualTextColor) {
+                derived.textColor = dark ? n['900'] : n['800'];
+            }
+
+            return derived;
         }
 
 
@@ -3179,6 +3421,30 @@
            ============================================================ */
         function applyConfig(cfg) {
             const root = document.documentElement;
+            const dark = isDarkBackground(cfg.pageBg);
+
+            // Auto-derive surface/text if not manually set
+            const derived = autoDeriveFromBg(cfg);
+            const effectiveSurface = cfg._manualSurface ? cfg.surface : (derived.surface || cfg.surface);
+            const effectiveSurfaceRaised = cfg._manualSurfaceRaised ? cfg.surfaceRaised : (derived.surfaceRaised || cfg.surfaceRaised);
+            const effectiveTextColor = cfg._manualTextColor ? cfg.textColor : (derived.textColor || cfg.textColor);
+
+            // Update display values (but don't update config to avoid feedback loops)
+            if (!cfg._manualSurface && derived.surface) {
+                const p = document.getElementById('ctrl-surface');
+                const h = document.getElementById('hex-surface');
+                if (p && h) { p.value = derived.surface; h.value = derived.surface.toUpperCase(); }
+            }
+            if (!cfg._manualSurfaceRaised && derived.surfaceRaised) {
+                const p = document.getElementById('ctrl-surfaceRaised');
+                const h = document.getElementById('hex-surfaceRaised');
+                if (p && h) { p.value = derived.surfaceRaised; h.value = derived.surfaceRaised.toUpperCase(); }
+            }
+            if (!cfg._manualTextColor && derived.textColor) {
+                const p = document.getElementById('ctrl-textColor');
+                const h = document.getElementById('hex-textColor');
+                if (p && h) { p.value = derived.textColor; h.value = derived.textColor.toUpperCase(); }
+            }
 
             // 1. Neutral scale from page background
             const neutrals = generateNeutralScale(cfg.pageBg);
@@ -3186,56 +3452,87 @@
                 root.style.setProperty(`--gray-${step}`, hex);
             }
 
-            // Page background — exact user-chosen color (not derived neutral)
+            // Page background — exact user-chosen color
             root.style.setProperty('--color-page-bg', cfg.pageBg);
 
-            // 2. Accent color
-            const accent = generateAccentVariants(cfg.accent);
+            // 2. Accent color (with dark-aware inversion)
+            const accent = generateAccentVariants(cfg.accent, dark);
             root.style.setProperty('--accent-100', accent['100']);
             root.style.setProperty('--accent-500', accent['500']);
             root.style.setProperty('--accent-700', accent['700']);
 
             // Foreground colors for accent swatches
-            root.style.setProperty('--accent-100-fg', accent['700']);
+            root.style.setProperty('--accent-100-fg', dark ? accent['500'] : accent['700']);
             root.style.setProperty('--accent-500-fg', getContrastColor(accent['500']));
             root.style.setProperty('--accent-700-fg', getContrastColor(accent['700']));
 
-            // 3. Status colors
+            // 3. Status colors (with dark-aware inversion)
             for (const name of ['red', 'green', 'blue', 'yellow']) {
                 const baseColor = cfg[name];
-                const v = generateAccentVariants(baseColor);
+                const v = generateAccentVariants(baseColor, dark);
                 root.style.setProperty(`--${name}-100`, v['100']);
                 root.style.setProperty(`--${name}-500`, v['500']);
                 root.style.setProperty(`--${name}-700`, v['700']);
 
                 // Foreground colors for swatches
-                root.style.setProperty(`--${name}-100-fg`, v['700']);
+                root.style.setProperty(`--${name}-100-fg`, dark ? v['500'] : v['700']);
                 root.style.setProperty(`--${name}-500-fg`, getContrastColor(v['500']));
                 root.style.setProperty(`--${name}-700-fg`, getContrastColor(v['700']));
             }
 
-            // 4. Surfaces (direct overrides)
-            root.style.setProperty('--color-surface', cfg.surface);
-            root.style.setProperty('--color-surface-raised', cfg.surfaceRaised);
+            // 4. Surfaces
+            root.style.setProperty('--color-surface', effectiveSurface);
+            root.style.setProperty('--color-surface-raised', effectiveSurfaceRaised);
 
             // Glass effect for sidebar
-            const { r: sr, g: sg, b: sb } = hexToRgb(cfg.surfaceRaised);
+            const { r: sr, g: sg, b: sb } = hexToRgb(effectiveSurfaceRaised);
             root.style.setProperty('--color-surface-raised-alpha', `rgba(${sr}, ${sg}, ${sb}, 0.88)`);
 
-            // 5. Text (direct overrides)
-            root.style.setProperty('--color-text', cfg.textColor);
-            root.style.setProperty('--color-text-muted', cfg.textMuted);
+            // 5. Text — auto-derive muted, subtle, disabled from text color
+            root.style.setProperty('--color-text', effectiveTextColor);
 
-            // 6. Border color + width
-            root.style.setProperty('--color-border', cfg.borderColor);
+            const textHsl = rgbToHsl(...Object.values(hexToRgb(effectiveTextColor)));
+            if (dark) {
+                // In dark themes, muted = dimmer version of light text
+                const mutedRgb = hslToRgb(textHsl.h, textHsl.s * 0.3, textHsl.l * 0.6);
+                const subtleRgb = hslToRgb(textHsl.h, textHsl.s * 0.2, textHsl.l * 0.45);
+                const disabledRgb = hslToRgb(textHsl.h, textHsl.s * 0.15, textHsl.l * 0.35);
+                root.style.setProperty('--color-text-muted', rgbToHex(mutedRgb.r, mutedRgb.g, mutedRgb.b));
+                root.style.setProperty('--color-text-subtle', rgbToHex(subtleRgb.r, subtleRgb.g, subtleRgb.b));
+                root.style.setProperty('--color-text-disabled', rgbToHex(disabledRgb.r, disabledRgb.g, disabledRgb.b));
+                root.style.setProperty('--color-text-invert', neutrals['50']);
+            } else {
+                // In light themes, muted = lighter version of dark text
+                const mutedRgb = hslToRgb(textHsl.h, textHsl.s * 0.2, Math.min(textHsl.l + 40, 65));
+                const subtleRgb = hslToRgb(textHsl.h, textHsl.s * 0.15, Math.min(textHsl.l + 50, 75));
+                const disabledRgb = hslToRgb(textHsl.h, textHsl.s * 0.1, Math.min(textHsl.l + 55, 80));
+                root.style.setProperty('--color-text-muted', rgbToHex(mutedRgb.r, mutedRgb.g, mutedRgb.b));
+                root.style.setProperty('--color-text-subtle', rgbToHex(subtleRgb.r, subtleRgb.g, subtleRgb.b));
+                root.style.setProperty('--color-text-disabled', rgbToHex(disabledRgb.r, disabledRgb.g, disabledRgb.b));
+                root.style.setProperty('--color-text-invert', neutrals['50']);
+            }
+
+            // 6. Borders — auto-derive from neutral scale
+            root.style.setProperty('--color-border', neutrals['300']);
+            root.style.setProperty('--color-border-light', neutrals['200']);
+            root.style.setProperty('--color-border-strong', neutrals['400']);
+            root.style.setProperty('--color-border-focus', accent['500']);
+
             const bw = cfg.borderWidth;
+            root.style.setProperty('--border-width-thin', bw + 'px');
             root.style.setProperty('--border-thin', bw ? `${bw}px solid var(--color-border)` : 'none');
             root.style.setProperty('--border-light', bw ? `${bw}px solid var(--color-border-light)` : 'none');
+            root.style.setProperty('--border-strong', bw ? `${bw}px solid var(--color-border-strong)` : 'none');
             root.style.setProperty('--card-border-width', (cfg.cardBorderWidth ?? 1) + 'px');
-            root.style.setProperty('--card-border-color', cfg.cardBorderColor);
+            root.style.setProperty('--card-border-color', neutrals['300']);
 
-            // Hover row
-            root.style.setProperty('--color-hover-row', cfg.hoverBg);
+            // Hover surface
+            root.style.setProperty('--color-hover-surface', dark ? neutrals['200'] : neutrals['100']);
+
+            // Disabled states — auto-derived
+            root.style.setProperty('--disabled-bg', neutrals['200']);
+            root.style.setProperty('--disabled-fg', neutrals['400']);
+            root.style.setProperty('--disabled-border', neutrals['300']);
 
             // 7. Radius
             const r = cfg.radius;
@@ -3244,26 +3541,45 @@
             root.style.setProperty('--radius-lg', `${Math.round(r * 1.67)}px`);
             root.style.setProperty('--radius-xl', `${Math.round(r * 2.33)}px`);
 
-            // 8. Shadows
-            const shadows = SHADOW_PRESETS[cfg.shadow] || SHADOW_PRESETS.soft;
+            // 8. Shadows — adapt to dark theme (use lighter shadow on dark)
+            let shadows = SHADOW_PRESETS[cfg.shadow] || SHADOW_PRESETS.soft;
+            if (dark && cfg.shadow !== 'none') {
+                // On dark themes, shadows are less visible, so increase opacity
+                shadows = Object.fromEntries(
+                    Object.entries(shadows).map(([k, v]) => [k, v.replace(/rgba\(([^)]+),\s*([\d.]+)\)/, (_, rgb, a) =>
+                        `rgba(0,0,0,${Math.min(parseFloat(a) * 2.5, 0.5).toFixed(2)})`
+                    )])
+                );
+            }
             for (const [size, val] of Object.entries(shadows)) {
                 root.style.setProperty(`--shadow-${size}`, val);
             }
+            // Elevation tokens (always reference current shadow values)
+            root.style.setProperty('--elevation-0', 'none');
+            root.style.setProperty('--elevation-1', shadows.xs);
+            root.style.setProperty('--elevation-2', shadows.sm);
+            root.style.setProperty('--elevation-3', shadows.md);
+            root.style.setProperty('--elevation-4', shadows.lg);
+            root.style.setProperty('--elevation-5', shadows.xl);
 
             // 9. Typography
             root.style.setProperty('--font-sans', `'${cfg.fontSans}', system-ui, -apple-system, sans-serif`);
             root.style.setProperty('--font-mono', `'${cfg.fontMono}', ui-monospace, monospace`);
             root.style.fontSize = `${cfg.fontSize}px`;
 
-            // 10. Focus ring adapts to accent - sharp, solid 2px ring
+            // 10. Focus ring adapts to accent
             root.style.setProperty('--focus-ring', `0 0 0 2px ${accent['500']}`);
+            root.style.setProperty('--focus-ring-inset', `inset 0 0 0 2px ${accent['500']}`);
+            root.style.setProperty('--focus-ring-error', `0 0 0 2px ${cfg.red}`);
 
             // 11. Status Semantic Variants & Switcher Contrast
-            const statuses = ['accent', 'red', 'green', 'blue', 'yellow'];
-            statuses.forEach(name => {
+            const statusMap = { accent: cfg.accent, red: cfg.red, green: cfg.green, blue: cfg.blue, yellow: cfg.yellow };
+            const semanticMap = { accent: 'accent', red: 'error', green: 'success', blue: 'info', yellow: 'warning' };
+
+            Object.entries(statusMap).forEach(([name, baseColor]) => {
                 const style = cfg.statusStyle[name];
-                const baseColor = cfg[name];
-                const variants = generateAccentVariants(baseColor);
+                const variants = generateAccentVariants(baseColor, dark);
+                const semanticName = semanticMap[name];
 
                 // Update Sidebar Switcher contrast & color
                 const container = document.querySelector(`.sb-segmented[data-key="${name}"]`);
@@ -3273,22 +3589,61 @@
                 }
 
                 if (style === 'solid') {
-                    root.style.setProperty(`--status-${name}-bg`, variants['500']);
-                    root.style.setProperty(`--status-${name}-fg`, getContrastColor(baseColor));
+                    root.style.setProperty(`--status-${semanticName}-bg`, variants['500']);
+                    root.style.setProperty(`--status-${semanticName}-fg`, getContrastColor(baseColor));
+                    // Also set the color-key based ones for backward compat
+                    if (name !== semanticName) {
+                        root.style.setProperty(`--status-${name}-bg`, variants['500']);
+                        root.style.setProperty(`--status-${name}-fg`, getContrastColor(baseColor));
+                    }
                 } else {
-                    root.style.setProperty(`--status-${name}-bg`, variants['100']);
-                    root.style.setProperty(`--status-${name}-fg`, variants['500']);
-
-                    // Ensure even soft foreground is readable if base color is very light
-                    // (though usually 500 on 100 is fine, sometimes it's not)
+                    root.style.setProperty(`--status-${semanticName}-bg`, variants['100']);
+                    root.style.setProperty(`--status-${semanticName}-fg`, variants[dark ? '700' : '500']);
+                    if (name !== semanticName) {
+                        root.style.setProperty(`--status-${name}-bg`, variants['100']);
+                        root.style.setProperty(`--status-${name}-fg`, variants[dark ? '700' : '500']);
+                    }
                 }
             });
 
-            // Update CTA Contrast
-            const ctaBg = cfg.statusStyle.accent === 'solid' ? accent['500'] : accent['100'];
-            const ctaFg = cfg.statusStyle.accent === 'solid' ? getContrastColor(accent['500']) : accent['500'];
-            root.style.setProperty('--cta-bg-live', ctaBg);
-            root.style.setProperty('--cta-fg-live', ctaFg);
+            // Neutral status
+            root.style.setProperty('--status-neutral-bg', neutrals['200']);
+            root.style.setProperty('--status-neutral-fg', neutrals['700']);
+
+            // CTA adapts to accent status style
+            const ctaAccent = generateAccentVariants(cfg.accent, dark);
+            if (cfg.statusStyle.accent === 'solid') {
+                root.style.setProperty('--cta-bg', ctaAccent['500']);
+                root.style.setProperty('--cta-fg', getContrastColor(cfg.accent));
+                root.style.setProperty('--cta-bg-live', ctaAccent['500']);
+                root.style.setProperty('--cta-fg-live', getContrastColor(cfg.accent));
+            } else {
+                root.style.setProperty('--cta-bg', ctaAccent['100']);
+                root.style.setProperty('--cta-fg', dark ? ctaAccent['700'] : ctaAccent['500']);
+                root.style.setProperty('--cta-bg-live', ctaAccent['100']);
+                root.style.setProperty('--cta-fg-live', dark ? ctaAccent['700'] : ctaAccent['500']);
+            }
+            root.style.setProperty('--cta-hover-bg', ctaAccent['500']);
+            root.style.setProperty('--cta-hover-fg', getContrastColor(cfg.accent));
+            root.style.setProperty('--cta-active-bg', ctaAccent['700']);
+            root.style.setProperty('--cta-active-fg', getContrastColor(ctaAccent['700']));
+            root.style.setProperty('--cta-disabled-bg', neutrals['200']);
+            root.style.setProperty('--cta-disabled-fg', neutrals['400']);
+
+            // 12. Overlay — adapt to dark mode
+            root.style.setProperty('--color-overlay', dark ? 'rgba(0,0,0,0.6)' : 'rgba(28,26,27,0.45)');
+
+            // Update dark mode indicator
+            const indicator = document.getElementById('darkModeIndicator');
+            if (indicator) {
+                if (dark) {
+                    indicator.className = 'sb-dark-indicator sb-dark-indicator--dark';
+                    indicator.textContent = '🌙 Dark theme detected';
+                } else {
+                    indicator.className = 'sb-dark-indicator sb-dark-indicator--light';
+                    indicator.textContent = '☀️ Light theme detected';
+                }
+            }
 
             // Update revert button visibility
             updateRevertStates();
@@ -3298,7 +3653,8 @@
         /* ============================================================
            UI CONTROLS → CONFIG BINDING
            ============================================================ */
-        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'textMuted', 'borderColor', 'hoverBg', 'cardBorderColor', 'red', 'green', 'blue', 'yellow'];
+        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'red', 'green', 'blue', 'yellow'];
+        const MANUAL_OVERRIDE_KEYS = { surface: '_manualSurface', surfaceRaised: '_manualSurfaceRaised', textColor: '_manualTextColor' };
 
         // Bind all color pickers + hex inputs
         COLOR_KEYS.forEach(key => {
@@ -3310,6 +3666,10 @@
                 const val = picker.value.toUpperCase();
                 hex.value = val;
                 currentConfig[key] = val;
+                // Mark as manually changed if it's an auto-derivable field
+                if (MANUAL_OVERRIDE_KEYS[key]) {
+                    currentConfig[MANUAL_OVERRIDE_KEYS[key]] = true;
+                }
                 applyConfig(currentConfig);
             });
 
@@ -3320,6 +3680,9 @@
                     picker.value = val;
                     hex.value = val;
                     currentConfig[key] = val;
+                    if (MANUAL_OVERRIDE_KEYS[key]) {
+                        currentConfig[MANUAL_OVERRIDE_KEYS[key]] = true;
+                    }
                     applyConfig(currentConfig);
                 } else {
                     hex.value = currentConfig[key];
@@ -3412,7 +3775,8 @@
            REVERT SYSTEM
            ============================================================ */
         function updateRevertStates() {
-            for (const key of Object.keys(currentConfig)) {
+            for (const key of Object.keys(DEFAULT_CONFIG)) {
+                if (key === 'statusStyle') continue;
                 const btn = document.getElementById(`revert-${key}`);
                 if (!btn) continue;
                 const current = typeof currentConfig[key] === 'string'
@@ -3430,7 +3794,13 @@
         }
 
         function revertKey(key) {
-            currentConfig[key] = referenceConfig[key];
+            currentConfig[key] = typeof referenceConfig[key] === 'object'
+                ? JSON.parse(JSON.stringify(referenceConfig[key]))
+                : referenceConfig[key];
+            // Clear manual override flag if applicable
+            if (MANUAL_OVERRIDE_KEYS[key]) {
+                delete currentConfig[MANUAL_OVERRIDE_KEYS[key]];
+            }
             syncUIFromConfig(currentConfig);
             applyConfig(currentConfig);
         }
@@ -3442,10 +3812,15 @@
         function saveTheme() {
             const data = {
                 name: 'Custom Theme',
-                version: '1.0',
+                version: '3.0',
                 generator: 'Agentic Blueprint',
                 config: { ...currentConfig },
             };
+            // Clean internal flags
+            delete data.config._manualSurface;
+            delete data.config._manualSurfaceRaised;
+            delete data.config._manualTextColor;
+
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -3464,8 +3839,9 @@
                 try {
                     const data = JSON.parse(ev.target.result);
                     const cfg = data.config || data;
-                    currentConfig = { ...DEFAULT_CONFIG, ...cfg };
-                    referenceConfig = { ...currentConfig };
+                    currentConfig = { ...JSON.parse(JSON.stringify(DEFAULT_CONFIG)), ...cfg };
+                    if (!currentConfig.statusStyle) currentConfig.statusStyle = { ...DEFAULT_CONFIG.statusStyle };
+                    referenceConfig = JSON.parse(JSON.stringify(currentConfig));
                     syncUIFromConfig(currentConfig);
                     if (currentConfig.fontSans !== DEFAULT_CONFIG.fontSans) {
                         loadGoogleFont(currentConfig.fontSans);
@@ -3483,8 +3859,8 @@
         });
 
         function resetToDefault() {
-            referenceConfig = { ...DEFAULT_CONFIG };
-            currentConfig = { ...DEFAULT_CONFIG };
+            referenceConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+            currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
             syncUIFromConfig(currentConfig);
             applyConfig(currentConfig);
         }
@@ -3494,7 +3870,7 @@
             COLOR_KEYS.forEach(key => {
                 const picker = document.getElementById(`ctrl-${key}`);
                 const hex = document.getElementById(`hex-${key}`);
-                if (picker && hex) {
+                if (picker && hex && cfg[key]) {
                     picker.value = cfg[key];
                     hex.value = cfg[key].toUpperCase();
                 }
@@ -3526,21 +3902,92 @@
 
 
         /* ============================================================
-           EXPORT FULL tokens.css
+           EXPORT FULL tokens.css (PRODUCTION-GRADE)
            ============================================================ */
         function exportTokensCSS() {
             const cfg = currentConfig;
+            const dark = isDarkBackground(cfg.pageBg);
             const n = generateNeutralScale(cfg.pageBg);
-            const a = generateAccentVariants(cfg.accent);
-            const red = generateAccentVariants(cfg.red);
-            const grn = generateAccentVariants(cfg.green);
-            const blu = generateAccentVariants(cfg.blue);
-            const yel = generateAccentVariants(cfg.yellow);
+            const a = generateAccentVariants(cfg.accent, dark);
+            const red = generateAccentVariants(cfg.red, dark);
+            const grn = generateAccentVariants(cfg.green, dark);
+            const blu = generateAccentVariants(cfg.blue, dark);
+            const yel = generateAccentVariants(cfg.yellow, dark);
             const r = cfg.radius;
-            const sh = SHADOW_PRESETS[cfg.shadow] || SHADOW_PRESETS.soft;
+            let sh = SHADOW_PRESETS[cfg.shadow] || SHADOW_PRESETS.soft;
+            if (dark && cfg.shadow !== 'none') {
+                sh = Object.fromEntries(
+                    Object.entries(sh).map(([k, v]) => [k, v.replace(/rgba\(([^)]+),\s*([\d.]+)\)/, (_, rgb, alpha) =>
+                        `rgba(0,0,0,${Math.min(parseFloat(alpha) * 2.5, 0.5).toFixed(2)})`
+                    )])
+                );
+            }
+
+            // Derive effective values
+            const derived = autoDeriveFromBg(cfg);
+            const eSurface = cfg._manualSurface ? cfg.surface : (derived.surface || cfg.surface);
+            const eSurfaceRaised = cfg._manualSurfaceRaised ? cfg.surfaceRaised : (derived.surfaceRaised || cfg.surfaceRaised);
+            const eTextColor = cfg._manualTextColor ? cfg.textColor : (derived.textColor || cfg.textColor);
+
+            // Derive text hierarchy
+            const textHsl = rgbToHsl(...Object.values(hexToRgb(eTextColor)));
+            let eMuted, eSubtle, eDisabledFg;
+            if (dark) {
+                const m = hslToRgb(textHsl.h, textHsl.s * 0.3, textHsl.l * 0.6);
+                const s = hslToRgb(textHsl.h, textHsl.s * 0.2, textHsl.l * 0.45);
+                const d = hslToRgb(textHsl.h, textHsl.s * 0.15, textHsl.l * 0.35);
+                eMuted = rgbToHex(m.r, m.g, m.b);
+                eSubtle = rgbToHex(s.r, s.g, s.b);
+                eDisabledFg = rgbToHex(d.r, d.g, d.b);
+            } else {
+                const m = hslToRgb(textHsl.h, textHsl.s * 0.2, Math.min(textHsl.l + 40, 65));
+                const s = hslToRgb(textHsl.h, textHsl.s * 0.15, Math.min(textHsl.l + 50, 75));
+                const d = hslToRgb(textHsl.h, textHsl.s * 0.1, Math.min(textHsl.l + 55, 80));
+                eMuted = rgbToHex(m.r, m.g, m.b);
+                eSubtle = rgbToHex(s.r, s.g, s.b);
+                eDisabledFg = rgbToHex(d.r, d.g, d.b);
+            }
+
+            // Contrast helper for export
+            const contrastHex = (bgHex) => relativeLuminance(bgHex) > 0.5 ? n['900'] : n['50'];
+
+            // Generate status blocks
+            const statusData = {
+                accent: { base: cfg.accent, variants: a, semantic: 'accent' },
+                red: { base: cfg.red, variants: red, semantic: 'error' },
+                green: { base: cfg.green, variants: grn, semantic: 'success' },
+                blue: { base: cfg.blue, variants: blu, semantic: 'info' },
+                yellow: { base: cfg.yellow, variants: yel, semantic: 'warning' },
+            };
+
+            let statusTokens = '';
+            for (const [key, { base, variants, semantic }] of Object.entries(statusData)) {
+                const style = cfg.statusStyle[key];
+                const bg = style === 'solid' ? variants['500'] : variants['100'];
+                const fg = style === 'solid' ? contrastHex(base) : (dark ? variants['700'] : variants['500']);
+                statusTokens += `  --status-${semantic}-bg: ${bg};\n  --status-${semantic}-fg: ${fg};\n`;
+            }
+            statusTokens += `  --status-neutral-bg:  ${n['200']};\n  --status-neutral-fg:  ${n['700']};`;
 
             const css = `/* ============================================================
-   tokens.css — Generated by Agentic Blueprint
+   tokens.css — Generated by Agentic Blueprint v3.0
+   ============================================================
+   Production-ready design token system.
+   
+   Structure:
+     1. Color Primitives
+     2. Semantic Colors
+     3. Interactive States (full: default/hover/active/disabled)
+     4. Status Variants (semantic naming)
+     5. Disabled States
+     6. Typography
+     7. Spacing (4px grid)
+     8. Geometry (radius, shadows, borders, elevation)
+     9. Motion & Transitions
+    10. Z-Index Scale
+    11. Focus & Accessibility
+    12. Size Scale (sm/md/lg)
+    13. Containers
    ============================================================ */
 
 :root {
@@ -3564,112 +4011,137 @@
   /* Accent */
   --accent-500: ${a['500']};   --accent-100: ${a['100']};   --accent-700: ${a['700']};
 
-  /* Blue */
+  /* Info (Blue) */
   --blue-500:   ${blu['500']};   --blue-100:   ${blu['100']};   --blue-700:   ${blu['700']};
 
-  /* Green */
+  /* Success (Green) */
   --green-500:  ${grn['500']};   --green-100:  ${grn['100']};   --green-700:  ${grn['700']};
 
-  /* Yellow */
+  /* Warning (Yellow) */
   --yellow-500: ${yel['500']};   --yellow-100: ${yel['100']};   --yellow-700: ${yel['700']};
 
-  /* Red */
+  /* Error (Red) */
   --red-500:    ${red['500']};   --red-100:    ${red['100']};   --red-700:    ${red['700']};
 
-  /* Foreground variants (contrast-aware) */
-  --accent-100-fg: ${a['700']};
-  --accent-500-fg: ${getContrastColor(a['500']).includes('gray-900') ? n['900'] : n['50']};
-  --accent-700-fg: ${getContrastColor(a['700']).includes('gray-900') ? n['900'] : n['50']};
+  /* Contrast-aware foregrounds */
+  --accent-100-fg: ${dark ? a['500'] : a['700']};
+  --accent-500-fg: ${contrastHex(a['500'])};
+  --accent-700-fg: ${contrastHex(a['700'])};
 
-  --blue-100-fg:   ${blu['700']};
-  --blue-500-fg:   ${getContrastColor(blu['500']).includes('gray-900') ? n['900'] : n['50']};
-  --blue-700-fg:   ${getContrastColor(blu['700']).includes('gray-900') ? n['900'] : n['50']};
+  --blue-100-fg:   ${dark ? blu['500'] : blu['700']};
+  --blue-500-fg:   ${contrastHex(blu['500'])};
+  --blue-700-fg:   ${contrastHex(blu['700'])};
 
-  --green-100-fg:  ${grn['700']};
-  --green-500-fg:  ${getContrastColor(grn['500']).includes('gray-900') ? n['900'] : n['50']};
-  --green-700-fg:  ${getContrastColor(grn['700']).includes('gray-900') ? n['900'] : n['50']};
+  --green-100-fg:  ${dark ? grn['500'] : grn['700']};
+  --green-500-fg:  ${contrastHex(grn['500'])};
+  --green-700-fg:  ${contrastHex(grn['700'])};
 
-  --yellow-100-fg: ${yel['700']};
-  --yellow-500-fg: ${getContrastColor(yel['500']).includes('gray-900') ? n['900'] : n['50']};
-  --yellow-700-fg: ${getContrastColor(yel['700']).includes('gray-900') ? n['900'] : n['50']};
+  --yellow-100-fg: ${dark ? yel['500'] : yel['700']};
+  --yellow-500-fg: ${contrastHex(yel['500'])};
+  --yellow-700-fg: ${contrastHex(yel['700'])};
 
-  --red-100-fg:    ${red['700']};
-  --red-500-fg:    ${getContrastColor(red['500']).includes('gray-900') ? n['900'] : n['50']};
-  --red-700-fg:    ${getContrastColor(red['700']).includes('gray-900') ? n['900'] : n['50']};
-
-  /* ==========================================================
-     3. SEMANTIC STATUS VARIANTS
-     ========================================================== */
-${['accent', 'red', 'green', 'blue', 'yellow'].map(name => {
-                const style = cfg.statusStyle[name];
-                const base = cfg[name];
-                const v = generateAccentVariants(base);
-                const bg = style === 'solid' ? v['500'] : v['100'];
-                const fg = style === 'solid' ? (getContrastColor(base).includes('gray-900') ? n['900'] : n['50']) : v['500'];
-                return `  --status-${name}-bg: ${bg}; --status-${name}-fg: ${fg};`;
-            }).join('\n')}
+  --red-100-fg:    ${dark ? red['500'] : red['700']};
+  --red-500-fg:    ${contrastHex(red['500'])};
+  --red-700-fg:    ${contrastHex(red['700'])};
 
   /* ==========================================================
-     4. SEMANTIC COLORS
+     2. SEMANTIC COLORS
      ========================================================== */
 
   /* Surfaces */
   --color-page-bg:        ${cfg.pageBg};
-  --color-surface:        ${cfg.surface};
-  --color-surface-raised: ${cfg.surfaceRaised};
+  --color-surface:        ${eSurface};
+  --color-surface-raised: ${eSurfaceRaised};
   --color-surface-sunken: var(--gray-300);
-  --color-overlay:        rgba(28, 26, 27, 0.45);
+  --color-overlay:        ${dark ? 'rgba(0,0,0,0.6)' : 'rgba(28,26,27,0.45)'};
 
-  /* Text */
-  --color-text:        ${cfg.textColor};
-  --color-text-muted:  ${cfg.textMuted};
-  --color-text-subtle: var(--gray-400);
-  --color-text-invert: var(--gray-50);
+  /* Text hierarchy: text > muted > subtle > disabled */
+  --color-text:          ${eTextColor};
+  --color-text-muted:    ${eMuted};
+  --color-text-subtle:   ${eSubtle};
+  --color-text-disabled: ${eDisabledFg};
+  --color-text-invert:   var(--gray-${dark ? '50' : '50'});
 
-  /* Borders */
-  --color-border:       ${cfg.borderColor};
-  --color-border-light: var(--gray-200);
-  --color-border-focus: var(--accent-500);
+  /* Borders: light < default < strong */
+  --color-border:        ${n['300']};
+  --color-border-light:  ${n['200']};
+  --color-border-strong: ${n['400']};
+  --color-border-focus:  var(--accent-500);
 
-  /* Hover states */
-  --color-hover-row:    ${cfg.hoverBg};
+  /* ==========================================================
+     3. INTERACTIVE STATES
+     ========================================================== */
 
-  /* Interactive — Primary (CTA) */
-  --cta-bg:       ${cfg.statusStyle.accent === 'solid' ? 'var(--accent-500)' : 'var(--accent-100)'};
-  --cta-fg:       ${cfg.statusStyle.accent === 'solid' ? 'var(--accent-500-fg)' : 'var(--accent-100-fg)'};
-  --cta-hover-bg: var(--accent-700);
-  --cta-hover-fg: var(--gray-50);
+  /* Primary (CTA) — default / hover / active / disabled */
+  --cta-bg:           ${cfg.statusStyle.accent === 'solid' ? 'var(--accent-500)' : 'var(--accent-100)'};
+  --cta-fg:           ${cfg.statusStyle.accent === 'solid' ? 'var(--accent-500-fg)' : (dark ? 'var(--accent-700)' : 'var(--accent-500)')};
+  --cta-hover-bg:     var(--accent-500);
+  --cta-hover-fg:     var(--accent-500-fg);
+  --cta-active-bg:    var(--accent-700);
+  --cta-active-fg:    var(--accent-700-fg);
+  --cta-disabled-bg:  var(--gray-200);
+  --cta-disabled-fg:  var(--gray-400);
 
-  /* Interactive — Secondary */
-  --secondary-bg:       var(--gray-100);
-  --secondary-fg:       var(--gray-800);
-  --secondary-hover-bg: var(--gray-300);
-  --secondary-hover-fg: var(--gray-800);
+  /* Secondary — default / hover / active / disabled */
+  --secondary-bg:           var(--gray-100);
+  --secondary-fg:           var(--gray-800);
+  --secondary-hover-bg:     var(--gray-300);
+  --secondary-hover-fg:     var(--gray-800);
+  --secondary-active-bg:    var(--gray-400);
+  --secondary-active-fg:    var(--gray-900);
+  --secondary-disabled-bg:  var(--gray-200);
+  --secondary-disabled-fg:  var(--gray-400);
 
-  /* Interactive — Destructive */
-  --destructive-bg:       var(--red-100);
-  --destructive-fg:       var(--red-500);
-  --destructive-hover-bg: var(--red-500);
-  --destructive-hover-fg: var(--gray-50);
+  /* Destructive — default / hover / active / disabled */
+  --destructive-bg:           var(--red-100);
+  --destructive-fg:           var(--red-500);
+  --destructive-hover-bg:     var(--red-500);
+  --destructive-hover-fg:     var(--red-500-fg);
+  --destructive-active-bg:    var(--red-700);
+  --destructive-active-fg:    var(--red-700-fg);
+  --destructive-disabled-bg:  var(--gray-200);
+  --destructive-disabled-fg:  var(--gray-400);
 
-  /* Interactive — Ghost */
-  --ghost-bg:       transparent;
-  --ghost-fg:       var(--gray-600);
-  --ghost-hover-bg: var(--gray-200);
-  --ghost-hover-fg: var(--gray-800);
+  /* Ghost — default / hover / active / disabled */
+  --ghost-bg:           transparent;
+  --ghost-fg:           var(--gray-600);
+  --ghost-hover-bg:     var(--gray-200);
+  --ghost-hover-fg:     var(--gray-800);
+  --ghost-active-bg:    var(--gray-300);
+  --ghost-active-fg:    var(--gray-900);
+  --ghost-disabled-bg:  transparent;
+  --ghost-disabled-fg:  var(--gray-400);
 
-  /* Status */
+  /* Interactive surface */
+  --color-hover-surface: var(--gray-${dark ? '200' : '100'});
+
+  /* ==========================================================
+     4. STATUS VARIANTS (semantic naming)
+     ========================================================== */
+
+${statusTokens}
+
+  /* Semantic shorthand */
+  --color-info:         var(--blue-500);
+  --color-info-soft:    var(--blue-100);
   --color-success:      var(--green-500);
   --color-success-soft: var(--green-100);
   --color-warning:      var(--yellow-500);
   --color-warning-soft: var(--yellow-100);
   --color-error:        var(--red-500);
   --color-error-soft:   var(--red-100);
-  --color-info:         var(--blue-500);
-  --color-info-soft:    var(--blue-100);
 
   /* ==========================================================
-     3. TYPOGRAPHY
+     5. DISABLED STATES
+     ========================================================== */
+
+  --disabled-bg:      ${n['200']};
+  --disabled-fg:      ${n['400']};
+  --disabled-border:  ${n['300']};
+  --disabled-opacity: 0.5;
+
+  /* ==========================================================
+     6. TYPOGRAPHY
      ========================================================== */
 
   --font-sans:  '${cfg.fontSans}', system-ui, -apple-system, sans-serif;
@@ -3701,9 +4173,11 @@ ${['accent', 'red', 'green', 'blue', 'yellow'].map(name => {
   --tracking-caps:    0.08em;
 
   /* ==========================================================
-     4. SPACING
+     7. SPACING (4px base grid)
      ========================================================== */
 
+  --space-0:  0px;
+  --space-px: 1px;
   --space-1:  4px;
   --space-2:  8px;
   --space-3:  12px;
@@ -3717,7 +4191,7 @@ ${['accent', 'red', 'green', 'blue', 'yellow'].map(name => {
   --space-20: 80px;
 
   /* ==========================================================
-     5. GEOMETRY
+     8. GEOMETRY
      ========================================================== */
 
   --radius-sm:   ${Math.round(r * 0.5)}px;
@@ -3726,66 +4200,101 @@ ${['accent', 'red', 'green', 'blue', 'yellow'].map(name => {
   --radius-xl:   ${Math.round(r * 2.33)}px;
   --radius-full: 999px;
 
+  /* Border widths */
+  --border-width-thin:   ${cfg.borderWidth}px;
+  --border-width-medium: ${cfg.borderWidth * 2}px;
+  --border-width-thick:  ${cfg.borderWidth * 3}px;
+
+  /* Composed borders */
+  --border-thin:   ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border)' : 'none'};
+  --border-light:  ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border-light)' : 'none'};
+  --border-strong: ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border-strong)' : 'none'};
+
+  /* Card borders */
+  --card-border-width: ${cfg.cardBorderWidth ?? 1}px;
+  --card-border-color: ${n['300']};
+
+  /* Raw shadows */
   --shadow-xs:  ${sh.xs};
   --shadow-sm:  ${sh.sm};
   --shadow-md:  ${sh.md};
   --shadow-lg:  ${sh.lg};
   --shadow-xl:  ${sh.xl};
 
-  /* General borders */
-  --border-thin:  ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border)' : 'none'};
-  --border-light: ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border-light)' : 'none'};
-
-  /* Card borders (dedicated — separate from general borders) */
-  --card-border-width: ${cfg.cardBorderWidth ?? 1}px;
-  --card-border-color: ${cfg.cardBorderColor};
+  /* Semantic elevation */
+  --elevation-0: none;
+  --elevation-1: var(--shadow-xs);
+  --elevation-2: var(--shadow-sm);
+  --elevation-3: var(--shadow-md);
+  --elevation-4: var(--shadow-lg);
+  --elevation-5: var(--shadow-xl);
 
   /* ==========================================================
-     6. MOTION
+     9. MOTION & TRANSITIONS
      ========================================================== */
 
-  --duration-fast:   120ms;
-  --duration-normal: 200ms;
-  --duration-slow:   350ms;
-  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-instant: 0ms;
+  --duration-fast:    120ms;
+  --duration-normal:  200ms;
+  --duration-slow:    350ms;
+  --ease-default:     cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in:          cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:         cubic-bezier(0, 0, 0.2, 1);
 
-  --transition-colors: color var(--duration-normal) var(--ease-default),
-                        background-color var(--duration-normal) var(--ease-default),
-                        border-color var(--duration-normal) var(--ease-default);
-  --transition-all:    all var(--duration-normal) var(--ease-default);
+  --transition-colors:    color var(--duration-normal) var(--ease-default),
+                          background-color var(--duration-normal) var(--ease-default),
+                          border-color var(--duration-normal) var(--ease-default);
+  --transition-opacity:   opacity var(--duration-normal) var(--ease-default);
+  --transition-transform: transform var(--duration-normal) var(--ease-default);
+  --transition-shadow:    box-shadow var(--duration-normal) var(--ease-default);
+  --transition-all:       all var(--duration-normal) var(--ease-default);
 
   /* ==========================================================
-     7. Z-INDEX SCALE
+     10. Z-INDEX SCALE
      ========================================================== */
 
-  --z-base:    0;
-  --z-raised:  10;
-  --z-dropdown:100;
-  --z-sticky:  200;
-  --z-overlay: 300;
-  --z-modal:   400;
-  --z-toast:   500;
+  --z-base:     0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
 
   /* ==========================================================
-     8. FOCUS & ACCESSIBILITY
+     11. FOCUS & ACCESSIBILITY
      ========================================================== */
 
-  --focus-ring: 0 0 0 2px var(--accent-500);
+  --focus-ring:       0 0 0 2px var(--accent-500);
+  --focus-ring-inset: inset 0 0 0 2px var(--accent-500);
+  --focus-ring-error: 0 0 0 2px var(--color-error);
 
   /* ==========================================================
-     9. SIZES & CONTAINERS
+     12. SIZE SCALE
+     ========================================================== */
+
+  --size-sm:  32px;
+  --size-md:  44px;
+  --size-lg:  52px;
+
+  --size-input-h:    var(--size-md);
+  --size-btn-h:      var(--size-md);
+  --size-icon-sm:    16px;
+  --size-icon:       20px;
+  --size-icon-lg:    24px;
+  --size-avatar-sm:  28px;
+  --size-avatar:     40px;
+  --size-avatar-lg:  56px;
+
+  /* ==========================================================
+     13. CONTAINERS
      ========================================================== */
 
   --size-container-sm: 640px;
   --size-container-md: 768px;
   --size-container-lg: 1024px;
   --size-container-xl: 1280px;
-
-  --size-input-h:  44px;
-  --size-btn-h:    44px;
-  --size-icon:     20px;
-  --size-avatar:   40px;
 }
 
 
