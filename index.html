@@ -703,7 +703,7 @@
 
         .swatch--red-100 {
             background: var(--red-100);
-            color: var(--red-700);
+            color: var(--red-500);
         }
 
         .swatch--red-500 {
@@ -832,7 +832,7 @@
         .card {
             background: var(--color-surface);
             border-radius: var(--radius-lg);
-            border: var(--card-border-width, 1px) solid var(--color-border);
+            border: var(--card-border-width, 1px) solid var(--card-border-color, var(--color-border));
             padding: var(--space-6);
             transition: var(--transition-all);
         }
@@ -1306,7 +1306,7 @@
         }
 
         tr:hover td {
-            background: var(--gray-50);
+            background: var(--color-hover-row, var(--gray-100));
         }
 
         /* ===== TAGS ===== */
@@ -1605,7 +1605,7 @@
         }
 
         .list-item:hover {
-            background: var(--gray-100);
+            background: var(--color-hover-row, var(--gray-100));
         }
 
         .list-item__text {
@@ -1764,9 +1764,11 @@
                 <p>Cut the noise. Keep the precision. <code>Set essentials. Export. Done.</code></p>
                 <p>It is so simple that even you can't fuck it up.</p>
                 
-                <span class="badge badge--green"><span class="badge__dot"></span>Open Source</span>
-                <span class="badge badge--blue"><span class="badge__dot"></span>Sloth friendly</span>
-                <span class="badge badge--red"><span class="badge__dot"></span>Made with ❤️</span>
+                <div style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center;">
+                    <span class="badge badge--green"><span class="badge__dot"></span>Open Source</span>
+                    <span class="badge badge--blue"><span class="badge__dot"></span>Sloth friendly</span>
+                    <span class="badge badge--red"><span class="badge__dot"></span>Made with ❤️</span>
+                </div>
 
             </header>
 
@@ -2107,24 +2109,24 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                        class="avatar avatar--sm">AN</span>Anna Nováková</td>
+                                <td><div style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                        class="avatar avatar--sm">AN</span>Anna Nováková</div></td>
                                 <td style="color:var(--color-text-muted);">Designer</td>
                                 <td><span class="badge badge--green"><span class="badge__dot"></span>Active</span></td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$12,400</td>
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
                             </tr>
                             <tr>
-                                <td style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                        class="avatar avatar--sm avatar--blue">PK</span>Pavel Kovář</td>
+                                <td><div style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                        class="avatar avatar--sm avatar--blue">PK</span>Pavel Kovář</div></td>
                                 <td style="color:var(--color-text-muted);">Engineer</td>
                                 <td><span class="badge badge--green"><span class="badge__dot"></span>Active</span></td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$18,750</td>
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
                             </tr>
                             <tr>
-                                <td style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                        class="avatar avatar--sm avatar--yellow">MH</span>Marie Horská</td>
+                                <td><div style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                        class="avatar avatar--sm avatar--yellow">MH</span>Marie Horská</div></td>
                                 <td style="color:var(--color-text-muted);">PM</td>
                                 <td><span class="badge badge--yellow"><span class="badge__dot"></span>Pending</span>
                                 </td>
@@ -2132,8 +2134,8 @@
                                 <td><button class="btn btn--ghost btn--sm">Edit</button></td>
                             </tr>
                             <tr>
-                                <td style="display:flex;align-items:center;gap:var(--space-3);"><span
-                                        class="avatar avatar--sm avatar--red">TK</span>Tomáš Kříž</td>
+                                <td><div style="display:flex;align-items:center;gap:var(--space-3);"><span
+                                        class="avatar avatar--sm avatar--red">TK</span>Tomáš Kříž</div></td>
                                 <td style="color:var(--color-text-muted);">Marketing</td>
                                 <td><span class="badge badge--red"><span class="badge__dot"></span>Inactive</span></td>
                                 <td style="font-family:var(--font-mono);font-size:var(--text-sm);">$3,100</td>
@@ -2561,6 +2563,15 @@
                         title="Revert">↩</button>
                 </div>
             </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Row Hover</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-hoverBg" value="#F5F3F1">
+                    <input type="text" class="sb-color__hex" id="hex-hoverBg" value="#F5F3F1" maxlength="7">
+                    <button class="sb-revert" id="revert-hoverBg" onclick="revertKey('hoverBg')"
+                        title="Revert">↩</button>
+                </div>
+            </div>
             <div class="sb-slider">
                 <div class="sb-slider__header">
                     <span class="sb-slider__label">Global Border Width</span>
@@ -2582,6 +2593,15 @@
                     </div>
                 </div>
                 <input type="range" class="sb-range" id="ctrl-cardBorderWidth" min="0" max="4" value="1" step="0.5">
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Card Border Color</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-cardBorderColor" value="#D6D0CD">
+                    <input type="text" class="sb-color__hex" id="hex-cardBorderColor" value="#D6D0CD" maxlength="7">
+                    <button class="sb-revert" id="revert-cardBorderColor" onclick="revertKey('cardBorderColor')"
+                        title="Revert">↩</button>
+                </div>
             </div>
         </div>
 
@@ -2714,8 +2734,10 @@
             textColor: '#343132',
             textMuted: '#9B9B9B',
             borderColor: '#D6D0CD',
+            hoverBg: '#F5F3F1',
             borderWidth: 1,
             cardBorderWidth: 1,
+            cardBorderColor: '#D6D0CD',
             red: '#FF564A',
             green: '#00C461',
             blue: '#00B4FF',
@@ -2876,6 +2898,9 @@
                 root.style.setProperty(`--gray-${step}`, hex);
             }
 
+            // Page background — exact user-chosen color (not derived neutral)
+            root.style.setProperty('--color-page-bg', cfg.pageBg);
+
             // 2. Accent color
             const accent = generateAccentVariants(cfg.accent);
             root.style.setProperty('--purple-100', accent['100']);
@@ -2908,6 +2933,10 @@
             root.style.setProperty('--border-thin', bw ? `${bw}px solid var(--color-border)` : 'none');
             root.style.setProperty('--border-light', bw ? `${bw}px solid var(--color-border-light)` : 'none');
             root.style.setProperty('--card-border-width', (cfg.cardBorderWidth ?? 1) + 'px');
+            root.style.setProperty('--card-border-color', cfg.cardBorderColor);
+
+            // Hover row
+            root.style.setProperty('--color-hover-row', cfg.hoverBg);
 
             // 7. Radius
             const r = cfg.radius;
@@ -2939,7 +2968,7 @@
         /* ============================================================
            UI CONTROLS → CONFIG BINDING
            ============================================================ */
-        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'textMuted', 'borderColor', 'red', 'green', 'blue', 'yellow'];
+        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'textMuted', 'borderColor', 'hoverBg', 'cardBorderColor', 'red', 'green', 'blue', 'yellow'];
 
         // Bind all color pickers + hex inputs
         COLOR_KEYS.forEach(key => {
@@ -3210,7 +3239,7 @@
      ========================================================== */
 
   /* Surfaces */
-  --color-page-bg:        var(--gray-200);
+  --color-page-bg:        ${cfg.pageBg};
   --color-surface:        ${cfg.surface};
   --color-surface-raised: ${cfg.surfaceRaised};
   --color-surface-sunken: var(--gray-300);
@@ -3227,6 +3256,9 @@
   --color-border-light: var(--gray-200);
   --color-border-focus: var(--purple-500);
 
+  /* Hover states */
+  --color-hover-row:    ${cfg.hoverBg};
+
   /* Interactive — Primary (CTA) */
   --cta-bg:       var(--purple-100);
   --cta-fg:       var(--purple-500);
@@ -3240,8 +3272,8 @@
   --secondary-hover-fg: var(--gray-800);
 
   /* Interactive — Destructive */
-  --destructive-bg:       var(--gray-100);
-  --destructive-fg:       var(--gray-800);
+  --destructive-bg:       var(--red-100);
+  --destructive-fg:       var(--red-500);
   --destructive-hover-bg: var(--red-500);
   --destructive-hover-fg: var(--gray-50);
 
@@ -3325,9 +3357,13 @@
   --shadow-lg:  ${sh.lg};
   --shadow-xl:  ${sh.xl};
 
+  /* General borders */
   --border-thin:  ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border)' : 'none'};
   --border-light: ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border-light)' : 'none'};
+
+  /* Card borders (dedicated — separate from general borders) */
   --card-border-width: ${cfg.cardBorderWidth ?? 1}px;
+  --card-border-color: ${cfg.cardBorderColor};
 
   /* ==========================================================
      6. MOTION
@@ -3436,6 +3472,13 @@ input, textarea, select { font: inherit; }
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('is-collapsed');
         }
+
+        // Fix: re-show sidebar when resizing from narrow back to wide
+        window.matchMedia('(max-width: 1200px)').addEventListener('change', (e) => {
+            if (!e.matches) {
+                document.getElementById('sidebar').classList.remove('is-collapsed');
+            }
+        });
 
 
         /* ============================================================
