@@ -40,6 +40,12 @@
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             transition: transform var(--duration-slow) var(--ease-default);
+
+            /* Fixed radius for sidebar elements to prevent bad looks at extreme values */
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
         }
 
         .app__sidebar.is-collapsed {
@@ -73,21 +79,12 @@
         }
 
         .sb-brand {
-            font-size: var(--text-base);
-            font-weight: var(--weight-bold);
+            font-size: var(--text-lg);
+            font-weight: var(--weight-heavy);
             margin-bottom: 2px;
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
+            color: var(--color-text);
         }
 
-        .sb-brand__dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 3px;
-            background: var(--purple-500);
-            display: inline-block;
-        }
 
         .sb-subtitle {
             font-size: var(--text-xs);
@@ -218,7 +215,7 @@
         .sb-color__hex:focus {
             outline: none;
             border-color: var(--color-border-focus);
-            box-shadow: var(--focus-ring);
+            box-shadow: 0 0 0 2px var(--color-border-focus);
         }
 
         /* --- Range Slider --- */
@@ -267,7 +264,7 @@
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            background: var(--purple-500);
+            background: var(--accent-500);
             cursor: pointer;
             box-shadow: var(--shadow-sm);
             border: 2px solid var(--color-surface-raised);
@@ -282,7 +279,7 @@
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            background: var(--purple-500);
+            background: var(--accent-500);
             cursor: pointer;
             box-shadow: var(--shadow-sm);
             border: 2px solid var(--color-surface-raised);
@@ -329,7 +326,7 @@
         .sb-select:focus {
             outline: none;
             border-color: var(--color-border-focus);
-            box-shadow: var(--focus-ring);
+            box-shadow: 0 0 0 2px var(--color-border-focus);
         }
 
         /* --- Font Input --- */
@@ -362,7 +359,7 @@
         .sb-font__input:focus {
             outline: none;
             border-color: var(--color-border-focus);
-            box-shadow: var(--focus-ring);
+            box-shadow: 0 0 0 2px var(--color-border-focus);
         }
 
         /* --- Revert Button --- */
@@ -390,8 +387,8 @@
         }
 
         .sb-revert:hover {
-            color: var(--purple-500);
-            background: var(--purple-100);
+            color: var(--accent-500);
+            background: var(--accent-100);
         }
 
         /* --- Export Bar --- */
@@ -429,7 +426,7 @@
             height: 48px;
             border-radius: 50%;
             border: none;
-            background: var(--purple-500);
+            background: var(--accent-500);
             color: #fff;
             font-size: var(--text-lg);
             cursor: pointer;
@@ -441,9 +438,40 @@
             transition: var(--transition-all);
         }
 
-        .sidebar-toggle:hover {
-            background: var(--purple-700);
-            transform: scale(1.08);
+        /* --- Segmented Control --- */
+        .sb-segmented {
+            display: flex;
+            background: var(--gray-200);
+            padding: 2px;
+            border-radius: var(--radius-sm);
+            margin-top: var(--space-2);
+        }
+
+        .sb-segmented__btn {
+            flex: 1;
+            height: 26px;
+            border: none;
+            background: none;
+            font-size: 10px;
+            font-weight: var(--weight-semi);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-text-muted);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition-colors);
+        }
+
+        .sb-segmented__btn:hover {
+            color: var(--color-text);
+        }
+
+        .sb-segmented__btn.is-active {
+            background: var(--sb-active-bg, var(--color-surface-raised));
+            color: var(--sb-active-fg, var(--accent-500));
+            box-shadow: var(--shadow-xs);
+            outline: 1px solid rgba(0, 0, 0, 0.05);
+            outline-offset: -1px;
         }
 
         @media (max-width: 1200px) {
@@ -478,8 +506,8 @@
             font-weight: var(--weight-semi);
             letter-spacing: var(--tracking-caps);
             text-transform: uppercase;
-            color: var(--cta-fg);
-            background: var(--cta-bg);
+            color: var(--cta-fg-live, var(--cta-fg));
+            background: var(--cta-bg-live, var(--cta-bg));
             padding: var(--space-2) var(--space-4);
             border-radius: var(--radius-full);
             margin-bottom: var(--space-6);
@@ -494,7 +522,7 @@
         }
 
         .ks-hero h1 span {
-            background: linear-gradient(135deg, var(--purple-500), var(--blue-500));
+            background: linear-gradient(135deg, var(--accent-500), var(--blue-500));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -642,79 +670,79 @@
             color: var(--gray-200);
         }
 
-        .swatch--purple-100 {
-            background: var(--purple-100);
-            color: var(--purple-700);
+        .swatch--accent-100 {
+            background: var(--accent-100);
+            color: var(--accent-100-fg, var(--accent-700));
         }
 
-        .swatch--purple-500 {
-            background: var(--purple-500);
-            color: #fff;
+        .swatch--accent-500 {
+            background: var(--accent-500);
+            color: var(--accent-500-fg, #fff);
         }
 
-        .swatch--purple-700 {
-            background: var(--purple-700);
-            color: #fff;
+        .swatch--accent-700 {
+            background: var(--accent-700);
+            color: var(--accent-700-fg, #fff);
         }
 
         .swatch--blue-100 {
             background: var(--blue-100);
-            color: var(--blue-700);
+            color: var(--blue-100-fg, var(--blue-700));
         }
 
         .swatch--blue-500 {
             background: var(--blue-500);
-            color: #fff;
+            color: var(--blue-500-fg, #fff);
         }
 
         .swatch--blue-700 {
             background: var(--blue-700);
-            color: #fff;
+            color: var(--blue-700-fg, #fff);
         }
 
         .swatch--green-100 {
             background: var(--green-100);
-            color: var(--green-700);
+            color: var(--green-100-fg, var(--green-700));
         }
 
         .swatch--green-500 {
             background: var(--green-500);
-            color: #fff;
+            color: var(--green-500-fg, #fff);
         }
 
         .swatch--green-700 {
             background: var(--green-700);
-            color: #fff;
+            color: var(--green-700-fg, #fff);
         }
 
         .swatch--yellow-100 {
             background: var(--yellow-100);
-            color: var(--yellow-700);
+            color: var(--yellow-100-fg, var(--yellow-700));
         }
 
         .swatch--yellow-500 {
             background: var(--yellow-500);
-            color: var(--gray-900);
+            color: var(--yellow-500-fg, var(--gray-900));
         }
 
         .swatch--yellow-700 {
             background: var(--yellow-700);
-            color: #fff;
+            color: var(--yellow-700-fg, #fff);
         }
 
         .swatch--red-100 {
             background: var(--red-100);
-            color: var(--red-500);
+            color: var(--red-100-fg, var(--red-500));
         }
 
         .swatch--red-500 {
             background: var(--red-500);
-            color: #fff;
+            color: var(--red-500-fg, #fff);
         }
 
         .swatch--red-700 {
             background: var(--red-700);
-            color: #fff;
+            color: var(--red-700-fg, #fff);
         }
 
         /* ===== TYPOGRAPHY DEMO ===== */
@@ -793,12 +821,12 @@
         }
 
         .btn--solid {
-            background: var(--purple-500);
+            background: var(--accent-500);
             color: #fff;
         }
 
         .btn--solid:hover {
-            background: var(--purple-700);
+            background: var(--accent-700);
         }
 
         .btn--sm {
@@ -898,29 +926,29 @@
             border-radius: var(--radius-full);
         }
 
-        .badge--purple {
-            background: var(--purple-100);
-            color: var(--purple-500);
+        .badge--accent {
+            background: var(--status-accent-bg);
+            color: var(--status-accent-fg);
         }
 
         .badge--blue {
-            background: var(--blue-100);
-            color: var(--blue-500);
+            background: var(--status-blue-bg);
+            color: var(--status-blue-fg);
         }
 
         .badge--green {
-            background: var(--green-100);
-            color: var(--green-500);
+            background: var(--status-green-bg);
+            color: var(--status-green-fg);
         }
 
         .badge--yellow {
-            background: var(--yellow-100);
-            color: var(--yellow-500);
+            background: var(--status-yellow-bg);
+            color: var(--status-yellow-fg);
         }
 
         .badge--red {
-            background: var(--red-100);
-            color: var(--red-500);
+            background: var(--status-red-bg);
+            color: var(--status-red-fg);
         }
 
         .badge--neutral {
@@ -982,7 +1010,8 @@
         }
 
         .input--error:focus {
-            box-shadow: 0 0 0 3px var(--red-100), 0 0 0 5px var(--red-500);
+            border-color: var(--color-error);
+            box-shadow: 0 0 0 2px var(--color-error);
         }
 
         .textarea {
@@ -1040,7 +1069,7 @@
         .check-group input[type="radio"] {
             width: 18px;
             height: 18px;
-            accent-color: var(--purple-500);
+            accent-color: var(--accent-500);
             cursor: pointer;
         }
 
@@ -1087,7 +1116,7 @@
         }
 
         .toggle input:checked+.toggle__track {
-            background: var(--purple-500);
+            background: var(--accent-500);
         }
 
         .toggle input:checked+.toggle__track::after {
@@ -1107,8 +1136,8 @@
             width: var(--size-avatar);
             height: var(--size-avatar);
             border-radius: 50%;
-            background: var(--purple-100);
-            color: var(--purple-500);
+            background: var(--accent-100);
+            color: var(--accent-500);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -1130,23 +1159,23 @@
         }
 
         .avatar--blue {
-            background: var(--blue-100);
-            color: var(--blue-500);
+            background: var(--status-blue-bg);
+            color: var(--status-blue-fg);
         }
 
         .avatar--green {
-            background: var(--green-100);
-            color: var(--green-500);
+            background: var(--status-green-bg);
+            color: var(--status-green-fg);
         }
 
         .avatar--red {
-            background: var(--red-100);
-            color: var(--red-500);
+            background: var(--status-red-bg);
+            color: var(--status-red-fg);
         }
 
         .avatar--yellow {
-            background: var(--yellow-100);
-            color: var(--yellow-500);
+            background: var(--status-yellow-bg);
+            color: var(--status-yellow-fg);
         }
 
         .avatar-stack {
@@ -1189,23 +1218,23 @@
         }
 
         .alert--info {
-            background: var(--color-info-soft);
-            color: var(--blue-500);
+            background: var(--status-blue-bg);
+            color: var(--status-blue-fg);
         }
 
         .alert--success {
-            background: var(--color-success-soft);
-            color: var(--green-500);
+            background: var(--status-green-bg);
+            color: var(--status-green-fg);
         }
 
         .alert--warning {
-            background: var(--color-warning-soft);
-            color: var(--yellow-500);
+            background: var(--status-yellow-bg);
+            color: var(--status-yellow-fg);
         }
 
         .alert--error {
-            background: var(--color-error-soft);
-            color: var(--red-500);
+            background: var(--status-red-bg);
+            color: var(--status-red-fg);
         }
 
         /* ===== PROGRESS ===== */
@@ -1222,8 +1251,8 @@
             transition: width var(--duration-slow) var(--ease-default);
         }
 
-        .progress__bar--purple {
-            background: var(--purple-500);
+        .progress__bar--accent {
+            background: var(--accent-500);
         }
 
         .progress__bar--blue {
@@ -1263,8 +1292,8 @@
         }
 
         .tab--active {
-            color: var(--purple-500);
-            border-bottom-color: var(--purple-500);
+            color: var(--accent-500);
+            border-bottom-color: var(--accent-500);
             font-weight: var(--weight-semi);
         }
 
@@ -1441,30 +1470,32 @@
         .radius-box {
             width: 80px;
             height: 80px;
-            background: var(--purple-100);
-            border: 2px solid var(--purple-500);
+            background: var(--accent-100);
+            border: 2px solid var(--accent-500);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: var(--text-xs);
             font-family: var(--font-mono);
-            color: var(--purple-500);
+            color: var(--accent-500);
             font-weight: var(--weight-medium);
         }
 
         /* ===== SPACING DEMO ===== */
         .space-bar {
             height: 20px;
-            background: var(--purple-100);
+            background: var(--accent-100);
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             padding-left: var(--space-2);
             font-size: var(--text-xs);
             font-family: var(--font-mono);
-            color: var(--purple-500);
+            color: var(--accent-500);
             font-weight: var(--weight-medium);
             margin-bottom: var(--space-2);
+            white-space: nowrap;
+            overflow: visible;
         }
 
         /* ===== MODAL PREVIEW ===== */
@@ -1529,7 +1560,7 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: var(--purple-500);
+            background: var(--accent-500);
         }
 
         .navbar__links {
@@ -1553,8 +1584,8 @@
         }
 
         .navbar__link--active {
-            color: var(--purple-500);
-            background: var(--purple-100);
+            color: var(--accent-500);
+            background: var(--accent-100);
         }
 
         /* ===== STAT CARDS ===== */
@@ -1586,13 +1617,13 @@
         }
 
         .stat-card__trend--up {
-            background: var(--green-100);
-            color: var(--green-500);
+            background: var(--status-green-bg);
+            color: var(--status-green-fg);
         }
 
         .stat-card__trend--down {
-            background: var(--red-100);
-            color: var(--red-500);
+            background: var(--status-red-bg);
+            color: var(--status-red-fg);
         }
 
         /* ===== LIST ITEMS ===== */
@@ -1662,7 +1693,7 @@
         }
 
         .code-block .kw {
-            color: var(--purple-500);
+            color: var(--accent-500);
         }
 
         .code-block .str {
@@ -1681,7 +1712,7 @@
             font-family: var(--font-mono);
             font-size: 0.875em;
             background: var(--gray-200);
-            color: var(--purple-700);
+            color: var(--accent-700);
             padding: 2px 6px;
             border-radius: var(--radius-sm);
         }
@@ -1715,12 +1746,12 @@
         }
 
         .page-btn--active {
-            background: var(--purple-500);
+            background: var(--accent-500);
             color: #fff;
         }
 
         .page-btn--active:hover {
-            background: var(--purple-700);
+            background: var(--accent-700);
             color: #fff;
         }
 
@@ -1745,6 +1776,122 @@
                 display: none;
             }
         }
+
+        /* --- Quick Nav --- */
+        .quick-nav {
+            position: fixed;
+            top: var(--space-6);
+            left: var(--space-6);
+            z-index: var(--z-sticky);
+            display: flex;
+            align-items: center;
+        }
+
+        .quick-nav__trigger {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--color-surface-raised-alpha, var(--color-surface-raised));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: var(--border-thin);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-all);
+            color: var(--color-text-muted);
+        }
+
+        .quick-nav:hover .quick-nav__trigger {
+            color: var(--accent-500);
+            border-color: var(--accent-100);
+            box-shadow: var(--shadow-md);
+            transform: scale(1.05);
+        }
+
+        .quick-nav__menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: var(--color-surface-raised);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: var(--border-thin);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 200px;
+            max-height: calc(100vh - 48px);
+            overflow-y: auto;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-4px) scale(0.95);
+            transition: var(--transition-all);
+        }
+
+        .quick-nav__menu::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .quick-nav__menu::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .quick-nav__menu::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 2px;
+        }
+
+
+        .quick-nav:hover .quick-nav__menu {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+
+        .quick-nav:hover .quick-nav__trigger {
+            opacity: 0;
+        }
+
+        .quick-nav__item {
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--text-xs);
+            font-weight: var(--weight-medium);
+            color: var(--color-text-muted);
+            border-radius: var(--radius-sm);
+            transition: var(--transition-colors);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quick-nav__item:hover {
+            background: var(--accent-100);
+            color: var(--accent-700);
+        }
+
+        .quick-nav__item::after {
+            content: '→';
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: var(--transition-all);
+        }
+
+        .quick-nav__item:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @media (max-width: 600px) {
+            .quick-nav {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -1753,22 +1900,57 @@
     <!-- ============================================================
        MAIN CONTENT — KITCHEN SINK DEMO
        ============================================================ -->
+    <!-- Quick Navigation -->
+    <nav class="quick-nav" aria-label="Quick navigation">
+        <div class="quick-nav__trigger" title="Jump to section">
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1H17M1 6H17M1 11H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </div>
+        <div class="quick-nav__menu">
+            <a href="#hero" class="quick-nav__item">Top / Hero</a>
+            <a href="#section-colors" class="quick-nav__item">Colors</a>
+            <a href="#section-cards" class="quick-nav__item">Cards</a>
+            <a href="#section-badges" class="quick-nav__item">Badges & Tags</a>
+            <a href="#section-buttons" class="quick-nav__item">Buttons</a>
+            <a href="#section-alerts" class="quick-nav__item">Alerts</a>
+            <a href="#section-progress" class="quick-nav__item">Progress Bars</a>
+            <a href="#section-typography" class="quick-nav__item">Typography</a>
+            <a href="#section-avatars" class="quick-nav__item">Avatars</a>
+            <a href="#section-tabs" class="quick-nav__item">Tabs</a>
+            <a href="#section-table" class="quick-nav__item">Table</a>
+            <a href="#section-navigation" class="quick-nav__item">Navigation</a>
+            <a href="#section-lists" class="quick-nav__item">List Items</a>
+            <a href="#section-modal" class="quick-nav__item">Modal / Dialog</a>
+            <a href="#section-code" class="quick-nav__item">Code</a>
+            <a href="#section-tooltips" class="quick-nav__item">Tooltips</a>
+            <a href="#section-skeleton" class="quick-nav__item">Skeletons</a>
+            <a href="#section-shadows" class="quick-nav__item">Shadows</a>
+            <a href="#section-radius" class="quick-nav__item">Border Radius</a>
+            <a href="#section-spacing" class="quick-nav__item">Spacing</a>
+            <a href="#section-inputs" class="quick-nav__item">Forms & Inputs</a>
+            <a href="#section-patterns" class="quick-nav__item">Composite Patterns</a>
+        </div>
+    </nav>
+
     <main class="app__main">
         <div class="ks-page">
 
             <!-- HERO -->
             <header class="ks-hero" id="hero">
-                <div class="ks-hero__badge">Agentic Blueprint v1.0</div>
+                <div class="ks-hero__badge">Agentic Blueprint v2.0</div>
                 <h1>Agentic Blueprint: <span>Kitchen Sink</span></h1>
-                <p>Every token, every component, every state — live preview.</p>
+                <p>Every token, every component, every state - live preview.</p>
                 <p> Adjust the sidebar to build your custom design system.</p>
                 <p>Cut the noise. Keep the precision. <code>Set essentials. Export. Done.</code></p>
-                <p>It is so simple that even you can't fuck it up.</p>
+                <p>It is so simple that even you can't f*ck it up.</p>
 
                 <div
                     style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center;">
+                    <span class="badge badge--accent"><span class="badge__dot"></span>Easy to use</span>
                     <span class="badge badge--green"><span class="badge__dot"></span>Open Source</span>
                     <span class="badge badge--blue"><span class="badge__dot"></span>Sloth friendly</span>
+                    <span class="badge badge--yellow"><span class="badge__dot"></span>Minimalistic</span>
                     <span class="badge badge--red"><span class="badge__dot"></span>Made with ❤️</span>
                 </div>
 
@@ -1793,9 +1975,9 @@
                 <div class="ks-grid ks-grid--5">
                     <div class="swatch-group">
                         <div class="swatch-group__label">Accent</div>
-                        <div class="swatch swatch--purple-100">100</div>
-                        <div class="swatch swatch--purple-500">500</div>
-                        <div class="swatch swatch--purple-700">700</div>
+                        <div class="swatch swatch--accent-100">100</div>
+                        <div class="swatch swatch--accent-500">500</div>
+                        <div class="swatch swatch--accent-700">700</div>
                     </div>
                     <div class="swatch-group">
                         <div class="swatch-group__label">Blue</div>
@@ -1881,7 +2063,7 @@
                         style="font-size:var(--text-sm);font-weight:var(--weight-semi);color:var(--color-text-muted);margin-bottom:var(--space-3);">
                         Badges</h3>
                     <div class="ks-flex" style="margin-bottom: var(--space-6);">
-                        <span class="badge badge--purple"><span class="badge__dot"></span>Accent</span>
+                        <span class="badge badge--accent"><span class="badge__dot"></span>Accent</span>
                         <span class="badge badge--blue"><span class="badge__dot"></span>Info</span>
                         <span class="badge badge--green"><span class="badge__dot"></span>Active</span>
                         <span class="badge badge--yellow"><span class="badge__dot"></span>Pending</span>
@@ -1967,7 +2149,7 @@
                                 style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Storage</span><span
                                 style="font-size:var(--text-sm);color:var(--color-text-muted);">72%</span></div>
                         <div class="progress">
-                            <div class="progress__bar progress__bar--purple" style="width:72%"></div>
+                            <div class="progress__bar progress__bar--accent" style="width:72%"></div>
                         </div>
                     </div>
                     <div style="margin-bottom:var(--space-5);">
@@ -2257,7 +2439,7 @@
                                 class="tooltip">This is a tooltip</span></div>
                         <div class="tooltip-wrap"><button class="btn btn--primary btn--icon"
                                 aria-label="Info">?</button><span class="tooltip">Help & docs</span></div>
-                        <div class="tooltip-wrap"><span class="badge badge--purple" style="cursor:help;">Pro
+                        <div class="tooltip-wrap"><span class="badge badge--accent" style="cursor:help;">Pro
                                 Feature</span><span class="tooltip">Requires Pro plan</span></div>
                     </div>
                 </div>
@@ -2320,15 +2502,15 @@
             <section class="ks-section" id="section-spacing">
                 <h2 class="ks-section__title">Spacing Scale</h2>
                 <div class="card card--raised" style="padding:var(--space-6);">
-                    <div class="space-bar" style="width:calc(var(--space-1)*5);">1 · 4px</div>
-                    <div class="space-bar" style="width:calc(var(--space-2)*5);">2 · 8px</div>
-                    <div class="space-bar" style="width:calc(var(--space-3)*5);">3 · 12px</div>
-                    <div class="space-bar" style="width:calc(var(--space-4)*5);">4 · 16px</div>
-                    <div class="space-bar" style="width:calc(var(--space-6)*5);">6 · 24px</div>
-                    <div class="space-bar" style="width:calc(var(--space-8)*5);">8 · 32px</div>
-                    <div class="space-bar" style="width:calc(var(--space-10)*5);">10 · 40px</div>
-                    <div class="space-bar" style="width:calc(var(--space-12)*5);">12 · 48px</div>
-                    <div class="space-bar" style="width:calc(var(--space-16)*5);">16 · 64px</div>
+                    <div class="space-bar" style="width:calc(var(--space-1)*8);">1 · 4px</div>
+                    <div class="space-bar" style="width:calc(var(--space-2)*8);">2 · 8px</div>
+                    <div class="space-bar" style="width:calc(var(--space-3)*8);">3 · 12px</div>
+                    <div class="space-bar" style="width:calc(var(--space-4)*8);">4 · 16px</div>
+                    <div class="space-bar" style="width:calc(var(--space-6)*8);">6 · 24px</div>
+                    <div class="space-bar" style="width:calc(var(--space-8)*8);">8 · 32px</div>
+                    <div class="space-bar" style="width:calc(var(--space-10)*8);">10 · 40px</div>
+                    <div class="space-bar" style="width:calc(var(--space-12)*8);">12 · 48px</div>
+                    <div class="space-bar" style="width:calc(var(--space-16)*8);">16 · 64px</div>
                 </div>
             </section>
 
@@ -2409,7 +2591,7 @@
                 <h2 class="ks-section__title">Composite Patterns</h2>
                 <div class="ks-grid ks-grid--2">
                     <div class="card card--raised" style="padding: var(--space-8);">
-                        <span class="badge badge--purple" style="margin-bottom:var(--space-4);">Most Popular</span>
+                        <span class="badge badge--accent" style="margin-bottom:var(--space-4);">Most Popular</span>
                         <div
                             style="font-size:var(--text-2xl);font-weight:var(--weight-bold);margin-bottom:var(--space-1);">
                             Pro Plan</div>
@@ -2469,17 +2651,51 @@
                             <button class="btn btn--secondary" style="flex:1;">Message</button>
                         </div>
                     </div>
+
+                    <!-- STATUS STYLE DEMO -->
+                    <div class="card card--raised" style="padding: var(--space-8);">
+                        <div class="card__eyebrow">Visual Priority</div>
+                        <div class="card__title">Priority Demo</div>
+                        <div class="card__body">These badges adapt in real-time between Soft and Solid styles via the
+                            sidebar toggles.</div>
+                        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+                            <div
+                                style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-3);background:var(--color-surface);border-radius:var(--radius-md);">
+                                <span style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Critical
+                                    Task</span>
+                                <span class="badge badge--red"><span class="badge__dot"></span>High</span>
+                            </div>
+                            <div
+                                style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-3);background:var(--color-surface);border-radius:var(--radius-md);">
+                                <span style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Review
+                                    Needed</span>
+                                <span class="badge badge--yellow"><span class="badge__dot"></span>Medium</span>
+                            </div>
+                            <div
+                                style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-3);background:var(--color-surface);border-radius:var(--radius-md);">
+                                <span style="font-size:var(--text-sm);font-weight:var(--weight-medium);">Backlog
+                                    Item</span>
+                                <span class="badge badge--blue"><span class="badge__dot"></span>Low</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- FOOTER -->
             <footer
                 style="text-align:center;padding:var(--space-10) 0 var(--space-6);border-top:var(--border-thin);margin-top:var(--space-16);">
-                <p style="font-size:var(--text-sm);color:var(--color-text-muted);">Agentic Blueprint — Design Tokens for
+                <p style="font-size:var(--text-sm);color:var(--color-text-muted);">Agentic Blueprint: Design Tokens for
                     Sloths</p>
                 <p style="font-size:var(--text-xs);color:var(--color-text-subtle);margin-top:var(--space-2);">Every
                     element powered by <code>tokens.css</code> © Štěpán Keršner, 2026</p>
             </footer>
+
+            <div
+                style="display: flex; justify-content: center; align-items: center; padding: var(--space-8) 0 var(--space-12); opacity: 0.5;">
+                <img src="logo_transparent.png" alt="Branding Logo"
+                    style="width: auto; max-width: 275px; height: auto; filter: grayscale(1);">
+            </div>
 
         </div>
     </main>
@@ -2492,7 +2708,8 @@
 
         <!-- Header -->
         <div class="sb-header">
-            <div class="sb-brand"><span class="sb-brand__dot"></span> Agentic Blueprint</div>
+            <div class="sb-brand">Agentic Blueprint</div>
+
             <div class="sb-subtitle">Theme Editor</div>
         </div>
 
@@ -2522,6 +2739,12 @@
                     <input type="text" class="sb-color__hex" id="hex-accent" value="#7263FF" maxlength="7">
                     <button class="sb-revert" id="revert-accent" onclick="revertKey('accent')" title="Revert">↩</button>
                 </div>
+            </div>
+            <div class="sb-segmented" data-key="accent">
+                <button class="sb-segmented__btn is-active" onclick="setStatusStyle('accent', 'soft')"
+                    data-val="soft">Soft</button>
+                <button class="sb-segmented__btn" onclick="setStatusStyle('accent', 'solid')"
+                    data-val="solid">Solid</button>
             </div>
         </div>
 
@@ -2626,6 +2849,13 @@
                     <button class="sb-revert" id="revert-red" onclick="revertKey('red')" title="Revert">↩</button>
                 </div>
             </div>
+            <div class="sb-segmented" data-key="red" style="margin-bottom:var(--space-4);">
+                <button class="sb-segmented__btn is-active" onclick="setStatusStyle('red', 'soft')"
+                    data-val="soft">Soft</button>
+                <button class="sb-segmented__btn" onclick="setStatusStyle('red', 'solid')"
+                    data-val="solid">Solid</button>
+            </div>
+
             <div class="sb-color">
                 <span class="sb-color__label">Green / Success</span>
                 <div class="sb-color__controls">
@@ -2634,6 +2864,13 @@
                     <button class="sb-revert" id="revert-green" onclick="revertKey('green')" title="Revert">↩</button>
                 </div>
             </div>
+            <div class="sb-segmented" data-key="green" style="margin-bottom:var(--space-4);">
+                <button class="sb-segmented__btn is-active" onclick="setStatusStyle('green', 'soft')"
+                    data-val="soft">Soft</button>
+                <button class="sb-segmented__btn" onclick="setStatusStyle('green', 'solid')"
+                    data-val="solid">Solid</button>
+            </div>
+
             <div class="sb-color">
                 <span class="sb-color__label">Blue / Info</span>
                 <div class="sb-color__controls">
@@ -2642,6 +2879,13 @@
                     <button class="sb-revert" id="revert-blue" onclick="revertKey('blue')" title="Revert">↩</button>
                 </div>
             </div>
+            <div class="sb-segmented" data-key="blue" style="margin-bottom:var(--space-4);">
+                <button class="sb-segmented__btn is-active" onclick="setStatusStyle('blue', 'soft')"
+                    data-val="soft">Soft</button>
+                <button class="sb-segmented__btn" onclick="setStatusStyle('blue', 'solid')"
+                    data-val="solid">Solid</button>
+            </div>
+
             <div class="sb-color">
                 <span class="sb-color__label">Yellow / Warning</span>
                 <div class="sb-color__controls">
@@ -2649,6 +2893,12 @@
                     <input type="text" class="sb-color__hex" id="hex-yellow" value="#FFB905" maxlength="7">
                     <button class="sb-revert" id="revert-yellow" onclick="revertKey('yellow')" title="Revert">↩</button>
                 </div>
+            </div>
+            <div class="sb-segmented" data-key="yellow">
+                <button class="sb-segmented__btn is-active" onclick="setStatusStyle('yellow', 'soft')"
+                    data-val="soft">Soft</button>
+                <button class="sb-segmented__btn" onclick="setStatusStyle('yellow', 'solid')"
+                    data-val="solid">Solid</button>
             </div>
         </div>
 
@@ -2757,6 +3007,13 @@
             fontSans: 'Inter',
             fontMono: 'JetBrains Mono',
             fontSize: 16,
+            statusStyle: {
+                accent: 'soft',
+                red: 'soft',
+                green: 'soft',
+                blue: 'soft',
+                yellow: 'soft',
+            }
         };
 
         let referenceConfig = { ...DEFAULT_CONFIG };
@@ -2853,6 +3110,27 @@
             };
         }
 
+        function getContrastColor(hex) {
+            if (!hex) return 'var(--gray-50)';
+            const { r, g, b } = hexToRgb(hex);
+            const l = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+            return l > 0.6 ? 'var(--gray-900)' : 'var(--gray-50)';
+        }
+
+        function setStatusStyle(key, style) {
+            currentConfig.statusStyle[key] = style;
+
+            // Update UI (active buttons)
+            const container = document.querySelector(`.sb-segmented[data-key="${key}"]`);
+            if (container) {
+                container.querySelectorAll('.sb-segmented__btn').forEach(btn => {
+                    btn.classList.toggle('is-active', btn.getAttribute('data-val') === style);
+                });
+            }
+
+            applyConfig(currentConfig);
+        }
+
         /** Generate a 10-step neutral scale from a single background color */
         function generateNeutralScale(bgHex) {
             const { r, g, b } = hexToRgb(bgHex);
@@ -2913,16 +3191,27 @@
 
             // 2. Accent color
             const accent = generateAccentVariants(cfg.accent);
-            root.style.setProperty('--purple-100', accent['100']);
-            root.style.setProperty('--purple-500', accent['500']);
-            root.style.setProperty('--purple-700', accent['700']);
+            root.style.setProperty('--accent-100', accent['100']);
+            root.style.setProperty('--accent-500', accent['500']);
+            root.style.setProperty('--accent-700', accent['700']);
+
+            // Foreground colors for accent swatches
+            root.style.setProperty('--accent-100-fg', accent['700']);
+            root.style.setProperty('--accent-500-fg', getContrastColor(accent['500']));
+            root.style.setProperty('--accent-700-fg', getContrastColor(accent['700']));
 
             // 3. Status colors
             for (const name of ['red', 'green', 'blue', 'yellow']) {
-                const v = generateAccentVariants(cfg[name]);
+                const baseColor = cfg[name];
+                const v = generateAccentVariants(baseColor);
                 root.style.setProperty(`--${name}-100`, v['100']);
                 root.style.setProperty(`--${name}-500`, v['500']);
                 root.style.setProperty(`--${name}-700`, v['700']);
+
+                // Foreground colors for swatches
+                root.style.setProperty(`--${name}-100-fg`, v['700']);
+                root.style.setProperty(`--${name}-500-fg`, getContrastColor(v['500']));
+                root.style.setProperty(`--${name}-700-fg`, getContrastColor(v['700']));
             }
 
             // 4. Surfaces (direct overrides)
@@ -2966,9 +3255,40 @@
             root.style.setProperty('--font-mono', `'${cfg.fontMono}', ui-monospace, monospace`);
             root.style.fontSize = `${cfg.fontSize}px`;
 
-            // 10. Focus ring adapts to accent
-            root.style.setProperty('--focus-ring',
-                `0 0 0 3px ${accent['100']}, 0 0 0 5px ${accent['500']}`);
+            // 10. Focus ring adapts to accent - sharp, solid 2px ring
+            root.style.setProperty('--focus-ring', `0 0 0 2px ${accent['500']}`);
+
+            // 11. Status Semantic Variants & Switcher Contrast
+            const statuses = ['accent', 'red', 'green', 'blue', 'yellow'];
+            statuses.forEach(name => {
+                const style = cfg.statusStyle[name];
+                const baseColor = cfg[name];
+                const variants = generateAccentVariants(baseColor);
+
+                // Update Sidebar Switcher contrast & color
+                const container = document.querySelector(`.sb-segmented[data-key="${name}"]`);
+                if (container) {
+                    container.style.setProperty('--sb-active-bg', variants['500']);
+                    container.style.setProperty('--sb-active-fg', getContrastColor(baseColor));
+                }
+
+                if (style === 'solid') {
+                    root.style.setProperty(`--status-${name}-bg`, variants['500']);
+                    root.style.setProperty(`--status-${name}-fg`, getContrastColor(baseColor));
+                } else {
+                    root.style.setProperty(`--status-${name}-bg`, variants['100']);
+                    root.style.setProperty(`--status-${name}-fg`, variants['500']);
+
+                    // Ensure even soft foreground is readable if base color is very light
+                    // (though usually 500 on 100 is fine, sometimes it's not)
+                }
+            });
+
+            // Update CTA Contrast
+            const ctaBg = cfg.statusStyle.accent === 'solid' ? accent['500'] : accent['100'];
+            const ctaFg = cfg.statusStyle.accent === 'solid' ? getContrastColor(accent['500']) : accent['500'];
+            root.style.setProperty('--cta-bg-live', ctaBg);
+            root.style.setProperty('--cta-fg-live', ctaFg);
 
             // Update revert button visibility
             updateRevertStates();
@@ -3190,6 +3510,18 @@
             document.getElementById('ctrl-fontMono').value = cfg.fontMono;
             document.getElementById('ctrl-fontSize').value = cfg.fontSize;
             document.getElementById('val-fontSize').textContent = cfg.fontSize + 'px';
+
+            // Sync segmented toggles
+            if (cfg.statusStyle) {
+                Object.entries(cfg.statusStyle).forEach(([key, val]) => {
+                    const container = document.querySelector(`.sb-segmented[data-key="${key}"]`);
+                    if (container) {
+                        container.querySelectorAll('.sb-segmented__btn').forEach(btn => {
+                            btn.classList.toggle('is-active', btn.getAttribute('data-val') === val);
+                        });
+                    }
+                });
+            }
         }
 
 
@@ -3230,7 +3562,7 @@
   --gray-900: ${n['900']};
 
   /* Accent */
-  --purple-500: ${a['500']};   --purple-100: ${a['100']};   --purple-700: ${a['700']};
+  --accent-500: ${a['500']};   --accent-100: ${a['100']};   --accent-700: ${a['700']};
 
   /* Blue */
   --blue-500:   ${blu['500']};   --blue-100:   ${blu['100']};   --blue-700:   ${blu['700']};
@@ -3244,8 +3576,41 @@
   /* Red */
   --red-500:    ${red['500']};   --red-100:    ${red['100']};   --red-700:    ${red['700']};
 
+  /* Foreground variants (contrast-aware) */
+  --accent-100-fg: ${a['700']};
+  --accent-500-fg: ${getContrastColor(a['500']).includes('gray-900') ? n['900'] : n['50']};
+  --accent-700-fg: ${getContrastColor(a['700']).includes('gray-900') ? n['900'] : n['50']};
+
+  --blue-100-fg:   ${blu['700']};
+  --blue-500-fg:   ${getContrastColor(blu['500']).includes('gray-900') ? n['900'] : n['50']};
+  --blue-700-fg:   ${getContrastColor(blu['700']).includes('gray-900') ? n['900'] : n['50']};
+
+  --green-100-fg:  ${grn['700']};
+  --green-500-fg:  ${getContrastColor(grn['500']).includes('gray-900') ? n['900'] : n['50']};
+  --green-700-fg:  ${getContrastColor(grn['700']).includes('gray-900') ? n['900'] : n['50']};
+
+  --yellow-100-fg: ${yel['700']};
+  --yellow-500-fg: ${getContrastColor(yel['500']).includes('gray-900') ? n['900'] : n['50']};
+  --yellow-700-fg: ${getContrastColor(yel['700']).includes('gray-900') ? n['900'] : n['50']};
+
+  --red-100-fg:    ${red['700']};
+  --red-500-fg:    ${getContrastColor(red['500']).includes('gray-900') ? n['900'] : n['50']};
+  --red-700-fg:    ${getContrastColor(red['700']).includes('gray-900') ? n['900'] : n['50']};
+
   /* ==========================================================
-     2. SEMANTIC COLORS
+     3. SEMANTIC STATUS VARIANTS
+     ========================================================== */
+${['accent', 'red', 'green', 'blue', 'yellow'].map(name => {
+                const style = cfg.statusStyle[name];
+                const base = cfg[name];
+                const v = generateAccentVariants(base);
+                const bg = style === 'solid' ? v['500'] : v['100'];
+                const fg = style === 'solid' ? (getContrastColor(base).includes('gray-900') ? n['900'] : n['50']) : v['500'];
+                return `  --status-${name}-bg: ${bg}; --status-${name}-fg: ${fg};`;
+            }).join('\n')}
+
+  /* ==========================================================
+     4. SEMANTIC COLORS
      ========================================================== */
 
   /* Surfaces */
@@ -3264,15 +3629,15 @@
   /* Borders */
   --color-border:       ${cfg.borderColor};
   --color-border-light: var(--gray-200);
-  --color-border-focus: var(--purple-500);
+  --color-border-focus: var(--accent-500);
 
   /* Hover states */
   --color-hover-row:    ${cfg.hoverBg};
 
   /* Interactive — Primary (CTA) */
-  --cta-bg:       var(--purple-100);
-  --cta-fg:       var(--purple-500);
-  --cta-hover-bg: var(--purple-500);
+  --cta-bg:       ${cfg.statusStyle.accent === 'solid' ? 'var(--accent-500)' : 'var(--accent-100)'};
+  --cta-fg:       ${cfg.statusStyle.accent === 'solid' ? 'var(--accent-500-fg)' : 'var(--accent-100-fg)'};
+  --cta-hover-bg: var(--accent-700);
   --cta-hover-fg: var(--gray-50);
 
   /* Interactive — Secondary */
@@ -3406,7 +3771,7 @@
      8. FOCUS & ACCESSIBILITY
      ========================================================== */
 
-  --focus-ring: 0 0 0 3px ${a['100']}, 0 0 0 5px ${a['500']};
+  --focus-ring: 0 0 0 2px var(--accent-500);
 
   /* ==========================================================
      9. SIZES & CONTAINERS
@@ -3432,6 +3797,8 @@ html {
   font-size: ${cfg.fontSize}px;
   box-sizing: border-box;
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 40px;
 }
 
 *, *::before, *::after {

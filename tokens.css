@@ -24,7 +24,7 @@
   --gray-900: #1C1A1B;
 
   /* Brand / Accent */
-  --purple-500: #7263FF;   --purple-100: #EEEAFD;   --purple-700: #5A4DD4;
+  --accent-500: #7263FF;   --accent-100: #EEEAFD;   --accent-700: #5A4DD4;
   --blue-500:   #00B4FF;   --blue-100:   #E4F4FD;   --blue-700:   #0090CC;
   --green-500:  #00C461;   --green-100:  #E8F7EC;   --green-700:  #00994D;
   --yellow-500: #FFB905;   --yellow-100: #FFF8EB;   --yellow-700: #CC9400;
@@ -50,15 +50,15 @@
   /* Borders */
   --color-border:       var(--gray-300);
   --color-border-light: var(--gray-200);
-  --color-border-focus: var(--purple-500);
+  --color-border-focus: var(--accent-500);
 
   /* Hover states */
   --color-hover-row:    var(--gray-100);
 
   /* Interactive — Primary (CTA) */
-  --cta-bg:       var(--purple-100);
-  --cta-fg:       var(--purple-500);
-  --cta-hover-bg: var(--purple-500);
+  --cta-bg:       var(--accent-100);
+  --cta-fg:       var(--accent-500);
+  --cta-hover-bg: var(--accent-500);
   --cta-hover-fg: var(--gray-50);
 
   /* Interactive — Secondary */
@@ -80,14 +80,23 @@
   --ghost-hover-fg: var(--gray-800);
 
   /* Status */
+  --color-info:         var(--blue-500);
+  --color-info-soft:    var(--blue-100);
   --color-success:      var(--green-500);
   --color-success-soft: var(--green-100);
   --color-warning:      var(--yellow-500);
   --color-warning-soft: var(--yellow-100);
   --color-error:        var(--red-500);
   --color-error-soft:   var(--red-100);
-  --color-info:         var(--blue-500);
-  --color-info-soft:    var(--blue-100);
+
+  /* ==========================================================
+     3. SEMANTIC STATUS VARIANTS (Soft vs Solid)
+     ========================================================== */
+  --status-accent-bg: var(--accent-100); --status-accent-fg: var(--accent-500);
+  --status-red-bg:    var(--red-100);    --status-red-fg:    var(--red-500);
+  --status-green-bg:  var(--green-100);  --status-green-fg:  var(--green-500);
+  --status-blue-bg:   var(--blue-100);   --status-blue-fg:   var(--blue-500);
+  --status-yellow-bg: var(--yellow-100); --status-yellow-fg: var(--yellow-500);
 
   /* ==========================================================
      3. TYPOGRAPHY
@@ -198,7 +207,7 @@
      8. FOCUS & ACCESSIBILITY
      ========================================================== */
 
-  --focus-ring: 0 0 0 3px var(--purple-100), 0 0 0 5px var(--purple-500);
+  --focus-ring: 0 0 0 2px var(--accent-500);
 
   /* ==========================================================
      9. SIZES & CONTAINERS
@@ -224,6 +233,8 @@ html {
   font-size: 16px;
   box-sizing: border-box;
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 40px;
 }
 
 *, *::before, *::after {
