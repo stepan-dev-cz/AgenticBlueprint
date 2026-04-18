@@ -28,3 +28,4 @@ A robust, interactive design token system and theme editor. Build, preview, and 
 Once you have tweaked the tokens to your satisfaction, simply export the CSS variables generated from the studio and drop them into the `:root` of your web project's CSS baseline. All elements consuming these semantic variables will automatically adopt your new design.
 
 ## contact: stepan.dev@outlook.cz
+## licence: CC BY-NC 4.0
