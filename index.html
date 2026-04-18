@@ -3877,12 +3877,6 @@
                 generator: 'Agentic Blueprint',
                 config: { ...currentConfig },
             };
-            // Clean internal flags
-            delete data.config._manualSurface;
-            delete data.config._manualSurfaceRaised;
-            delete data.config._manualTextColor;
-            delete data.config._manualBorderColor;
-            delete data.config._manualCardBorderColor;
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -3906,11 +3900,20 @@
                     if (!currentConfig.statusStyle) currentConfig.statusStyle = { ...DEFAULT_CONFIG.statusStyle };
 
                     // Detect manually-specified overridable fields from loaded config
-                    if (cfg.surface) currentConfig._manualSurface = true;
-                    if (cfg.surfaceRaised) currentConfig._manualSurfaceRaised = true;
-                    if (cfg.textColor) currentConfig._manualTextColor = true;
-                    if (cfg.borderColor) currentConfig._manualBorderColor = true;
-                    if (cfg.cardBorderColor) currentConfig._manualCardBorderColor = true;
+                    if ('_manualSurface' in cfg) currentConfig._manualSurface = cfg._manualSurface;
+                    else if (cfg.surface && cfg.surface.toUpperCase() !== DEFAULT_CONFIG.surface.toUpperCase()) currentConfig._manualSurface = true;
+
+                    if ('_manualSurfaceRaised' in cfg) currentConfig._manualSurfaceRaised = cfg._manualSurfaceRaised;
+                    else if (cfg.surfaceRaised && cfg.surfaceRaised.toUpperCase() !== DEFAULT_CONFIG.surfaceRaised.toUpperCase()) currentConfig._manualSurfaceRaised = true;
+
+                    if ('_manualTextColor' in cfg) currentConfig._manualTextColor = cfg._manualTextColor;
+                    else if (cfg.textColor && cfg.textColor.toUpperCase() !== DEFAULT_CONFIG.textColor.toUpperCase()) currentConfig._manualTextColor = true;
+
+                    if ('_manualBorderColor' in cfg) currentConfig._manualBorderColor = cfg._manualBorderColor;
+                    else if (cfg.borderColor && cfg.borderColor.toUpperCase() !== DEFAULT_CONFIG.borderColor.toUpperCase()) currentConfig._manualBorderColor = true;
+
+                    if ('_manualCardBorderColor' in cfg) currentConfig._manualCardBorderColor = cfg._manualCardBorderColor;
+                    else if (cfg.cardBorderColor && cfg.cardBorderColor.toUpperCase() !== DEFAULT_CONFIG.cardBorderColor.toUpperCase()) currentConfig._manualCardBorderColor = true;
 
                     referenceConfig = JSON.parse(JSON.stringify(currentConfig));
                     syncUIFromConfig(currentConfig);
