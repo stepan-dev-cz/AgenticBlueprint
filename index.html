@@ -2028,12 +2028,12 @@
 
             <!-- HERO -->
             <header class="ks-hero" id="hero">
-                <div class="ks-hero__badge">Agentic Blueprint v3.0</div>
+                <div class="ks-hero__badge">Agentic Blueprint v3.1</div>
                 <h1>Agentic Blueprint: <span>Kitchen Sink</span></h1>
                 <p>Every token, every component, every state — live preview.</p>
                 <p> Adjust the sidebar to build your custom design system.</p>
                 <p>Cut the noise. Keep the precision. <code>Set essentials. Export. Done.</code></p>
-                <p>9 colors in, 60+ tokens out.</p>
+                <p>11 colors in, 60+ tokens out.</p>
                 <p>It is so simple that even you can't f*ck it up.</p>
 
                 <div
@@ -2900,7 +2900,7 @@
 
             <div
                 style="display: flex; justify-content: center; align-items: center; padding: var(--space-8) 0 var(--space-12); opacity: 0.5;">
-                <img src="logo_transparent.png" alt="Branding Logo"
+                <img src="logo_sticker.png" alt="Branding Logo"
                     style="width: auto; max-width: 275px; height: auto; filter: grayscale(1);">
             </div>
 
@@ -2989,6 +2989,15 @@
                         title="Revert">↩</button>
                 </div>
             </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Border Color</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-borderColor" value="#D6D0CD">
+                    <input type="text" class="sb-color__hex" id="hex-borderColor" value="#D6D0CD" maxlength="7">
+                    <button class="sb-revert" id="revert-borderColor" onclick="revertKey('borderColor')"
+                        title="Revert">↩</button>
+                </div>
+            </div>
             <div class="sb-slider">
                 <div class="sb-slider__header">
                     <span class="sb-slider__label">Global Border Width</span>
@@ -3010,6 +3019,15 @@
                     </div>
                 </div>
                 <input type="range" class="sb-range" id="ctrl-cardBorderWidth" min="0" max="4" value="1" step="0.5">
+            </div>
+            <div class="sb-color">
+                <span class="sb-color__label">Card Border Color</span>
+                <div class="sb-color__controls">
+                    <input type="color" class="sb-color__picker" id="ctrl-cardBorderColor" value="#D6D0CD">
+                    <input type="text" class="sb-color__hex" id="hex-cardBorderColor" value="#D6D0CD" maxlength="7">
+                    <button class="sb-revert" id="revert-cardBorderColor" onclick="revertKey('cardBorderColor')"
+                        title="Revert">↩</button>
+                </div>
             </div>
         </div>
 
@@ -3167,8 +3185,10 @@
             surface: '#F5F3F1',
             surfaceRaised: '#FAFAF9',
             textColor: '#343132',
+            borderColor: '#D6D0CD',
             borderWidth: 1,
             cardBorderWidth: 1,
+            cardBorderColor: '#D6D0CD',
             red: '#FF564A',
             green: '#00C461',
             blue: '#00B4FF',
@@ -3411,6 +3431,14 @@
             if (!cfg._manualTextColor) {
                 derived.textColor = dark ? n['900'] : n['800'];
             }
+            // Border color = mid-range neutral
+            if (!cfg._manualBorderColor) {
+                derived.borderColor = n['300'];
+            }
+            // Card border color = same as border by default
+            if (!cfg._manualCardBorderColor) {
+                derived.cardBorderColor = n['300'];
+            }
 
             return derived;
         }
@@ -3428,6 +3456,8 @@
             const effectiveSurface = cfg._manualSurface ? cfg.surface : (derived.surface || cfg.surface);
             const effectiveSurfaceRaised = cfg._manualSurfaceRaised ? cfg.surfaceRaised : (derived.surfaceRaised || cfg.surfaceRaised);
             const effectiveTextColor = cfg._manualTextColor ? cfg.textColor : (derived.textColor || cfg.textColor);
+            const effectiveBorderColor = cfg._manualBorderColor ? cfg.borderColor : (derived.borderColor || cfg.borderColor);
+            const effectiveCardBorderColor = cfg._manualCardBorderColor ? cfg.cardBorderColor : (derived.cardBorderColor || cfg.cardBorderColor);
 
             // Update display values (but don't update config to avoid feedback loops)
             if (!cfg._manualSurface && derived.surface) {
@@ -3444,6 +3474,16 @@
                 const p = document.getElementById('ctrl-textColor');
                 const h = document.getElementById('hex-textColor');
                 if (p && h) { p.value = derived.textColor; h.value = derived.textColor.toUpperCase(); }
+            }
+            if (!cfg._manualBorderColor && derived.borderColor) {
+                const p = document.getElementById('ctrl-borderColor');
+                const h = document.getElementById('hex-borderColor');
+                if (p && h) { p.value = derived.borderColor; h.value = derived.borderColor.toUpperCase(); }
+            }
+            if (!cfg._manualCardBorderColor && derived.cardBorderColor) {
+                const p = document.getElementById('ctrl-cardBorderColor');
+                const h = document.getElementById('hex-cardBorderColor');
+                if (p && h) { p.value = derived.cardBorderColor; h.value = derived.cardBorderColor.toUpperCase(); }
             }
 
             // 1. Neutral scale from page background
@@ -3483,6 +3523,7 @@
             // 4. Surfaces
             root.style.setProperty('--color-surface', effectiveSurface);
             root.style.setProperty('--color-surface-raised', effectiveSurfaceRaised);
+            root.style.setProperty('--color-surface-sunken', neutrals['300']);
 
             // Glass effect for sidebar
             const { r: sr, g: sg, b: sb } = hexToRgb(effectiveSurfaceRaised);
@@ -3512,10 +3553,22 @@
                 root.style.setProperty('--color-text-invert', neutrals['50']);
             }
 
-            // 6. Borders — auto-derive from neutral scale
-            root.style.setProperty('--color-border', neutrals['300']);
-            root.style.setProperty('--color-border-light', neutrals['200']);
-            root.style.setProperty('--color-border-strong', neutrals['400']);
+            // 6. Borders — use effective border color (user-chosen or auto-derived)
+            root.style.setProperty('--color-border', effectiveBorderColor);
+
+            // Derive lighter and stronger variants from the effective border color
+            const borderHsl = rgbToHsl(...Object.values(hexToRgb(effectiveBorderColor)));
+            if (dark) {
+                const borderLightRgb = hslToRgb(borderHsl.h, borderHsl.s, Math.max(borderHsl.l - 5, 5));
+                const borderStrongRgb = hslToRgb(borderHsl.h, borderHsl.s, Math.min(borderHsl.l + 10, 50));
+                root.style.setProperty('--color-border-light', rgbToHex(borderLightRgb.r, borderLightRgb.g, borderLightRgb.b));
+                root.style.setProperty('--color-border-strong', rgbToHex(borderStrongRgb.r, borderStrongRgb.g, borderStrongRgb.b));
+            } else {
+                const borderLightRgb = hslToRgb(borderHsl.h, borderHsl.s, Math.min(borderHsl.l + 7, 95));
+                const borderStrongRgb = hslToRgb(borderHsl.h, borderHsl.s, Math.max(borderHsl.l - 10, 30));
+                root.style.setProperty('--color-border-light', rgbToHex(borderLightRgb.r, borderLightRgb.g, borderLightRgb.b));
+                root.style.setProperty('--color-border-strong', rgbToHex(borderStrongRgb.r, borderStrongRgb.g, borderStrongRgb.b));
+            }
             root.style.setProperty('--color-border-focus', accent['500']);
 
             const bw = cfg.borderWidth;
@@ -3524,7 +3577,7 @@
             root.style.setProperty('--border-light', bw ? `${bw}px solid var(--color-border-light)` : 'none');
             root.style.setProperty('--border-strong', bw ? `${bw}px solid var(--color-border-strong)` : 'none');
             root.style.setProperty('--card-border-width', (cfg.cardBorderWidth ?? 1) + 'px');
-            root.style.setProperty('--card-border-color', neutrals['300']);
+            root.style.setProperty('--card-border-color', effectiveCardBorderColor);
 
             // Hover surface
             root.style.setProperty('--color-hover-surface', dark ? neutrals['200'] : neutrals['100']);
@@ -3653,8 +3706,8 @@
         /* ============================================================
            UI CONTROLS → CONFIG BINDING
            ============================================================ */
-        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'red', 'green', 'blue', 'yellow'];
-        const MANUAL_OVERRIDE_KEYS = { surface: '_manualSurface', surfaceRaised: '_manualSurfaceRaised', textColor: '_manualTextColor' };
+        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'borderColor', 'cardBorderColor', 'red', 'green', 'blue', 'yellow'];
+        const MANUAL_OVERRIDE_KEYS = { surface: '_manualSurface', surfaceRaised: '_manualSurfaceRaised', textColor: '_manualTextColor', borderColor: '_manualBorderColor', cardBorderColor: '_manualCardBorderColor' };
 
         // Bind all color pickers + hex inputs
         COLOR_KEYS.forEach(key => {
@@ -3812,7 +3865,7 @@
         function saveTheme() {
             const data = {
                 name: 'Custom Theme',
-                version: '3.0',
+                version: '3.1',
                 generator: 'Agentic Blueprint',
                 config: { ...currentConfig },
             };
@@ -3820,6 +3873,8 @@
             delete data.config._manualSurface;
             delete data.config._manualSurfaceRaised;
             delete data.config._manualTextColor;
+            delete data.config._manualBorderColor;
+            delete data.config._manualCardBorderColor;
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -3841,6 +3896,14 @@
                     const cfg = data.config || data;
                     currentConfig = { ...JSON.parse(JSON.stringify(DEFAULT_CONFIG)), ...cfg };
                     if (!currentConfig.statusStyle) currentConfig.statusStyle = { ...DEFAULT_CONFIG.statusStyle };
+
+                    // Detect manually-specified overridable fields from loaded config
+                    if (cfg.surface) currentConfig._manualSurface = true;
+                    if (cfg.surfaceRaised) currentConfig._manualSurfaceRaised = true;
+                    if (cfg.textColor) currentConfig._manualTextColor = true;
+                    if (cfg.borderColor) currentConfig._manualBorderColor = true;
+                    if (cfg.cardBorderColor) currentConfig._manualCardBorderColor = true;
+
                     referenceConfig = JSON.parse(JSON.stringify(currentConfig));
                     syncUIFromConfig(currentConfig);
                     if (currentConfig.fontSans !== DEFAULT_CONFIG.fontSans) {
@@ -3928,6 +3991,23 @@
             const eSurface = cfg._manualSurface ? cfg.surface : (derived.surface || cfg.surface);
             const eSurfaceRaised = cfg._manualSurfaceRaised ? cfg.surfaceRaised : (derived.surfaceRaised || cfg.surfaceRaised);
             const eTextColor = cfg._manualTextColor ? cfg.textColor : (derived.textColor || cfg.textColor);
+            const eBorderColor = cfg._manualBorderColor ? cfg.borderColor : (derived.borderColor || cfg.borderColor);
+            const eCardBorderColor = cfg._manualCardBorderColor ? cfg.cardBorderColor : (derived.cardBorderColor || cfg.cardBorderColor);
+
+            // Derive border-light and border-strong from effective border
+            const eBorderHsl = rgbToHsl(...Object.values(hexToRgb(eBorderColor)));
+            let eBorderLight, eBorderStrong;
+            if (dark) {
+                const bl = hslToRgb(eBorderHsl.h, eBorderHsl.s, Math.max(eBorderHsl.l - 5, 5));
+                const bs = hslToRgb(eBorderHsl.h, eBorderHsl.s, Math.min(eBorderHsl.l + 10, 50));
+                eBorderLight = rgbToHex(bl.r, bl.g, bl.b);
+                eBorderStrong = rgbToHex(bs.r, bs.g, bs.b);
+            } else {
+                const bl = hslToRgb(eBorderHsl.h, eBorderHsl.s, Math.min(eBorderHsl.l + 7, 95));
+                const bs = hslToRgb(eBorderHsl.h, eBorderHsl.s, Math.max(eBorderHsl.l - 10, 30));
+                eBorderLight = rgbToHex(bl.r, bl.g, bl.b);
+                eBorderStrong = rgbToHex(bs.r, bs.g, bs.b);
+            }
 
             // Derive text hierarchy
             const textHsl = rgbToHsl(...Object.values(hexToRgb(eTextColor)));
@@ -3970,7 +4050,7 @@
             statusTokens += `  --status-neutral-bg:  ${n['200']};\n  --status-neutral-fg:  ${n['700']};`;
 
             const css = `/* ============================================================
-   tokens.css — Generated by Agentic Blueprint v3.0
+   tokens.css — Generated by Agentic Blueprint v3.1
    ============================================================
    Production-ready design token system.
    
@@ -4052,7 +4132,7 @@
   --color-page-bg:        ${cfg.pageBg};
   --color-surface:        ${eSurface};
   --color-surface-raised: ${eSurfaceRaised};
-  --color-surface-sunken: var(--gray-300);
+  --color-surface-sunken: ${n['300']};
   --color-overlay:        ${dark ? 'rgba(0,0,0,0.6)' : 'rgba(28,26,27,0.45)'};
 
   /* Text hierarchy: text > muted > subtle > disabled */
@@ -4060,12 +4140,12 @@
   --color-text-muted:    ${eMuted};
   --color-text-subtle:   ${eSubtle};
   --color-text-disabled: ${eDisabledFg};
-  --color-text-invert:   var(--gray-${dark ? '50' : '50'});
+  --color-text-invert:   ${n['50']};
 
   /* Borders: light < default < strong */
-  --color-border:        ${n['300']};
-  --color-border-light:  ${n['200']};
-  --color-border-strong: ${n['400']};
+  --color-border:        ${eBorderColor};
+  --color-border-light:  ${eBorderLight};
+  --color-border-strong: ${eBorderStrong};
   --color-border-focus:  var(--accent-500);
 
   /* ==========================================================
@@ -4212,7 +4292,7 @@ ${statusTokens}
 
   /* Card borders */
   --card-border-width: ${cfg.cardBorderWidth ?? 1}px;
-  --card-border-color: ${n['300']};
+  --card-border-color: ${eCardBorderColor};
 
   /* Raw shadows */
   --shadow-xs:  ${sh.xs};
