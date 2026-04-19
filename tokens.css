@@ -86,9 +86,9 @@
 
   /* Text hierarchy: text > muted > subtle > disabled */
   --color-text:          #343332;
-  --color-text-muted:    #343332;
-  --color-text-subtle:   #3d3c3b;
-  --color-text-disabled: #6b6867;
+  --color-text-muted:    #4f4e4c;
+  --color-text-subtle:   #6b6867;
+  --color-text-disabled: #868381;
   --color-text-invert:   var(--gray-50);
 
   /* Borders: light < default < strong */

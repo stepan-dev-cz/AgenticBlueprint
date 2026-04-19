@@ -2032,7 +2032,6 @@
                 <div class="ks-hero__badge">Agentic Blueprint v3.1</div>
                 <h1>Agentic Blueprint: <span>Kitchen Sink</span></h1>
                 <p>Every token, every component, every state — live preview.</p>
-                <p>Adjust the sidebar to build your custom design system.</p>
                 <p>Cut the noise. Keep the precision. <code>Set essentials. Export. Done.</code></p>
                 <p>It is so simple that even you can't f*ck it up.</p>
                 <p style="margin-top: var(--space-4); font-size: var(--text-sm);">
@@ -3362,20 +3361,30 @@
                 getContrastRatio(hex, surfaceColor)
             );
 
-            const generate = (baseColor, minRatio, initialMix) => {
-                for (let ratio = initialMix; ratio <= 1.0; ratio += 0.05) {
+            // Cap the target ratio to ensure we don't demand more contrast than the base text color actually has.
+            const baseContrast = getWorstContrast(textColor);
+
+            const generate = (baseColor, idealRatio, defaultMix, maxMix) => {
+                // Ensure the realism of the target contrast. 
+                // It should be slightly lower than base contrast to visibly "step down".
+                const targetRatio = Math.min(idealRatio, Math.max(1, baseContrast * 0.95));
+
+                for (let ratio = defaultMix; ratio <= maxMix; ratio += 0.05) {
                     let testHex = mixHex(baseColor, bgColor, ratio);
-                    if (getWorstContrast(testHex) >= minRatio) {
+                    if (getWorstContrast(testHex) >= targetRatio) {
                         return testHex;
                     }
                 }
-                return baseColor;
+
+                // If the target contrast was never met (e.g. user chose an inherently low-contrast color),
+                // return the maximum allowed mix so it's guaranteed to be visually distinct from the base.
+                return mixHex(baseColor, bgColor, maxMix);
             };
 
             return {
-                muted:    generate(textColor, 4.0, 0.65),
-                subtle:   generate(textColor, 3.0, 0.50),
-                disabled: generate(textColor, 2.0, 0.35)
+                muted: generate(textColor, 4.5, 0.65, 0.85),
+                subtle: generate(textColor, 3.0, 0.50, 0.70),
+                disabled: generate(textColor, 2.0, 0.35, 0.55)
             };
         }
 
