@@ -3318,6 +3318,24 @@
             return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
         }
 
+        /** Determine contrast ratio between two hex colors */
+        function getContrastRatio(hex1, hex2) {
+            const l1 = relativeLuminance(hex1);
+            const l2 = relativeLuminance(hex2);
+            return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+        }
+
+        /** Mix two hex colors by ratio (0 to 1, where 1 is 100% hex1) */
+        function mixHex(hex1, hex2, ratio = 0.5) {
+            const c1 = hexToRgb(hex1);
+            const c2 = hexToRgb(hex2);
+            return rgbToHex(
+                Math.round(c1.r * ratio + c2.r * (1 - ratio)),
+                Math.round(c1.g * ratio + c2.g * (1 - ratio)),
+                Math.round(c1.b * ratio + c2.b * (1 - ratio))
+            );
+        }
+
         /** Is the given background color dark? */
         function isDarkBackground(hex) {
             return relativeLuminance(hex) < 0.45;
@@ -3335,6 +3353,30 @@
                 return relativeLuminance(hex) > 0.5 ? 'var(--gray-50)' : 'var(--gray-900)';
             }
             return relativeLuminance(hex) > 0.5 ? 'var(--gray-900)' : 'var(--gray-50)';
+        }
+
+        /** Generate muted/subtle/disabled variants with contrast guarantees */
+        function generateTextVariants(textColor, bgColor, surfaceColor) {
+            const getWorstContrast = (hex) => Math.min(
+                getContrastRatio(hex, bgColor),
+                getContrastRatio(hex, surfaceColor)
+            );
+
+            const generate = (baseColor, minRatio, initialMix) => {
+                for (let ratio = initialMix; ratio <= 1.0; ratio += 0.05) {
+                    let testHex = mixHex(baseColor, bgColor, ratio);
+                    if (getWorstContrast(testHex) >= minRatio) {
+                        return testHex;
+                    }
+                }
+                return baseColor;
+            };
+
+            return {
+                muted:    generate(textColor, 4.0, 0.65),
+                subtle:   generate(textColor, 3.0, 0.50),
+                disabled: generate(textColor, 2.0, 0.35)
+            };
         }
 
         function setStatusStyle(key, style) {
@@ -3546,26 +3588,12 @@
             // 5. Text — auto-derive muted, subtle, disabled from text color
             root.style.setProperty('--color-text', effectiveTextColor);
 
-            const textHsl = rgbToHsl(...Object.values(hexToRgb(effectiveTextColor)));
-            if (dark) {
-                // In dark themes, muted = dimmer version of light text
-                const mutedRgb = hslToRgb(textHsl.h, textHsl.s * 0.3, textHsl.l * 0.6);
-                const subtleRgb = hslToRgb(textHsl.h, textHsl.s * 0.2, textHsl.l * 0.45);
-                const disabledRgb = hslToRgb(textHsl.h, textHsl.s * 0.15, textHsl.l * 0.35);
-                root.style.setProperty('--color-text-muted', rgbToHex(mutedRgb.r, mutedRgb.g, mutedRgb.b));
-                root.style.setProperty('--color-text-subtle', rgbToHex(subtleRgb.r, subtleRgb.g, subtleRgb.b));
-                root.style.setProperty('--color-text-disabled', rgbToHex(disabledRgb.r, disabledRgb.g, disabledRgb.b));
-                root.style.setProperty('--color-text-invert', neutrals['50']);
-            } else {
-                // In light themes, muted = lighter version of dark text
-                const mutedRgb = hslToRgb(textHsl.h, textHsl.s * 0.2, Math.min(textHsl.l + 40, 65));
-                const subtleRgb = hslToRgb(textHsl.h, textHsl.s * 0.15, Math.min(textHsl.l + 50, 75));
-                const disabledRgb = hslToRgb(textHsl.h, textHsl.s * 0.1, Math.min(textHsl.l + 55, 80));
-                root.style.setProperty('--color-text-muted', rgbToHex(mutedRgb.r, mutedRgb.g, mutedRgb.b));
-                root.style.setProperty('--color-text-subtle', rgbToHex(subtleRgb.r, subtleRgb.g, subtleRgb.b));
-                root.style.setProperty('--color-text-disabled', rgbToHex(disabledRgb.r, disabledRgb.g, disabledRgb.b));
-                root.style.setProperty('--color-text-invert', neutrals['50']);
-            }
+            const variants = generateTextVariants(effectiveTextColor, cfg.pageBg, effectiveSurface);
+
+            root.style.setProperty('--color-text-muted', variants.muted);
+            root.style.setProperty('--color-text-subtle', variants.subtle);
+            root.style.setProperty('--color-text-disabled', variants.disabled);
+            root.style.setProperty('--color-text-invert', neutrals['50']);
 
             // 6. Borders — use effective border color (user-chosen or auto-derived)
             root.style.setProperty('--color-border', effectiveBorderColor);
@@ -4026,24 +4054,11 @@
                 eBorderStrong = rgbToHex(bs.r, bs.g, bs.b);
             }
 
-            // Derive text hierarchy
-            const textHsl = rgbToHsl(...Object.values(hexToRgb(eTextColor)));
-            let eMuted, eSubtle, eDisabledFg;
-            if (dark) {
-                const m = hslToRgb(textHsl.h, textHsl.s * 0.3, textHsl.l * 0.6);
-                const s = hslToRgb(textHsl.h, textHsl.s * 0.2, textHsl.l * 0.45);
-                const d = hslToRgb(textHsl.h, textHsl.s * 0.15, textHsl.l * 0.35);
-                eMuted = rgbToHex(m.r, m.g, m.b);
-                eSubtle = rgbToHex(s.r, s.g, s.b);
-                eDisabledFg = rgbToHex(d.r, d.g, d.b);
-            } else {
-                const m = hslToRgb(textHsl.h, textHsl.s * 0.2, Math.min(textHsl.l + 40, 65));
-                const s = hslToRgb(textHsl.h, textHsl.s * 0.15, Math.min(textHsl.l + 50, 75));
-                const d = hslToRgb(textHsl.h, textHsl.s * 0.1, Math.min(textHsl.l + 55, 80));
-                eMuted = rgbToHex(m.r, m.g, m.b);
-                eSubtle = rgbToHex(s.r, s.g, s.b);
-                eDisabledFg = rgbToHex(d.r, d.g, d.b);
-            }
+            // Derive text hierarchy using contrast-aware utility
+            const textVariants = generateTextVariants(eTextColor, cfg.pageBg, eSurface);
+            const eMuted = textVariants.muted;
+            const eSubtle = textVariants.subtle;
+            const eDisabledFg = textVariants.disabled;
 
             // Contrast helper for export
             const contrastHex = (hex) => {
