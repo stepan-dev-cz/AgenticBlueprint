@@ -3515,7 +3515,7 @@
             root.style.setProperty('--accent-700', accent['700']);
 
             // Foreground colors for accent swatches
-            root.style.setProperty('--accent-100-fg', dark ? accent['700'] : accent['500']);
+            root.style.setProperty('--accent-100-fg', dark ? accent['700'] : (relativeLuminance(accent['500']) > 0.8 ? getContrastColor(accent['100'], false) : accent['500']));
             root.style.setProperty('--accent-500-fg', getContrastColor(accent['500'], dark));
             root.style.setProperty('--accent-700-fg', getContrastColor(accent['700'], dark));
 
@@ -3528,7 +3528,7 @@
                 root.style.setProperty(`--${name}-700`, v['700']);
 
                 // Foreground colors for swatches
-                root.style.setProperty(`--${name}-100-fg`, dark ? v['700'] : v['500']);
+                root.style.setProperty(`--${name}-100-fg`, dark ? v['700'] : (relativeLuminance(v['500']) > 0.8 ? getContrastColor(v['100'], false) : v['500']));
                 root.style.setProperty(`--${name}-500-fg`, getContrastColor(v['500'], dark));
                 root.style.setProperty(`--${name}-700-fg`, getContrastColor(v['700'], dark));
             }
@@ -3664,10 +3664,10 @@
                     }
                 } else {
                     root.style.setProperty(`--status-${semanticName}-bg`, variants['100']);
-                    root.style.setProperty(`--status-${semanticName}-fg`, variants[dark ? '700' : '500']);
+                    root.style.setProperty(`--status-${semanticName}-fg`, dark ? variants['700'] : (relativeLuminance(variants['500']) > 0.8 ? getContrastColor(variants['100'], false) : variants['500']));
                     if (name !== semanticName) {
                         root.style.setProperty(`--status-${name}-bg`, variants['100']);
-                        root.style.setProperty(`--status-${name}-fg`, variants[dark ? '700' : '500']);
+                        root.style.setProperty(`--status-${name}-fg`, dark ? variants['700'] : (relativeLuminance(variants['500']) > 0.8 ? getContrastColor(variants['100'], false) : variants['500']));
                     }
                 }
             });
@@ -3685,9 +3685,9 @@
                 root.style.setProperty('--cta-fg-live', getContrastColor(cfg.accent, dark));
             } else {
                 root.style.setProperty('--cta-bg', ctaAccent['100']);
-                root.style.setProperty('--cta-fg', dark ? ctaAccent['700'] : ctaAccent['500']);
+                root.style.setProperty('--cta-fg', dark ? ctaAccent['700'] : (relativeLuminance(ctaAccent['500']) > 0.8 ? getContrastColor(ctaAccent['100'], false) : ctaAccent['500']));
                 root.style.setProperty('--cta-bg-live', ctaAccent['100']);
-                root.style.setProperty('--cta-fg-live', dark ? ctaAccent['700'] : ctaAccent['500']);
+                root.style.setProperty('--cta-fg-live', dark ? ctaAccent['700'] : (relativeLuminance(ctaAccent['500']) > 0.8 ? getContrastColor(ctaAccent['100'], false) : ctaAccent['500']));
             }
             root.style.setProperty('--cta-hover-bg', ctaAccent['500']);
             root.style.setProperty('--cta-hover-fg', getContrastColor(cfg.accent, dark));
@@ -4134,23 +4134,23 @@
   --red-500:    ${red['500']};   --red-100:    ${red['100']};   --red-700:    ${red['700']};
 
   /* Contrast-aware foregrounds */
-  --accent-100-fg: ${dark ? a['700'] : a['500']};
+  --accent-100-fg: ${dark ? a['700'] : (relativeLuminance(a['500']) > 0.8 ? contrastHex(a['100']) : a['500'])};
   --accent-500-fg: ${contrastHex(a['500'])};
   --accent-700-fg: ${contrastHex(a['700'])};
 
-  --blue-100-fg:   ${dark ? blu['700'] : blu['500']};
+  --blue-100-fg:   ${dark ? blu['700'] : (relativeLuminance(blu['500']) > 0.8 ? contrastHex(blu['100']) : blu['500'])};
   --blue-500-fg:   ${contrastHex(blu['500'])};
   --blue-700-fg:   ${contrastHex(blu['700'])};
 
-  --green-100-fg:  ${dark ? grn['700'] : grn['500']};
+  --green-100-fg:  ${dark ? grn['700'] : (relativeLuminance(grn['500']) > 0.8 ? contrastHex(grn['100']) : grn['500'])};
   --green-500-fg:  ${contrastHex(grn['500'])};
   --green-700-fg:  ${contrastHex(grn['700'])};
 
-  --yellow-100-fg: ${dark ? yel['700'] : yel['500']};
+  --yellow-100-fg: ${dark ? yel['700'] : (relativeLuminance(yel['500']) > 0.8 ? contrastHex(yel['100']) : yel['500'])};
   --yellow-500-fg: ${contrastHex(yel['500'])};
   --yellow-700-fg: ${contrastHex(yel['700'])};
 
-  --red-100-fg:    ${dark ? red['700'] : red['500']};
+  --red-100-fg:    ${dark ? red['700'] : (relativeLuminance(red['500']) > 0.8 ? contrastHex(red['100']) : red['500'])};
   --red-500-fg:    ${contrastHex(red['500'])};
   --red-700-fg:    ${contrastHex(red['700'])};
 
