@@ -7,7 +7,7 @@ A robust, interactive design token system and theme editor. Build, preview, and 
 ## Features
 
 - **Theme Editor**: Real-time manipulation of colors, typography, border radius, and spacing variables.
-- **Smart Color Engine**: Automatically derives complementary secondary colors, interaction states, and smart inversion logic for dynamic dark mode support.
+- **Smart Color Engine**: Automatically derives complementary secondary colors, interaction states, and smart inversion logic for dynamic dark mode support. Basically you just need to set a bg color and tweak color accents. Thats it. 6 clicks, export.
 - **Kitchen Sink Demo**: Live preview of your design system directly applied to various UI components (swatches, buttons, typography specimens, data cards).
 - **Dark Mode Integration**: Seamlessly toggle between light and dark themes with intelligent contrast adjustments.
 - **Export & Import**: Save your curated design tokens to JSON presets
@@ -16,7 +16,7 @@ A robust, interactive design token system and theme editor. Build, preview, and 
 
 1. Clone or download the repository.
 2. Open `index.html` in your modern web browser or serve it using a local development server (like VS Code Live Server).
-3. Use the sidebar controls on the right to customize the design tokens.
+3. Set bg color. If needed, use the sidebar controls on the right to customize the design tokens.
 4. View real-time changes applied instantly in the Kitchen Sink demo space.
 
 ## File Structure
@@ -27,7 +27,7 @@ A robust, interactive design token system and theme editor. Build, preview, and 
 
 ## How to Apply to Your Project
 
-Once you have tweaked the tokens to your satisfaction, simply export the CSS variables generated from the studio and drop them into the `:root` of your web project's CSS baseline. All elements consuming these semantic variables will automatically adopt your new design.
+Once you have tweaked the tokens to your satisfaction, simply export the CSS variables generated from the studio and drop them into the `:root` of your web project's CSS baseline. All elements consuming these semantic variables will automatically adopt your new design. Or, on foundation of tokens.css, you can start building components...
 
 ## contact: stepan.dev@outlook.cz
 ## licence: CC BY-NC 4.0
