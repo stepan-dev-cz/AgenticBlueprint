@@ -1296,7 +1296,7 @@
         /* ===== PROGRESS ===== */
         .progress {
             height: 8px;
-            background: var(--gray-200);
+            background: var(--color-surface-sunken);
             border-radius: var(--radius-full);
             overflow: hidden;
         }
@@ -1481,7 +1481,7 @@
         }
 
         .skeleton {
-            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+            background: linear-gradient(90deg, var(--color-surface-sunken) 25%, var(--color-hover-surface) 50%, var(--color-surface-sunken) 75%);
             background-size: 200% 100%;
             animation: shimmer 1.8s ease-in-out infinite;
             border-radius: var(--radius-sm);
@@ -3531,7 +3531,7 @@
             // 4. Surfaces
             root.style.setProperty('--color-surface', effectiveSurface);
             root.style.setProperty('--color-surface-raised', effectiveSurfaceRaised);
-            root.style.setProperty('--color-surface-sunken', neutrals['300']);
+            root.style.setProperty('--color-surface-sunken', dark ? neutrals['50'] : neutrals['300']);
 
             // Glass effect for sidebar
             const { r: sr, g: sg, b: sb } = hexToRgb(effectiveSurfaceRaised);
@@ -3588,12 +3588,12 @@
             root.style.setProperty('--card-border-color', effectiveCardBorderColor);
 
             // Hover surface
-            root.style.setProperty('--color-hover-surface', dark ? neutrals['200'] : neutrals['100']);
+            root.style.setProperty('--color-hover-surface', dark ? neutrals['300'] : neutrals['100']);
 
             // Disabled states — auto-derived
-            root.style.setProperty('--disabled-bg', neutrals['200']);
+            root.style.setProperty('--disabled-bg', dark ? neutrals['300'] : neutrals['200']);
             root.style.setProperty('--disabled-fg', neutrals['400']);
-            root.style.setProperty('--disabled-border', neutrals['300']);
+            root.style.setProperty('--disabled-border', dark ? neutrals['400'] : neutrals['300']);
 
             // 7. Radius
             const r = cfg.radius;
@@ -3668,7 +3668,7 @@
             });
 
             // Neutral status
-            root.style.setProperty('--status-neutral-bg', neutrals['200']);
+            root.style.setProperty('--status-neutral-bg', dark ? neutrals['300'] : neutrals['200']);
             root.style.setProperty('--status-neutral-fg', neutrals['700']);
 
             // CTA adapts to accent status style
@@ -4151,7 +4151,7 @@
   --color-page-bg:        ${cfg.pageBg};
   --color-surface:        ${eSurface};
   --color-surface-raised: ${eSurfaceRaised};
-  --color-surface-sunken: var(--gray-300);
+  --color-surface-sunken: var(--gray-${dark ? '50' : '300'});
   --color-overlay:        ${dark ? 'rgba(0,0,0,0.6)' : 'rgba(28,26,27,0.45)'};
 
   /* Text hierarchy: text > muted > subtle > disabled */
@@ -4212,7 +4212,7 @@
   --ghost-disabled-fg:  var(--gray-400);
 
   /* Interactive surface */
-  --color-hover-surface: var(--gray-${dark ? '200' : '100'});
+  --color-hover-surface: var(--gray-${dark ? '300' : '100'});
 
   /* ==========================================================
      4. STATUS VARIANTS (semantic naming)
@@ -4224,9 +4224,9 @@ ${statusTokens}
      5. DISABLED STATES
      ========================================================== */
 
-  --disabled-bg:      var(--gray-200);
+  --disabled-bg:      var(--gray-${dark ? '300' : '200'});
   --disabled-fg:      var(--gray-400);
-  --disabled-border:  var(--gray-300);
+  --disabled-border:  var(--gray-${dark ? '400' : '300'});
   --disabled-opacity: 0.5;
 
   /* ==========================================================
