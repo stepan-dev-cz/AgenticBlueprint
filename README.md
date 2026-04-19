@@ -2,6 +2,8 @@
 
 A robust, interactive design token system and theme editor. Build, preview, and export your design system seamlessly with a smart color engine and a real-time "Kitchen Sink" component preview.
 
+## 🚀 Live Demo: [designtokens.eu](https://designtokens.eu/)
+
 ## Features
 
 - **Theme Editor**: Real-time manipulation of colors, typography, border radius, and spacing variables.
@@ -29,3 +31,5 @@ Once you have tweaked the tokens to your satisfaction, simply export the CSS var
 
 ## contact: stepan.dev@outlook.cz
 ## licence: CC BY-NC 4.0
+
+<img src="logo_sticker.png" alt="Design Tokens Logo" width="250">
