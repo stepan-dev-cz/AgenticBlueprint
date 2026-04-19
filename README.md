@@ -32,4 +32,6 @@ Once you have tweaked the tokens to your satisfaction, simply export the CSS var
 ## contact: stepan.dev@outlook.cz
 ## licence: CC BY-NC 4.0
 
-<img src="logo_sticker.png" alt="Design Tokens Logo" width="250">
+<a href="https://designtokens.eu/">
+  <img src="logo_sticker.png" alt="Design Tokens Demo" width="250">
+</a>
