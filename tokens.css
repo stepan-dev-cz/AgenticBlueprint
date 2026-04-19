@@ -53,23 +53,23 @@
   --red-500:    #FF564A;   --red-100:    #fdecea;   --red-700:    #d54339;
 
   /* Contrast-aware foregrounds */
-  --accent-100-fg: #574ad9;
+  --accent-100-fg: #7263FF;
   --accent-500-fg: #f9f9f8;
   --accent-700-fg: #f9f9f8;
 
-  --blue-100-fg:   #2585ad;
+  --blue-100-fg:   #00B4FF;
   --blue-500-fg:   #1c1c1c;
   --blue-700-fg:   #f9f9f8;
 
-  --green-100-fg:  #1c8550;
+  --green-100-fg:  #00C461;
   --green-500-fg:  #1c1c1c;
   --green-700-fg:  #f9f9f8;
 
-  --yellow-100-fg: #b08925;
+  --yellow-100-fg: #FFB905;
   --yellow-500-fg: #1c1c1c;
   --yellow-700-fg: #1c1c1c;
 
-  --red-100-fg:    #d54339;
+  --red-100-fg:    #FF564A;
   --red-500-fg:    #f9f9f8;
   --red-700-fg:    #f9f9f8;
 

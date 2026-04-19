@@ -2037,7 +2037,9 @@
                 <p>11 colors in, 60+ tokens out.</p>
                 <p>It is so simple that even you can't f*ck it up.</p>
                 <p style="margin-top: var(--space-4); font-size: var(--text-sm);">
-                    Need help getting started? <a href="docs.html" style="color: var(--accent-500); text-decoration: none; font-weight: var(--weight-medium); border-bottom: 1px solid var(--accent-500); padding-bottom: 2px;">Read the quick documentation</a>
+                    Need help getting started? <a href="docs.html"
+                        style="color: var(--accent-500); text-decoration: none; font-weight: var(--weight-medium); border-bottom: 1px solid var(--accent-500); padding-bottom: 2px;">Read
+                        the quick documentation</a>
                 </p>
 
                 <div
@@ -3326,8 +3328,11 @@
         }
 
         /** Get contrast as CSS var reference */
-        function getContrastColor(hex) {
+        function getContrastColor(hex, isDark = false) {
             if (!hex) return 'var(--gray-50)';
+            if (isDark) {
+                return relativeLuminance(hex) > 0.5 ? 'var(--gray-50)' : 'var(--gray-900)';
+            }
             return relativeLuminance(hex) > 0.5 ? 'var(--gray-900)' : 'var(--gray-50)';
         }
 
@@ -3403,7 +3408,7 @@
                 const c100 = rgbToHex(deep.r, deep.g, deep.b);
 
                 // 700: Brighter tint for dark bg.
-                const bright = hslToRgb(h, Math.max(s * 0.85, 15), Math.min(l * 1.25, 75));
+                const bright = hslToRgb(h, s, 75);
                 const c700 = rgbToHex(bright.r, bright.g, bright.b);
 
                 return { '100': c100, '500': hex.toUpperCase(), '700': c700 };
@@ -3510,9 +3515,9 @@
             root.style.setProperty('--accent-700', accent['700']);
 
             // Foreground colors for accent swatches
-            root.style.setProperty('--accent-100-fg', dark ? accent['500'] : accent['700']);
-            root.style.setProperty('--accent-500-fg', getContrastColor(accent['500']));
-            root.style.setProperty('--accent-700-fg', getContrastColor(accent['700']));
+            root.style.setProperty('--accent-100-fg', dark ? accent['700'] : accent['500']);
+            root.style.setProperty('--accent-500-fg', getContrastColor(accent['500'], dark));
+            root.style.setProperty('--accent-700-fg', getContrastColor(accent['700'], dark));
 
             // 3. Status colors (with dark-aware inversion)
             for (const name of ['red', 'green', 'blue', 'yellow']) {
@@ -3523,9 +3528,9 @@
                 root.style.setProperty(`--${name}-700`, v['700']);
 
                 // Foreground colors for swatches
-                root.style.setProperty(`--${name}-100-fg`, dark ? v['500'] : v['700']);
-                root.style.setProperty(`--${name}-500-fg`, getContrastColor(v['500']));
-                root.style.setProperty(`--${name}-700-fg`, getContrastColor(v['700']));
+                root.style.setProperty(`--${name}-100-fg`, dark ? v['700'] : v['500']);
+                root.style.setProperty(`--${name}-500-fg`, getContrastColor(v['500'], dark));
+                root.style.setProperty(`--${name}-700-fg`, getContrastColor(v['700'], dark));
             }
 
             // 4. Surfaces
@@ -3646,16 +3651,16 @@
                 const container = document.querySelector(`.sb-segmented[data-key="${name}"]`);
                 if (container) {
                     container.style.setProperty('--sb-active-bg', variants['500']);
-                    container.style.setProperty('--sb-active-fg', getContrastColor(baseColor));
+                    container.style.setProperty('--sb-active-fg', getContrastColor(baseColor, dark));
                 }
 
                 if (style === 'solid') {
                     root.style.setProperty(`--status-${semanticName}-bg`, variants['500']);
-                    root.style.setProperty(`--status-${semanticName}-fg`, getContrastColor(baseColor));
+                    root.style.setProperty(`--status-${semanticName}-fg`, getContrastColor(baseColor, dark));
                     // Also set the color-key based ones for backward compat
                     if (name !== semanticName) {
                         root.style.setProperty(`--status-${name}-bg`, variants['500']);
-                        root.style.setProperty(`--status-${name}-fg`, getContrastColor(baseColor));
+                        root.style.setProperty(`--status-${name}-fg`, getContrastColor(baseColor, dark));
                     }
                 } else {
                     root.style.setProperty(`--status-${semanticName}-bg`, variants['100']);
@@ -3675,9 +3680,9 @@
             const ctaAccent = generateAccentVariants(cfg.accent, dark);
             if (cfg.statusStyle.accent === 'solid') {
                 root.style.setProperty('--cta-bg', ctaAccent['500']);
-                root.style.setProperty('--cta-fg', getContrastColor(cfg.accent));
+                root.style.setProperty('--cta-fg', getContrastColor(cfg.accent, dark));
                 root.style.setProperty('--cta-bg-live', ctaAccent['500']);
-                root.style.setProperty('--cta-fg-live', getContrastColor(cfg.accent));
+                root.style.setProperty('--cta-fg-live', getContrastColor(cfg.accent, dark));
             } else {
                 root.style.setProperty('--cta-bg', ctaAccent['100']);
                 root.style.setProperty('--cta-fg', dark ? ctaAccent['700'] : ctaAccent['500']);
@@ -3685,9 +3690,9 @@
                 root.style.setProperty('--cta-fg-live', dark ? ctaAccent['700'] : ctaAccent['500']);
             }
             root.style.setProperty('--cta-hover-bg', ctaAccent['500']);
-            root.style.setProperty('--cta-hover-fg', getContrastColor(cfg.accent));
+            root.style.setProperty('--cta-hover-fg', getContrastColor(cfg.accent, dark));
             root.style.setProperty('--cta-active-bg', ctaAccent['700']);
-            root.style.setProperty('--cta-active-fg', getContrastColor(ctaAccent['700']));
+            root.style.setProperty('--cta-active-fg', getContrastColor(ctaAccent['700'], dark));
             root.style.setProperty('--cta-disabled-bg', neutrals['200']);
             root.style.setProperty('--cta-disabled-fg', neutrals['400']);
 
@@ -4040,7 +4045,13 @@
             }
 
             // Contrast helper for export
-            const contrastHex = (bgHex) => relativeLuminance(bgHex) > 0.5 ? n['900'] : n['50'];
+            const contrastHex = (hex) => {
+                if (!hex) return n['50'];
+                if (dark) {
+                    return relativeLuminance(hex) > 0.5 ? n['50'] : n['900'];
+                }
+                return relativeLuminance(hex) > 0.5 ? n['900'] : n['50'];
+            };
 
             // Generate status blocks
             // Generate status blocks & semantic shorthand
@@ -4123,23 +4134,23 @@
   --red-500:    ${red['500']};   --red-100:    ${red['100']};   --red-700:    ${red['700']};
 
   /* Contrast-aware foregrounds */
-  --accent-100-fg: ${dark ? a['500'] : a['700']};
+  --accent-100-fg: ${dark ? a['700'] : a['500']};
   --accent-500-fg: ${contrastHex(a['500'])};
   --accent-700-fg: ${contrastHex(a['700'])};
 
-  --blue-100-fg:   ${dark ? blu['500'] : blu['700']};
+  --blue-100-fg:   ${dark ? blu['700'] : blu['500']};
   --blue-500-fg:   ${contrastHex(blu['500'])};
   --blue-700-fg:   ${contrastHex(blu['700'])};
 
-  --green-100-fg:  ${dark ? grn['500'] : grn['700']};
+  --green-100-fg:  ${dark ? grn['700'] : grn['500']};
   --green-500-fg:  ${contrastHex(grn['500'])};
   --green-700-fg:  ${contrastHex(grn['700'])};
 
-  --yellow-100-fg: ${dark ? yel['500'] : yel['700']};
+  --yellow-100-fg: ${dark ? yel['700'] : yel['500']};
   --yellow-500-fg: ${contrastHex(yel['500'])};
   --yellow-700-fg: ${contrastHex(yel['700'])};
 
-  --red-100-fg:    ${dark ? red['500'] : red['700']};
+  --red-100-fg:    ${dark ? red['700'] : red['500']};
   --red-500-fg:    ${contrastHex(red['500'])};
   --red-700-fg:    ${contrastHex(red['700'])};
 
