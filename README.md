@@ -1,4 +1,4 @@
-# Agentic Blueprint — Design Token Studio
+# Agentic Blueprint — Design Token Studio [WIP]
 
 A robust, interactive design token system and theme editor. Build, preview, and export your design system seamlessly with a smart color engine and a real-time "Kitchen Sink" component preview.
 
@@ -29,6 +29,7 @@ A robust, interactive design token system and theme editor. Build, preview, and 
 
 Once you have tweaked the tokens to your satisfaction, simply export the CSS variables generated from the studio and drop them into the `:root` of your web project's CSS baseline. All elements consuming these semantic variables will automatically adopt your new design. Or, on foundation of tokens.css, you can start building components...
 
+##I am working in this in my free time, and this is WIP.
 ## contact: stepan.dev@outlook.cz
 ## licence: CC BY-NC 4.0
 
