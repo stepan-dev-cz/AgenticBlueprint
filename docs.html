@@ -132,6 +132,7 @@
             line-height: var(--leading-loose);
             overflow-x: auto;
             margin-bottom: var(--space-6);
+            white-space: pre-wrap;
         }
 
         .code-block .tag {
@@ -245,6 +246,15 @@
                     class="inline">tokens.css</code>.
             </p>
 
+            <h2 id="free">Free Design Tokens Generator</h2>
+            <p>
+                <strong>Free Design Tokens Generator: No account needed, no subscription required.</strong>
+            </p>
+            <p>
+                I believe that great design tools should be accessible. Agentic Blueprint is free for personal and non-commercial projects under the CC BY-NC 4.0 license.
+                No hidden paywalls, no signup forms, and no usage limits. Launch the editor, build your theme, and download your CSS instantly.
+            </p>
+
             <h2>Why use it?</h2>
             <p>Unlike massive frameworks that ship with thousands of utility classes you never use, Agentic Blueprint is
                 focused purely on <strong>variables</strong> and <strong>semantic structure</strong>.</p>
@@ -259,9 +269,19 @@
             </ul>
 
             <h2>Smart Color Engine</h2>
-            <p>You don't need to manually configure 10 shades for every color. Just choose a <strong>base
-                    color</strong>, and Agentic Blueprint mathematically derives the appropriate lighter and darker
-                tones to build a harmonious swatch.</p>
+            <p>
+                Designing a balanced color palette shouldn't require a degree in color theory. With the <b>Smart Color
+                Engine</b>, you just select a page background,one <strong>base color</strong> that represents main
+                accent and four status colors. If needed, you can tweak a few of other parameters. And that's it!
+                Agentic Blueprint will mathematically derive the perfect complementary shades—from delicate background
+                tints all the way down to rich, deep tones to automatically construct a harmonious swatch.
+            </p>
+            <p>
+                But it goes further: the engine dynamically calculates <strong>optimal contrast colors</strong> for
+                text. Whether a background surface is light, muted, vibrant, or completely dark, your text will
+                automatically adapt to remain perfectly legible and accessible, ensuring a stunning visual experience
+                across both Light and Dark modes.
+            </p>
 
             <div
                 style="display: flex; gap: var(--space-6); align-items: center; background: var(--color-surface, #F5F3F1); padding: var(--space-6); border-radius: var(--radius-lg); border: 1px solid var(--color-border); margin-bottom: var(--space-8); flex-wrap: wrap;">
@@ -311,24 +331,46 @@
                 </div>
             </div>
 
+            <p style="font-weight: var(--weight-semi); margin-bottom: var(--space-4);">Intelligent Contrast Generation:
+            </p>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8);">
+                <div
+                    style="background: var(--accent-100); color: var(--accent-100-fg, var(--accent-800)); padding: var(--space-5); border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: var(--space-2); text-align: center; border: 1px solid var(--color-border, transparent);">
+                    <div style="font-weight: var(--weight-bold); font-size: var(--text-lg);">Soft Background</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.8;">Text automatically uses a darker complementary
+                        shade.</div>
+                </div>
+                <div
+                    style="background: var(--accent-500); color: var(--accent-500-fg, #fff); padding: var(--space-5); border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: var(--space-2); text-align: center; box-shadow: var(--elevation-3);">
+                    <div style="font-weight: var(--weight-bold); font-size: var(--text-lg);">Vibrant Base</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.9;">High-contrast text ensures brilliant
+                        readability.</div>
+                </div>
+                <div
+                    style="background: var(--accent-700); color: var(--accent-700-fg, #fff); padding: var(--space-5); border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: var(--space-2); text-align: center;">
+                    <div style="font-weight: var(--weight-bold); font-size: var(--text-lg);">Deep Shade</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.8;">Crisp, bright text perfectly balances dark
+                        surfaces.</div>
+                </div>
+            </div>
+
             <h2>Quick Start</h2>
             <p>Implementing Agentic Blueprint requires zero setup. Simply generate your theme from the editor, save it,
                 and link the resulting CSS file in the <code class="inline">&lt;head&gt;</code> of your HTML.</p>
 
-            <div class="code-block">
-                <span class="cm">&lt;!-- 1. Include your exported tokens font --&gt;</span>
-                &lt;<span class="tag">link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span>
-                <span class="attr">href</span>=<span class="str">"tokens.css"</span>&gt;
+            <div class="code-block"><span class="cm">&lt;!-- 1. Include your exported tokens font --&gt;</span>
+&lt;<span class="tag">link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"tokens.css"</span>&gt;
 
-                <span class="cm">&lt;!-- 2. Apply theme variables to your elements --&gt;</span>
-                &lt;<span class="tag">style</span>&gt;
-                <span class="tag">body</span> {
-                <span class="css-var">background-color</span>: <span class="attr">var</span>(--color-page-bg);
-                <span class="css-var">color</span>: <span class="attr">var</span>(--color-text);
-                <span class="css-var">font-family</span>: <span class="attr">var</span>(--font-sans);
-                }
-                &lt;/<span class="tag">style</span>&gt;
-            </div>
+<span class="cm">&lt;!-- 2. Apply theme variables to your elements --&gt;</span>
+&lt;<span class="tag">style</span>&gt;
+  <span class="tag">body</span> {
+    <span class="css-var">background-color</span>: <span class="attr">var</span>(--color-page-bg);
+    <span class="css-var">color</span>: <span class="attr">var</span>(--color-text);
+    <span class="css-var">font-family</span>: <span class="attr">var</span>(--font-sans);
+  }
+&lt;/<span class="tag">style</span>&gt;</div>
+
 
             <h2>Component Example: Feature Default Card</h2>
             <p>Here is an example demonstrating a simpler, widely used component. Its clean layout uses straightforward
@@ -353,29 +395,22 @@
             </div>
 
             <p><strong>Code configuration for the Feature Card:</strong></p>
-            <div class="code-block">
-                &lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"card"</span> <span
-                    class="attr">style</span>=<span class="str">"max-width: 320px;"</span>&gt;
-                &lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="str">"font-size:
-                    var(--text-xs); font-weight: var(--weight-semi); text-transform: uppercase; color:
-                    var(--color-text-muted); margin-bottom: var(--space-2);"</span>&gt;Feature&lt;/<span
-                    class="tag">div</span>&gt;
-                &lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="str">"font-size:
-                    var(--text-xl); font-weight: var(--weight-bold); margin-bottom: var(--space-2);"</span>&gt;Default
-                Card&lt;/<span class="tag">div</span>&gt;
-                &lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="str">"font-size:
-                    var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-4);"</span>&gt;Standard
-                surface with a subtle border. Automatically elevates on hover.&lt;/<span class="tag">div</span>&gt;
-                &lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="str">"display: flex; gap:
-                    var(--space-3);"</span>&gt;
-                &lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn
-                    btn--solid"</span>&gt;Action&lt;/<span class="tag">button</span>&gt;
-                &lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn"</span> <span
-                    class="attr">style</span>=<span class="str">"background: transparent; color:
-                    var(--color-text-muted);"</span>&gt;Learn More&lt;/<span class="tag">button</span>&gt;
-                &lt;/<span class="tag">div</span>&gt;
-                &lt;/<span class="tag">div</span>&gt;
-            </div>
+            <div class="code-block">&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"card"</span> <span class="attr">style</span>=<span class="str">"max-width: 320px;"</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="str">"font-size: var(--text-xs); font-weight: var(--weight-semi); text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-2);"</span>&gt;
+    Feature
+  &lt;/<span class="tag">div</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="str">"font-size: var(--text-xl); font-weight: var(--weight-bold); margin-bottom: var(--space-2);"</span>&gt;
+    Default Card
+  &lt;/<span class="tag">div</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="str">"font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-4);"</span>&gt;
+    Standard surface with a subtle border. Automatically elevates on hover.
+  &lt;/<span class="tag">div</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="str">"display: flex; gap: var(--space-3);"</span>&gt;
+    &lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn btn--solid"</span>&gt;Action&lt;/<span class="tag">button</span>&gt;
+    &lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn"</span> <span class="attr">style</span>=<span class="str">"background: transparent; color: var(--color-text-muted);"</span>&gt;Learn More&lt;/<span class="tag">button</span>&gt;
+  &lt;/<span class="tag">div</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</div>
+
 
             <h2>The Core Scale</h2>
             <p>Every size, spacing, and font decision relies on a robust scale system. Avoid writing magic numbers and
