@@ -148,6 +148,34 @@
             margin-bottom: var(--space-4);
         }
 
+        /* --- Collapsible Section --- */
+        .sb-details summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sb-details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .sb-details summary::after {
+            content: '▼';
+            font-size: 8px;
+            color: var(--color-text-subtle);
+            transition: transform var(--duration-fast);
+        }
+
+        .sb-details:not([open]) summary::after {
+            transform: rotate(-90deg);
+        }
+
+        .sb-details[open] .sb-details__content {
+            margin-top: var(--space-4);
+        }
+
         /* --- Color Control --- */
         .sb-color {
             display: flex;
@@ -2970,78 +2998,6 @@
             </div>
         </div>
 
-        <!-- SURFACES & BORDERS -->
-        <div class="sb-section">
-            <div class="sb-section__title">Surfaces & Borders</div>
-            <div class="sb-color">
-                <span class="sb-color__label">Surface</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-surface" value="#F5F3F1">
-                    <input type="text" class="sb-color__hex" id="hex-surface" value="#F5F3F1" maxlength="7">
-                    <button class="sb-revert" id="revert-surface" onclick="revertKey('surface')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
-            <div class="sb-color">
-                <span class="sb-color__label">Raised</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-surfaceRaised" value="#FAFAF9">
-                    <input type="text" class="sb-color__hex" id="hex-surfaceRaised" value="#FAFAF9" maxlength="7">
-                    <button class="sb-revert" id="revert-surfaceRaised" onclick="revertKey('surfaceRaised')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
-            <div class="sb-color">
-                <span class="sb-color__label">Text Color</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-textColor" value="#343132">
-                    <input type="text" class="sb-color__hex" id="hex-textColor" value="#343132" maxlength="7">
-                    <button class="sb-revert" id="revert-textColor" onclick="revertKey('textColor')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
-            <div class="sb-color">
-                <span class="sb-color__label">Border Color</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-borderColor" value="#D6D0CD">
-                    <input type="text" class="sb-color__hex" id="hex-borderColor" value="#D6D0CD" maxlength="7">
-                    <button class="sb-revert" id="revert-borderColor" onclick="revertKey('borderColor')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
-            <div class="sb-slider">
-                <div class="sb-slider__header">
-                    <span class="sb-slider__label">Global Border Width</span>
-                    <div style="display:flex;align-items:center;gap:var(--space-1);">
-                        <span class="sb-slider__value" id="val-borderWidth">1px</span>
-                        <button class="sb-revert" id="revert-borderWidth" onclick="revertKey('borderWidth')"
-                            title="Revert">↩</button>
-                    </div>
-                </div>
-                <input type="range" class="sb-range" id="ctrl-borderWidth" min="0" max="3" value="1" step="0.5">
-            </div>
-            <div class="sb-slider">
-                <div class="sb-slider__header">
-                    <span class="sb-slider__label">Card Border Width</span>
-                    <div style="display:flex;align-items:center;gap:var(--space-1);">
-                        <span class="sb-slider__value" id="val-cardBorderWidth">1px</span>
-                        <button class="sb-revert" id="revert-cardBorderWidth" onclick="revertKey('cardBorderWidth')"
-                            title="Revert">↩</button>
-                    </div>
-                </div>
-                <input type="range" class="sb-range" id="ctrl-cardBorderWidth" min="0" max="4" value="1" step="0.5">
-            </div>
-            <div class="sb-color">
-                <span class="sb-color__label">Card Border Color</span>
-                <div class="sb-color__controls">
-                    <input type="color" class="sb-color__picker" id="ctrl-cardBorderColor" value="#D6D0CD">
-                    <input type="text" class="sb-color__hex" id="hex-cardBorderColor" value="#D6D0CD" maxlength="7">
-                    <button class="sb-revert" id="revert-cardBorderColor" onclick="revertKey('cardBorderColor')"
-                        title="Revert">↩</button>
-                </div>
-            </div>
-        </div>
-
         <!-- STATUS COLORS -->
         <div class="sb-section">
             <div class="sb-section__title">Status Colors</div>
@@ -3105,6 +3061,81 @@
                     data-val="solid">Solid</button>
             </div>
         </div>
+
+        <!-- SURFACES & BORDERS -->
+        <details class="sb-section sb-details">
+            <summary class="sb-section__title" style="margin-bottom: 0;">Surfaces &amp; Borders</summary>
+            <div class="sb-details__content">
+                <p style="font-size: 10px; color: var(--color-text-subtle); margin-bottom: var(--space-4); line-height: 1.4;">Generated automatically from pg background. You can tweak them, if needed.</p>
+                <div class="sb-color">
+                    <span class="sb-color__label">Surface</span>
+                    <div class="sb-color__controls">
+                        <input type="color" class="sb-color__picker" id="ctrl-surface" value="#F5F3F1">
+                        <input type="text" class="sb-color__hex" id="hex-surface" value="#F5F3F1" maxlength="7">
+                        <button class="sb-revert" id="revert-surface" onclick="revertKey('surface')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+                <div class="sb-color">
+                    <span class="sb-color__label">Raised</span>
+                    <div class="sb-color__controls">
+                        <input type="color" class="sb-color__picker" id="ctrl-surfaceRaised" value="#FAFAF9">
+                        <input type="text" class="sb-color__hex" id="hex-surfaceRaised" value="#FAFAF9" maxlength="7">
+                        <button class="sb-revert" id="revert-surfaceRaised" onclick="revertKey('surfaceRaised')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+                <div class="sb-color">
+                    <span class="sb-color__label">Text Color</span>
+                    <div class="sb-color__controls">
+                        <input type="color" class="sb-color__picker" id="ctrl-textColor" value="#343132">
+                        <input type="text" class="sb-color__hex" id="hex-textColor" value="#343132" maxlength="7">
+                        <button class="sb-revert" id="revert-textColor" onclick="revertKey('textColor')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+                <div class="sb-color">
+                    <span class="sb-color__label">Border Color</span>
+                    <div class="sb-color__controls">
+                        <input type="color" class="sb-color__picker" id="ctrl-borderColor" value="#D6D0CD">
+                        <input type="text" class="sb-color__hex" id="hex-borderColor" value="#D6D0CD" maxlength="7">
+                        <button class="sb-revert" id="revert-borderColor" onclick="revertKey('borderColor')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+                <div class="sb-slider">
+                    <div class="sb-slider__header">
+                        <span class="sb-slider__label">Global Border Width</span>
+                        <div style="display:flex;align-items:center;gap:var(--space-1);">
+                            <span class="sb-slider__value" id="val-borderWidth">1px</span>
+                            <button class="sb-revert" id="revert-borderWidth" onclick="revertKey('borderWidth')"
+                                title="Revert">↩</button>
+                        </div>
+                    </div>
+                    <input type="range" class="sb-range" id="ctrl-borderWidth" min="0" max="3" value="1" step="0.5">
+                </div>
+                <div class="sb-slider">
+                    <div class="sb-slider__header">
+                        <span class="sb-slider__label">Card Border Width</span>
+                        <div style="display:flex;align-items:center;gap:var(--space-1);">
+                            <span class="sb-slider__value" id="val-cardBorderWidth">1px</span>
+                            <button class="sb-revert" id="revert-cardBorderWidth" onclick="revertKey('cardBorderWidth')"
+                                title="Revert">↩</button>
+                        </div>
+                    </div>
+                    <input type="range" class="sb-range" id="ctrl-cardBorderWidth" min="0" max="4" value="1" step="0.5">
+                </div>
+                <div class="sb-color">
+                    <span class="sb-color__label">Card Border Color</span>
+                    <div class="sb-color__controls">
+                        <input type="color" class="sb-color__picker" id="ctrl-cardBorderColor" value="#D6D0CD">
+                        <input type="text" class="sb-color__hex" id="hex-cardBorderColor" value="#D6D0CD" maxlength="7">
+                        <button class="sb-revert" id="revert-cardBorderColor" onclick="revertKey('cardBorderColor')"
+                            title="Revert">↩</button>
+                    </div>
+                </div>
+            </div>
+        </details>
 
         <!-- GEOMETRY -->
         <div class="sb-section">
