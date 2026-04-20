@@ -645,52 +645,52 @@
 
         .swatch--g50 {
             background: var(--gray-50);
-            color: var(--gray-600);
+            color: var(--gray-50-fg);
         }
 
         .swatch--g100 {
             background: var(--gray-100);
-            color: var(--gray-600);
+            color: var(--gray-100-fg);
         }
 
         .swatch--g200 {
             background: var(--gray-200);
-            color: var(--gray-600);
+            color: var(--gray-200-fg);
         }
 
         .swatch--g300 {
             background: var(--gray-300);
-            color: var(--gray-700);
+            color: var(--gray-300-fg);
         }
 
         .swatch--g400 {
             background: var(--gray-400);
-            color: var(--gray-800);
+            color: var(--gray-400-fg);
         }
 
         .swatch--g500 {
             background: var(--gray-500);
-            color: var(--gray-900);
+            color: var(--gray-500-fg);
         }
 
         .swatch--g600 {
             background: var(--gray-600);
-            color: var(--gray-100);
+            color: var(--gray-600-fg);
         }
 
         .swatch--g700 {
             background: var(--gray-700);
-            color: var(--gray-100);
+            color: var(--gray-700-fg);
         }
 
         .swatch--g800 {
             background: var(--gray-800);
-            color: var(--gray-100);
+            color: var(--gray-800-fg);
         }
 
         .swatch--g900 {
             background: var(--gray-900);
-            color: var(--gray-200);
+            color: var(--gray-900-fg);
         }
 
         .swatch--accent-100 {
@@ -3556,6 +3556,7 @@
             const neutrals = generateNeutralScale(cfg.pageBg);
             for (const [step, hex] of Object.entries(neutrals)) {
                 root.style.setProperty(`--gray-${step}`, hex);
+                root.style.setProperty(`--gray-${step}-fg`, getContrastColor(hex, dark));
             }
 
             // Page background — exact user-chosen color
@@ -4133,16 +4134,16 @@
      ========================================================== */
 
   /* Neutrals */
-  --gray-50:  ${n['50']};
-  --gray-100: ${n['100']};
-  --gray-200: ${n['200']};
-  --gray-300: ${n['300']};
-  --gray-400: ${n['400']};
-  --gray-500: ${n['500']};
-  --gray-600: ${n['600']};
-  --gray-700: ${n['700']};
-  --gray-800: ${n['800']};
-  --gray-900: ${n['900']};
+  --gray-50:  ${n['50']};   --gray-50-fg:  ${contrastHex(n['50'])};
+  --gray-100: ${n['100']};  --gray-100-fg: ${contrastHex(n['100'])};
+  --gray-200: ${n['200']};  --gray-200-fg: ${contrastHex(n['200'])};
+  --gray-300: ${n['300']};  --gray-300-fg: ${contrastHex(n['300'])};
+  --gray-400: ${n['400']};  --gray-400-fg: ${contrastHex(n['400'])};
+  --gray-500: ${n['500']};  --gray-500-fg: ${contrastHex(n['500'])};
+  --gray-600: ${n['600']};  --gray-600-fg: ${contrastHex(n['600'])};
+  --gray-700: ${n['700']};  --gray-700-fg: ${contrastHex(n['700'])};
+  --gray-800: ${n['800']};  --gray-800-fg: ${contrastHex(n['800'])};
+  --gray-900: ${n['900']};  --gray-900-fg: ${contrastHex(n['900'])};
 
   /* Accent */
   --accent-500: ${a['500']};   --accent-100: ${a['100']};   --accent-700: ${a['700']};
