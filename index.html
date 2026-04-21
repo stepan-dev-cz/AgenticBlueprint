@@ -658,7 +658,7 @@
             font-family: var(--font-mono);
             font-weight: var(--weight-medium);
             transition: var(--transition-all);
-            border: var(--card-border-width, 1px) solid var(--card-border-color, var(--color-border));
+            border: var(--border-thin);
         }
 
         .swatch:hover {
@@ -937,7 +937,7 @@
         .card {
             background: var(--color-surface);
             border-radius: var(--radius-lg);
-            border: var(--card-border-width, 1px) solid var(--card-border-color, var(--color-border));
+            border: var(--border-thin);
             padding: var(--space-6);
             transition: var(--transition-all);
         }
@@ -3250,26 +3250,6 @@
                     </div>
                     <input type="range" class="sb-range" id="ctrl-borderWidth" min="0" max="3" value="1" step="0.5">
                 </div>
-                <div class="sb-slider">
-                    <div class="sb-slider__header">
-                        <span class="sb-slider__label">Card Border Width</span>
-                        <div style="display:flex;align-items:center;gap:var(--space-1);">
-                            <span class="sb-slider__value" id="val-cardBorderWidth">1px</span>
-                            <button class="sb-revert" id="revert-cardBorderWidth" onclick="revertKey('cardBorderWidth')"
-                                title="Revert">↩</button>
-                        </div>
-                    </div>
-                    <input type="range" class="sb-range" id="ctrl-cardBorderWidth" min="0" max="4" value="1" step="0.5">
-                </div>
-                <div class="sb-color">
-                    <span class="sb-color__label">Card Border Color</span>
-                    <div class="sb-color__controls">
-                        <input type="color" class="sb-color__picker" id="ctrl-cardBorderColor" value="#D6D0CD">
-                        <input type="text" class="sb-color__hex" id="hex-cardBorderColor" value="#D6D0CD" maxlength="7">
-                        <button class="sb-revert" id="revert-cardBorderColor" onclick="revertKey('cardBorderColor')"
-                            title="Revert">↩</button>
-                    </div>
-                </div>
             </div>
         </details>
 
@@ -3365,8 +3345,6 @@
             textColor: '#343132',
             borderColor: '#D6D0CD',
             borderWidth: 1,
-            cardBorderWidth: 1,
-            cardBorderColor: '#D6D0CD',
             red: '#FF564A',
             green: '#00C461',
             blue: '#00B4FF',
@@ -3668,10 +3646,7 @@
             if (!cfg._manualBorderColor) {
                 derived.borderColor = n['300'];
             }
-            // Card border color = same as border by default
-            if (!cfg._manualCardBorderColor) {
-                derived.cardBorderColor = n['300'];
-            }
+
 
             return derived;
         }
@@ -3690,7 +3665,6 @@
             const effectiveSurfaceRaised = cfg._manualSurfaceRaised ? cfg.surfaceRaised : (derived.surfaceRaised || cfg.surfaceRaised);
             const effectiveTextColor = cfg._manualTextColor ? cfg.textColor : (derived.textColor || cfg.textColor);
             const effectiveBorderColor = cfg._manualBorderColor ? cfg.borderColor : (derived.borderColor || cfg.borderColor);
-            const effectiveCardBorderColor = cfg._manualCardBorderColor ? cfg.cardBorderColor : (derived.cardBorderColor || cfg.cardBorderColor);
 
             // Update display values (but don't update config to avoid feedback loops)
             if (!cfg._manualSurface && derived.surface) {
@@ -3712,11 +3686,6 @@
                 const p = document.getElementById('ctrl-borderColor');
                 const h = document.getElementById('hex-borderColor');
                 if (p && h) { p.value = derived.borderColor; h.value = derived.borderColor.toUpperCase(); }
-            }
-            if (!cfg._manualCardBorderColor && derived.cardBorderColor) {
-                const p = document.getElementById('ctrl-cardBorderColor');
-                const h = document.getElementById('hex-cardBorderColor');
-                if (p && h) { p.value = derived.cardBorderColor; h.value = derived.cardBorderColor.toUpperCase(); }
             }
 
             // 1. Neutral scale from page background
@@ -3796,8 +3765,6 @@
             root.style.setProperty('--border-thin', bw ? `${bw}px solid var(--color-border)` : 'none');
             root.style.setProperty('--border-light', bw ? `${bw}px solid var(--color-border-light)` : 'none');
             root.style.setProperty('--border-strong', bw ? `${bw}px solid var(--color-border-strong)` : 'none');
-            root.style.setProperty('--card-border-width', (cfg.cardBorderWidth ?? 1) + 'px');
-            root.style.setProperty('--card-border-color', effectiveCardBorderColor);
 
             // Hover surface
             root.style.setProperty('--color-hover-surface', dark ? neutrals['300'] : neutrals['100']);
@@ -3926,8 +3893,8 @@
         /* ============================================================
            UI CONTROLS → CONFIG BINDING
            ============================================================ */
-        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'borderColor', 'cardBorderColor', 'red', 'green', 'blue', 'yellow'];
-        const MANUAL_OVERRIDE_KEYS = { surface: '_manualSurface', surfaceRaised: '_manualSurfaceRaised', textColor: '_manualTextColor', borderColor: '_manualBorderColor', cardBorderColor: '_manualCardBorderColor' };
+        const COLOR_KEYS = ['pageBg', 'accent', 'surface', 'surfaceRaised', 'textColor', 'borderColor', 'red', 'green', 'blue', 'yellow'];
+        const MANUAL_OVERRIDE_KEYS = { surface: '_manualSurface', surfaceRaised: '_manualSurfaceRaised', textColor: '_manualTextColor', borderColor: '_manualBorderColor' };
 
         // Bind all color pickers + hex inputs
         COLOR_KEYS.forEach(key => {
@@ -3983,15 +3950,6 @@
             applyConfig(currentConfig);
         });
 
-        // Bind card border width slider
-        const cbwCtrl = document.getElementById('ctrl-cardBorderWidth');
-        const cbwVal = document.getElementById('val-cardBorderWidth');
-        cbwCtrl.addEventListener('input', () => {
-            const v = parseFloat(cbwCtrl.value);
-            cbwVal.textContent = v + 'px';
-            currentConfig.cardBorderWidth = v;
-            applyConfig(currentConfig);
-        });
 
         // Bind shadow select
         const shadowCtrl = document.getElementById('ctrl-shadow');
@@ -4124,9 +4082,6 @@
                     if ('_manualBorderColor' in cfg) currentConfig._manualBorderColor = cfg._manualBorderColor;
                     else if (cfg.borderColor && cfg.borderColor.toUpperCase() !== DEFAULT_CONFIG.borderColor.toUpperCase()) currentConfig._manualBorderColor = true;
 
-                    if ('_manualCardBorderColor' in cfg) currentConfig._manualCardBorderColor = cfg._manualCardBorderColor;
-                    else if (cfg.cardBorderColor && cfg.cardBorderColor.toUpperCase() !== DEFAULT_CONFIG.cardBorderColor.toUpperCase()) currentConfig._manualCardBorderColor = true;
-
                     referenceConfig = JSON.parse(JSON.stringify(currentConfig));
                     syncUIFromConfig(currentConfig);
                     if (currentConfig.fontSans !== DEFAULT_CONFIG.fontSans) {
@@ -4165,8 +4120,6 @@
             document.getElementById('val-radius').textContent = cfg.radius + 'px';
             document.getElementById('ctrl-borderWidth').value = cfg.borderWidth;
             document.getElementById('val-borderWidth').textContent = cfg.borderWidth + 'px';
-            document.getElementById('ctrl-cardBorderWidth').value = cfg.cardBorderWidth ?? 1;
-            document.getElementById('val-cardBorderWidth').textContent = (cfg.cardBorderWidth ?? 1) + 'px';
             document.getElementById('ctrl-shadow').value = cfg.shadow;
             document.getElementById('ctrl-fontSans').value = cfg.fontSans;
             document.getElementById('ctrl-fontMono').value = cfg.fontMono;
@@ -4215,7 +4168,6 @@
             const eSurfaceRaised = cfg._manualSurfaceRaised ? cfg.surfaceRaised : (derived.surfaceRaised || cfg.surfaceRaised);
             const eTextColor = cfg._manualTextColor ? cfg.textColor : (derived.textColor || cfg.textColor);
             const eBorderColor = cfg._manualBorderColor ? cfg.borderColor : (derived.borderColor || cfg.borderColor);
-            const eCardBorderColor = cfg._manualCardBorderColor ? cfg.cardBorderColor : (derived.cardBorderColor || cfg.cardBorderColor);
 
             // Derive border-light and border-strong from effective border
             const eBorderHsl = rgbToHsl(...Object.values(hexToRgb(eBorderColor)));
@@ -4503,10 +4455,6 @@ ${statusTokens}
   --border-thin:   ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border)' : 'none'};
   --border-light:  ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border-light)' : 'none'};
   --border-strong: ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border-strong)' : 'none'};
-
-  /* Card borders */
-  --card-border-width: ${cfg.cardBorderWidth ?? 1}px;
-  --card-border-color: ${eCardBorderColor};
 
   /* Raw shadows */
   --shadow-xs:  ${sh.xs};
