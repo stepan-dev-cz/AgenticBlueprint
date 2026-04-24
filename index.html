@@ -587,6 +587,26 @@
             margin: 0 auto;
         }
 
+        .ks-hero__big-title {
+            font-size: clamp(2rem, 12vw, 12rem);
+            font-weight: var(--weight-heavy);
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0 0.3em;
+            margin: var(--space-8) 0;
+            width: 100%;
+            line-height: 0.9;
+        }
+
+        .ks-hero__big-title span:nth-child(1) { color: var(--accent-500); }
+        .ks-hero__big-title span:nth-child(2) { color: var(--blue-500); }
+        .ks-hero__big-title span:nth-child(3) { color: var(--green-500); }
+        .ks-hero__big-title span:nth-child(4) { color: var(--yellow-500); }
+        .ks-hero__big-title span:nth-child(5) { color: var(--red-500); }
+
         /* --- Section --- */
         .ks-section {
             margin-bottom: var(--space-16);
@@ -2167,6 +2187,9 @@
             <!-- HERO -->
             <header class="ks-hero" id="hero">
                 <div class="ks-hero__badge">Agentic Blueprint v3.1</div>
+                <div class="ks-hero__big-title">
+                    <span>Form.</span><span>Function.</span><span>Color.</span><span>Type.</span><span>Soul.</span>
+                </div>
                 <h1>Agentic Blueprint: <span>Kitchen Sink</span></h1>
                 <p><b>Free Design Tokens Generator: No account needed, no subscription required.</b></p>
                 <p>Every token, every component, every state — live preview.</p>
