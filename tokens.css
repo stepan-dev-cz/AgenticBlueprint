@@ -26,52 +26,52 @@
      ========================================================== */
 
   /* Neutrals */
-  --gray-50:  #f9f9f8;   --gray-50-fg:  #1c1c1c;
-  --gray-100: #f3f2f2;  --gray-100-fg: #1c1c1c;
-  --gray-200: #e7e5e4;  --gray-200-fg: #1c1c1c;
-  --gray-300: #d5d3d2;  --gray-300-fg: #1c1c1c;
-  --gray-400: #b5b2b0;  --gray-400-fg: #1c1c1c;
-  --gray-500: #a19d9b;  --gray-500-fg: #1c1c1c;
-  --gray-600: #736f6e;  --gray-600-fg: #f9f9f8;
-  --gray-700: #565453;  --gray-700-fg: #f9f9f8;
-  --gray-800: #343332;  --gray-800-fg: #f9f9f8;
-  --gray-900: #1c1c1c;  --gray-900-fg: #f9f9f8;
+  --gray-50:  #f9f9f8;   --gray-50-fg:  var(--gray-900);
+  --gray-100: #f3f2f2;  --gray-100-fg: var(--gray-900);
+  --gray-200: #e7e5e4;  --gray-200-fg: var(--gray-900);
+  --gray-300: #d5d3d2;  --gray-300-fg: var(--gray-900);
+  --gray-400: #b5b2b0;  --gray-400-fg: var(--gray-900);
+  --gray-500: #a19d9b;  --gray-500-fg: var(--gray-900);
+  --gray-600: #736f6e;  --gray-600-fg: var(--gray-50);
+  --gray-700: #565453;  --gray-700-fg: var(--gray-50);
+  --gray-800: #343332;  --gray-800-fg: var(--gray-50);
+  --gray-900: #1c1c1c;  --gray-900-fg: var(--gray-50);
 
   /* Accent */
-  --accent-500: #7263FF;   --accent-100: #eceafd;   --accent-700: #574ad9;
+  --accent-500: #7263FF;   --accent-100: #eceafd;   --accent-700: #0f0099;
 
   /* Info (Blue) */
-  --blue-500:   #00B4FF;   --blue-100:   #eaf7fd;   --blue-700:   #2585ad;
+  --blue-500:   #00B4FF;   --blue-100:   #eaf7fd;   --blue-700:   #006c99;
 
   /* Success (Green) */
-  --green-500:  #00C461;   --green-100:  #eafdf3;   --green-700:  #1c8550;
+  --green-500:  #00C461;   --green-100:  #eafdf3;   --green-700:  #00763a;
 
   /* Warning (Yellow) */
-  --yellow-500: #FFB905;   --yellow-100: #fdf8ea;   --yellow-700: #b08925;
+  --yellow-500: #FFB905;   --yellow-100: #fdf8ea;   --yellow-700: #996e00;
 
   /* Error (Red) */
-  --red-500:    #FF564A;   --red-100:    #fdecea;   --red-700:    #d54339;
+  --red-500:    #FF564A;   --red-100:    #fdecea;   --red-700:    #990a00;
 
   /* Contrast-aware foregrounds */
-  --accent-100-fg: #7263FF;
-  --accent-500-fg: #f9f9f8;
-  --accent-700-fg: #f9f9f8;
+  --accent-100-fg: #0f0099;
+  --accent-500-fg: #000000;
+  --accent-700-fg: #FFFFFF;
 
-  --blue-100-fg:   #00B4FF;
-  --blue-500-fg:   #1c1c1c;
-  --blue-700-fg:   #f9f9f8;
+  --blue-100-fg:   #006c99;
+  --blue-500-fg:   var(--gray-900);
+  --blue-700-fg:   #FFFFFF;
 
-  --green-100-fg:  #00C461;
-  --green-500-fg:  #1c1c1c;
-  --green-700-fg:  #f9f9f8;
+  --green-100-fg:  #00763a;
+  --green-500-fg:  var(--gray-900);
+  --green-700-fg:  #FFFFFF;
 
-  --yellow-100-fg: #FFB905;
-  --yellow-500-fg: #1c1c1c;
-  --yellow-700-fg: #1c1c1c;
+  --yellow-100-fg: #664900;
+  --yellow-500-fg: var(--gray-900);
+  --yellow-700-fg: #FFFFFF;
 
-  --red-100-fg:    #FF564A;
-  --red-500-fg:    #f9f9f8;
-  --red-700-fg:    #f9f9f8;
+  --red-100-fg:    #990a00;
+  --red-500-fg:    var(--gray-900);
+  --red-700-fg:    #FFFFFF;
 
   /* ==========================================================
      2. SEMANTIC COLORS
@@ -86,9 +86,9 @@
 
   /* Text hierarchy: text > muted > subtle > disabled */
   --color-text:          #343332;
-  --color-text-muted:    #4f4e4c;
-  --color-text-subtle:   #6b6867;
-  --color-text-disabled: #868381;
+  --color-text-muted:    #5c5a59;
+  --color-text-subtle:   #787573;
+  --color-text-disabled: #979391;
   --color-text-invert:   var(--gray-50);
 
   /* Borders: light < default < strong */

@@ -649,16 +649,25 @@
         }
 
         .swatch {
-            height: 52px;
+            height: 64px;
             border-radius: var(--radius-md);
             display: flex;
             align-items: flex-end;
+            justify-content: space-between;
             padding: var(--space-2) var(--space-3);
-            font-size: var(--text-xs);
+            font-size: var(--text-md);
             font-family: var(--font-mono);
-            font-weight: var(--weight-medium);
+            font-weight: var(--weight-bold);
             transition: var(--transition-all);
             border: var(--border-thin);
+        }
+
+        .swatch__ratio {
+            align-self: flex-start;
+            font-size: 10px;
+            opacity: 0.85;
+            font-weight: var(--weight-medium);
+            margin-top: -2px;
         }
 
         .swatch:hover {
@@ -798,7 +807,34 @@
 
         /* ===== TYPOGRAPHY DEMO ===== */
         .type-specimen {
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .type-specimen__meta {
+            font-size: 10px;
+            font-weight: var(--weight-bold);
+            color: var(--color-text-subtle);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-caps);
+            margin-bottom: var(--space-1);
+        }
+
+        /* ===== CONTRAST CHECKER ===== */
+        .contrast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-4);
+        }
+
+        /* Override badge radius for the contrast checker to make it respond to theme radius */
+        .contrast-grid .badge {
+            border-radius: var(--radius-sm);
+            padding: var(--space-1) var(--space-2);
+        }
+
+        .type-specimen {
+            margin-bottom: var(--space-6);
         }
 
         .type-specimen__meta {
@@ -2097,6 +2133,7 @@
         <div class="quick-nav__menu">
             <a href="#hero" class="quick-nav__item">Top / Hero</a>
             <a href="#section-colors" class="quick-nav__item">Colors</a>
+            <a href="#section-contrast" class="quick-nav__item">Surface & Text</a>
             <a href="#section-cards" class="quick-nav__item">Cards</a>
             <a href="#section-hierarchy" class="quick-nav__item">Hierarchy & Depth</a>
             <a href="#section-badges" class="quick-nav__item">Badges & Tags</a>
@@ -2143,11 +2180,11 @@
 
                 <div
                     style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center;">
-                    <span class="badge badge--accent"><span class="badge__dot"></span>CC BY-NC 4.0</span>
-                    <span class="badge badge--success"><span class="badge__dot"></span>Easy to use</span>
-                    <span class="badge badge--info"><span class="badge__dot"></span>Sloth friendly</span>
-                    <span class="badge badge--warning"><span class="badge__dot"></span>Minimalistic</span>
-                    <span class="badge badge--error"><span class="badge__dot"></span>Made with ❤️</span>
+                    <span class="badge badge--accent">CC BY-NC 4.0</span>
+                    <span class="badge badge--success">Easy to use</span>
+                    <span class="badge badge--info">Sloth friendly</span>
+                    <span class="badge badge--warning">WCAG Level AA compliant</span>
+                    <span class="badge badge--error">Made with 🩶</span>
                 </div>
 
             </header>
@@ -2156,50 +2193,101 @@
             <section class="ks-section" id="section-colors">
                 <h2 class="ks-section__title">Color Palette — Neutrals</h2>
                 <div class="ks-grid ks-grid--5" style="margin-bottom: var(--space-8);">
-                    <div class="swatch swatch--lg swatch--g50">50</div>
-                    <div class="swatch swatch--lg swatch--g100">100</div>
-                    <div class="swatch swatch--lg swatch--g200">200</div>
-                    <div class="swatch swatch--lg swatch--g300">300</div>
-                    <div class="swatch swatch--lg swatch--g400">400</div>
-                    <div class="swatch swatch--lg swatch--g500">500</div>
-                    <div class="swatch swatch--lg swatch--g600">600</div>
-                    <div class="swatch swatch--lg swatch--g700">700</div>
-                    <div class="swatch swatch--lg swatch--g800">800</div>
-                    <div class="swatch swatch--lg swatch--g900">900</div>
+                    <div class="swatch swatch--lg swatch--g50"><span>50</span><span class="swatch__ratio" id="ratio-gray-50"></span></div>
+                    <div class="swatch swatch--lg swatch--g100"><span>100</span><span class="swatch__ratio" id="ratio-gray-100"></span></div>
+                    <div class="swatch swatch--lg swatch--g200"><span>200</span><span class="swatch__ratio" id="ratio-gray-200"></span></div>
+                    <div class="swatch swatch--lg swatch--g300"><span>300</span><span class="swatch__ratio" id="ratio-gray-300"></span></div>
+                    <div class="swatch swatch--lg swatch--g400"><span>400</span><span class="swatch__ratio" id="ratio-gray-400"></span></div>
+                    <div class="swatch swatch--lg swatch--g500"><span>500</span><span class="swatch__ratio" id="ratio-gray-500"></span></div>
+                    <div class="swatch swatch--lg swatch--g600"><span>600</span><span class="swatch__ratio" id="ratio-gray-600"></span></div>
+                    <div class="swatch swatch--lg swatch--g700"><span>700</span><span class="swatch__ratio" id="ratio-gray-700"></span></div>
+                    <div class="swatch swatch--lg swatch--g800"><span>800</span><span class="swatch__ratio" id="ratio-gray-800"></span></div>
+                    <div class="swatch swatch--lg swatch--g900"><span>900</span><span class="swatch__ratio" id="ratio-gray-900"></span></div>
                 </div>
                 <h2 class="ks-section__title">Color Palette — Accents & Status</h2>
                 <div class="ks-grid ks-grid--5">
                     <div class="swatch-group">
                         <div class="swatch-group__label">Accent</div>
-                        <div class="swatch swatch--accent-100">100</div>
-                        <div class="swatch swatch--accent-500">500</div>
-                        <div class="swatch swatch--accent-700">700</div>
+                        <div class="swatch swatch--accent-100"><span>100</span><span class="swatch__ratio" id="ratio-accent-100"></span></div>
+                        <div class="swatch swatch--accent-500"><span>500</span><span class="swatch__ratio" id="ratio-accent-500"></span></div>
+                        <div class="swatch swatch--accent-700"><span>700</span><span class="swatch__ratio" id="ratio-accent-700"></span></div>
                     </div>
                     <div class="swatch-group">
                         <div class="swatch-group__label">Info</div>
-                        <div class="swatch swatch--blue-100">100</div>
-                        <div class="swatch swatch--blue-500">500</div>
-                        <div class="swatch swatch--blue-700">700</div>
+                        <div class="swatch swatch--blue-100"><span>100</span><span class="swatch__ratio" id="ratio-blue-100"></span></div>
+                        <div class="swatch swatch--blue-500"><span>500</span><span class="swatch__ratio" id="ratio-blue-500"></span></div>
+                        <div class="swatch swatch--blue-700"><span>700</span><span class="swatch__ratio" id="ratio-blue-700"></span></div>
                     </div>
                     <div class="swatch-group">
                         <div class="swatch-group__label">Success</div>
-                        <div class="swatch swatch--green-100">100</div>
-                        <div class="swatch swatch--green-500">500</div>
-                        <div class="swatch swatch--green-700">700</div>
+                        <div class="swatch swatch--green-100"><span>100</span><span class="swatch__ratio" id="ratio-green-100"></span></div>
+                        <div class="swatch swatch--green-500"><span>500</span><span class="swatch__ratio" id="ratio-green-500"></span></div>
+                        <div class="swatch swatch--green-700"><span>700</span><span class="swatch__ratio" id="ratio-green-700"></span></div>
                     </div>
                     <div class="swatch-group">
                         <div class="swatch-group__label">Warning</div>
-                        <div class="swatch swatch--yellow-100">100</div>
-                        <div class="swatch swatch--yellow-500">500</div>
-                        <div class="swatch swatch--yellow-700">700</div>
+                        <div class="swatch swatch--yellow-100"><span>100</span><span class="swatch__ratio" id="ratio-yellow-100"></span></div>
+                        <div class="swatch swatch--yellow-500"><span>500</span><span class="swatch__ratio" id="ratio-yellow-500"></span></div>
+                        <div class="swatch swatch--yellow-700"><span>700</span><span class="swatch__ratio" id="ratio-yellow-700"></span></div>
                     </div>
                     <div class="swatch-group">
                         <div class="swatch-group__label">Error</div>
-                        <div class="swatch swatch--red-100">100</div>
-                        <div class="swatch swatch--red-500">500</div>
-                        <div class="swatch swatch--red-700">700</div>
+                        <div class="swatch swatch--red-100"><span>100</span><span class="swatch__ratio" id="ratio-red-100"></span></div>
+                        <div class="swatch swatch--red-500"><span>500</span><span class="swatch__ratio" id="ratio-red-500"></span></div>
+                        <div class="swatch swatch--red-700"><span>700</span><span class="swatch__ratio" id="ratio-red-700"></span></div>
                     </div>
                 </div>
+            </section>
+
+            <!-- CONTRAST CHECKER SECTION -->
+            <section class="ks-section" id="section-contrast">
+                <h2 class="ks-section__title">Color Palette: Surface & Text</h2>
+                <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-6);">
+                    Quick verification of primary and muted text & WCAG compliance for body text.
+                </p>
+
+                <div class="contrast-grid">
+                    <!-- Page Background -->
+                    <div class="card" style="background: var(--color-page-bg); min-height: 180px; display: flex; flex-direction: column;">
+                        <div class="card__eyebrow">Page Background</div>
+                        <div class="card__title" style="font-size: var(--text-2xl); margin-bottom: 0;">Background</div>
+                        <div class="card__body" style="margin-bottom: var(--space-6);">Muted text example</div>
+                        <div class="card__footer" style="margin-top: auto;">
+                            <span class="badge" id="contrast-badge-page">AA Pass 0.00:1</span>
+                        </div>
+                    </div>
+
+                    <!-- Surface -->
+                    <div class="card" style="background: var(--color-surface); min-height: 180px; display: flex; flex-direction: column;">
+                        <div class="card__eyebrow">Surface</div>
+                        <div class="card__title" style="font-size: var(--text-2xl); margin-bottom: 0;">Surface</div>
+                        <div class="card__body" style="margin-bottom: var(--space-6);">Muted text example</div>
+                        <div class="card__footer" style="margin-top: auto;">
+                            <span class="badge" id="contrast-badge-surface">AA Pass 0.00:1</span>
+                        </div>
+                    </div>
+
+                    <!-- Raised -->
+                    <div class="card card--raised" style="background: var(--color-surface-raised); min-height: 180px; display: flex; flex-direction: column;">
+                        <div class="card__eyebrow">Raised</div>
+                        <div class="card__title" style="font-size: var(--text-2xl); margin-bottom: 0;">Raised</div>
+                        <div class="card__body" style="margin-bottom: var(--space-6);">Muted text example</div>
+                        <div class="card__footer" style="margin-top: auto;">
+                            <span class="badge" id="contrast-badge-raised">AA Pass 0.00:1</span>
+                        </div>
+                    </div>
+
+                    <!-- Sunken -->
+                    <div class="card card--flat" style="background: var(--color-surface-sunken); min-height: 180px; display: flex; flex-direction: column;">
+                        <div class="card__eyebrow">Sunken</div>
+                        <div class="card__title" style="font-size: var(--text-2xl); margin-bottom: 0;">Sunken</div>
+                        <div class="card__body" style="margin-bottom: var(--space-6);">Muted text example</div>
+                        <div class="card__footer" style="margin-top: auto;">
+                            <span class="badge" id="contrast-badge-sunken">AA Pass 0.00:1</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 10px; width: 100%; border-radius: var(--radius-md); margin-top: var(--space-8); background: linear-gradient(to right, var(--accent-500) 0% 20%, var(--blue-500) 20% 40%, var(--green-500) 40% 60%, var(--yellow-500) 60% 80%, var(--red-500) 80% 100%);"></div>
             </section>
 
             <!-- CARDS -->
@@ -2222,7 +2310,7 @@
                         <div class="card__title">Raised Card</div>
                         <div class="card__body">Raised surface with shadow. Feels elevated from the page.</div>
                         <div class="card__footer">
-                            <button class="btn btn--solid btn--sm">Upgrade</button>
+                            <button class="btn btn--primary btn--sm">Upgrade</button>
                             <button class="btn btn--ghost btn--sm">Details</button>
                         </div>
                     </div>
@@ -2242,13 +2330,7 @@
                         <div class="card__eyebrow">Users</div>
                         <div class="stat-card__value">3,842</div>
                         <div class="stat-card__label">Active now</div>
-                        <div class="stat-card__trend stat-card__trend--up">↑ 8.2%</div>
-                    </div>
-                    <div class="card card--raised stat-card">
-                        <div class="card__eyebrow">Churn</div>
-                        <div class="stat-card__value">2.4%</div>
-                        <div class="stat-card__label">Last 30 days</div>
-                        <div class="stat-card__trend stat-card__trend--down">↓ 0.3%</div>
+                        <div class="stat-card__trend stat-card__trend--down">↓ 14.8%</div>
                     </div>
                 </div>
             </section>
@@ -2353,7 +2435,6 @@
                         Variants</h3>
                     <div class="ks-flex" style="margin-bottom: var(--space-6);">
                         <button class="btn btn--primary">Primary CTA</button>
-                        <button class="btn btn--solid">Solid</button>
                         <button class="btn btn--secondary">Secondary</button>
                         <button class="btn btn--ghost">Ghost</button>
                         <button class="btn btn--destructive">Delete</button>
@@ -3457,10 +3538,14 @@
             };
         }
 
-        /** Determine relative luminance (WCAG) */
+        /** Determine relative luminance (WCAG 2.x) */
         function relativeLuminance(hex) {
             const { r, g, b } = hexToRgb(hex);
-            return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+            const a = [r, g, b].map(v => {
+                v /= 255;
+                return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+            });
+            return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
         }
 
         /** Determine contrast ratio between two hex colors */
@@ -3486,56 +3571,93 @@
             return relativeLuminance(hex) < 0.45;
         }
 
-        /** Get the best contrast color for text on a given background */
-        function getContrastColorHex(bgHex, lightHex, darkHex) {
-            return relativeLuminance(bgHex) > 0.5 ? darkHex : lightHex;
-        }
 
-        /** Get contrast as CSS var reference */
-        function getContrastColor(hex, isDark = false) {
-            if (!hex) return 'var(--gray-50)';
-            if (isDark) {
-                return relativeLuminance(hex) > 0.5 ? 'var(--gray-50)' : 'var(--gray-900)';
+
+        /** Get the best compliant foreground for any background.
+         *  Tries to be "playful" by preserving hue if possible. */
+        function getBestCompliantFG(bgHex, preferredHex, neutrals) {
+            // 1. Try preferred color (e.g. accent-700 on 100, or white on 500)
+            if (preferredHex && getContrastRatio(bgHex, preferredHex) >= 4.5) {
+                return preferredHex;
             }
-            return relativeLuminance(hex) > 0.5 ? 'var(--gray-900)' : 'var(--gray-50)';
+            
+            // 2. Playful fallback: Try to derive a high-contrast version of the hue
+            // only if the color has meaningful saturation.
+            const targetColor = preferredHex || bgHex;
+            const { r, g, b } = hexToRgb(targetColor);
+            const { h, s, l } = rgbToHsl(r, g, b);
+            
+            if (s > 8) {
+                // If background is light, try a very dark saturated version
+                if (!isDarkBackground(bgHex)) {
+                    const darkVibrant = hslToRgb(h, Math.max(s, 60), 20);
+                    const darkHex = rgbToHex(darkVibrant.r, darkVibrant.g, darkVibrant.b);
+                    if (getContrastRatio(bgHex, darkHex) >= 4.5) return darkHex;
+                } else {
+                    // If background is dark, try a very light saturated version
+                    const lightVibrant = hslToRgb(h, Math.max(s * 0.5, 30), 95);
+                    const lightHex = rgbToHex(lightVibrant.r, lightVibrant.g, lightVibrant.b);
+                    if (getContrastRatio(bgHex, lightHex) >= 4.5) return lightHex;
+                }
+            }
+
+            // 3. Try neutral tokens (gray-50 and gray-900)
+            const g50 = neutrals['50'];
+            const g900 = neutrals['900'];
+            const r50 = getContrastRatio(bgHex, g50);
+            const r900 = getContrastRatio(bgHex, g900);
+            
+            if (r50 >= 4.5 || r900 >= 4.5) {
+                return r900 > r50 ? 'var(--gray-900)' : 'var(--gray-50)';
+            }
+            
+            // 4. Absolute fallback
+            return getContrastRatio(bgHex, '#FFFFFF') >= getContrastRatio(bgHex, '#000000') ? '#FFFFFF' : '#000000';
         }
 
         /** Generate muted/subtle/disabled variants with contrast guarantees */
-        function generateTextVariants(textColor, bgColor, surfaceColor) {
+        function generateTextVariants(textColor, bgColor, surfaceColor, raisedColor) {
+            const dark = isDarkBackground(bgColor);
+            const neutrals = generateNeutralScale(bgColor);
+            const sunkenColor = dark ? neutrals['50'] : neutrals['300'];
+            
             const getWorstContrast = (hex) => Math.min(
                 getContrastRatio(hex, bgColor),
-                getContrastRatio(hex, surfaceColor)
+                getContrastRatio(hex, surfaceColor),
+                getContrastRatio(hex, sunkenColor),
+                getContrastRatio(hex, raisedColor || surfaceColor)
             );
 
-            // Cap the target ratio to ensure we don't demand more contrast than the base text color actually has.
             const baseContrast = getWorstContrast(textColor);
 
-            const generate = (baseColor, idealRatio, defaultMix, maxMix) => {
-                // Ensure the realism of the target contrast. 
-                // It should be slightly lower than base contrast to visibly "step down".
-                const targetRatio = Math.min(idealRatio, Math.max(1, baseContrast * 0.95));
+            const generate = (baseColor, targetRatio, mostMutedRatio) => {
+                // If base color itself doesn't meet the target, we can only aim for the base contrast at best
+                const effectiveTarget = Math.min(targetRatio, baseContrast);
 
-                for (let ratio = defaultMix; ratio <= maxMix; ratio += 0.05) {
-                    let testHex = mixHex(baseColor, bgColor, ratio);
-                    if (getWorstContrast(testHex) >= targetRatio) {
+                // Start from the "most muted" (closest to background) and move towards base color
+                // ratio 0.0 = 100% background, ratio 1.0 = 100% baseColor
+                for (let r = mostMutedRatio; r <= 1.0; r += 0.01) {
+                    let testHex = mixHex(baseColor, bgColor, r);
+                    if (getWorstContrast(testHex) >= effectiveTarget) {
                         return testHex;
                     }
                 }
-
-                // If the target contrast was never met (e.g. user chose an inherently low-contrast color),
-                // return the maximum allowed mix so it's guaranteed to be visually distinct from the base.
-                return mixHex(baseColor, bgColor, maxMix);
+                return baseColor;
             };
 
             return {
-                muted: generate(textColor, 4.5, 0.65, 0.85),
-                subtle: generate(textColor, 3.0, 0.50, 0.70),
-                disabled: generate(textColor, 2.0, 0.35, 0.55)
+                // Muted: aim for 4.5:1 (AA), start at 55% text mix
+                muted: generate(textColor, 4.5, 0.55),
+                // Subtle: aim for 3.0:1 (UI components/large text), start at 40% text mix
+                subtle: generate(textColor, 3.0, 0.40),
+                // Disabled: aim for 2.0:1, start at 25% text mix
+                disabled: generate(textColor, 2.0, 0.25)
             };
         }
 
         function setStatusStyle(key, style) {
             currentConfig.statusStyle[key] = style;
+            currentConfig[`_manualStatusStyle_${key}`] = true; // Mark this specific key as manual
 
             // Update UI (active buttons)
             const container = document.querySelector(`.sb-segmented[data-key="${key}"]`);
@@ -3611,11 +3733,14 @@
 
                 return { '100': c100, '500': hex.toUpperCase(), '700': c700 };
             } else {
-                // Light theme as before
+                // Light theme: 100 is light tint, 700 is dark shade
                 const light = hslToRgb(h, Math.max(s * 0.8, 8), 95.5);
                 const c100 = rgbToHex(light.r, light.g, light.b);
 
-                const dark = hslToRgb(h, Math.max(s * 0.65, 10), l * 0.82);
+                // 700: ensure it's dark enough for WCAG on c100
+                // We target a lightness that usually passes (around 25-30% for vibrant colors)
+                const darkL = Math.min(l * 0.6, 30);
+                const dark = hslToRgb(h, Math.max(s, 40), darkL);
                 const c700 = rgbToHex(dark.r, dark.g, dark.b);
 
                 return { '100': c100, '500': hex.toUpperCase(), '700': c700 };
@@ -3632,7 +3757,7 @@
 
             // Surface = slightly lighter/darker than page bg
             if (!cfg._manualSurface) {
-                derived.surface = dark ? n['100'] : n['100'];
+                derived.surface = n['100'];
             }
             // Surface raised = even more contrast
             if (!cfg._manualSurfaceRaised) {
@@ -3647,6 +3772,14 @@
                 derived.borderColor = n['300'];
             }
 
+            // Status Style Default: always 'soft' by default (reverted from theme-aware logic)
+            derived.statusStyle = { ...cfg.statusStyle };
+            const defaultStyle = 'soft';
+            ['accent', 'red', 'green', 'blue', 'yellow'].forEach(k => {
+                if (!cfg[`_manualStatusStyle_${k}`]) {
+                    derived.statusStyle[k] = defaultStyle;
+                }
+            });
 
             return derived;
         }
@@ -3690,26 +3823,48 @@
 
             // 1. Neutral scale from page background
             const neutrals = generateNeutralScale(cfg.pageBg);
+            const getActualHex = (fgStr) => {
+                if (fgStr.includes('gray-50')) return neutrals['50'];
+                if (fgStr.includes('gray-900')) return neutrals['900'];
+                return fgStr;
+            };
+
             for (const [step, hex] of Object.entries(neutrals)) {
                 root.style.setProperty(`--gray-${step}`, hex);
-                root.style.setProperty(`--gray-${step}-fg`, getContrastColor(hex, dark));
+                const fg = getBestCompliantFG(hex, null, neutrals);
+                root.style.setProperty(`--gray-${step}-fg`, fg);
+                
+                const el = document.getElementById(`ratio-gray-${step}`);
+                if (el) el.textContent = `${getContrastRatio(hex, getActualHex(fg)).toFixed(1)}:1`;
             }
 
-            // Page background — exact user-chosen color
+            // Page background
             root.style.setProperty('--color-page-bg', cfg.pageBg);
 
-            // 2. Accent color (with dark-aware inversion)
+            // 2. Accent color
             const accent = generateAccentVariants(cfg.accent, dark);
             root.style.setProperty('--accent-100', accent['100']);
             root.style.setProperty('--accent-500', accent['500']);
             root.style.setProperty('--accent-700', accent['700']);
 
-            // Foreground colors for accent swatches
-            root.style.setProperty('--accent-100-fg', dark ? accent['700'] : (relativeLuminance(accent['500']) > 0.8 ? getContrastColor(accent['100'], false) : accent['500']));
-            root.style.setProperty('--accent-500-fg', getContrastColor(accent['500'], dark));
-            root.style.setProperty('--accent-700-fg', getContrastColor(accent['700'], dark));
+            const acc100fg = getBestCompliantFG(accent['100'], accent['700'], neutrals);
+            const acc500fg = getBestCompliantFG(accent['500'], '#FFFFFF', neutrals);
+            const acc700fg = getBestCompliantFG(accent['700'], '#FFFFFF', neutrals);
+            
+            root.style.setProperty('--accent-100-fg', acc100fg);
+            root.style.setProperty('--accent-500-fg', acc500fg);
+            root.style.setProperty('--accent-700-fg', acc700fg);
 
-            // 3. Status colors (with dark-aware inversion)
+            const updateRatio = (id, bg, fg) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = `${getContrastRatio(bg, getActualHex(fg)).toFixed(1)}:1`;
+            };
+
+            updateRatio('ratio-accent-100', accent['100'], acc100fg);
+            updateRatio('ratio-accent-500', accent['500'], acc500fg);
+            updateRatio('ratio-accent-700', accent['700'], acc700fg);
+
+            // 3. Status colors
             for (const name of ['red', 'green', 'blue', 'yellow']) {
                 const baseColor = cfg[name];
                 const v = generateAccentVariants(baseColor, dark);
@@ -3717,10 +3872,17 @@
                 root.style.setProperty(`--${name}-500`, v['500']);
                 root.style.setProperty(`--${name}-700`, v['700']);
 
-                // Foreground colors for swatches
-                root.style.setProperty(`--${name}-100-fg`, dark ? v['700'] : (relativeLuminance(v['500']) > 0.8 ? getContrastColor(v['100'], false) : v['500']));
-                root.style.setProperty(`--${name}-500-fg`, getContrastColor(v['500'], dark));
-                root.style.setProperty(`--${name}-700-fg`, getContrastColor(v['700'], dark));
+                const f100 = getBestCompliantFG(v['100'], v['700'], neutrals);
+                const f500 = getBestCompliantFG(v['500'], '#FFFFFF', neutrals);
+                const f700 = getBestCompliantFG(v['700'], '#FFFFFF', neutrals);
+
+                root.style.setProperty(`--${name}-100-fg`, f100);
+                root.style.setProperty(`--${name}-500-fg`, f500);
+                root.style.setProperty(`--${name}-700-fg`, f700);
+
+                updateRatio(`ratio-${name}-100`, v['100'], f100);
+                updateRatio(`ratio-${name}-500`, v['500'], f500);
+                updateRatio(`ratio-${name}-700`, v['700'], f700);
             }
 
             // 4. Surfaces
@@ -3728,35 +3890,30 @@
             root.style.setProperty('--color-surface-raised', effectiveSurfaceRaised);
             root.style.setProperty('--color-surface-sunken', dark ? neutrals['50'] : neutrals['300']);
 
-            // Glass effect for sidebar
             const { r: sr, g: sg, b: sb } = hexToRgb(effectiveSurfaceRaised);
             root.style.setProperty('--color-surface-raised-alpha', `rgba(${sr}, ${sg}, ${sb}, 0.88)`);
 
-            // 5. Text — auto-derive muted, subtle, disabled from text color
+            // 5. Text
             root.style.setProperty('--color-text', effectiveTextColor);
-
-            const variants = generateTextVariants(effectiveTextColor, cfg.pageBg, effectiveSurface);
-
-            root.style.setProperty('--color-text-muted', variants.muted);
-            root.style.setProperty('--color-text-subtle', variants.subtle);
-            root.style.setProperty('--color-text-disabled', variants.disabled);
+            const txtVars = generateTextVariants(effectiveTextColor, cfg.pageBg, effectiveSurface, effectiveSurfaceRaised);
+            root.style.setProperty('--color-text-muted', txtVars.muted);
+            root.style.setProperty('--color-text-subtle', txtVars.subtle);
+            root.style.setProperty('--color-text-disabled', txtVars.disabled);
             root.style.setProperty('--color-text-invert', neutrals['50']);
 
-            // 6. Borders — use effective border color (user-chosen or auto-derived)
+            // 6. Borders
             root.style.setProperty('--color-border', effectiveBorderColor);
-
-            // Derive lighter and stronger variants from the effective border color
             const borderHsl = rgbToHsl(...Object.values(hexToRgb(effectiveBorderColor)));
             if (dark) {
-                const borderLightRgb = hslToRgb(borderHsl.h, borderHsl.s, Math.max(borderHsl.l - 5, 5));
-                const borderStrongRgb = hslToRgb(borderHsl.h, borderHsl.s, Math.min(borderHsl.l + 10, 50));
-                root.style.setProperty('--color-border-light', rgbToHex(borderLightRgb.r, borderLightRgb.g, borderLightRgb.b));
-                root.style.setProperty('--color-border-strong', rgbToHex(borderStrongRgb.r, borderStrongRgb.g, borderStrongRgb.b));
+                const bl = hslToRgb(borderHsl.h, borderHsl.s, Math.max(borderHsl.l - 5, 5));
+                const bs = hslToRgb(borderHsl.h, borderHsl.s, Math.min(borderHsl.l + 10, 50));
+                root.style.setProperty('--color-border-light', rgbToHex(bl.r, bl.g, bl.b));
+                root.style.setProperty('--color-border-strong', rgbToHex(bs.r, bs.g, bs.b));
             } else {
-                const borderLightRgb = hslToRgb(borderHsl.h, borderHsl.s, Math.min(borderHsl.l + 7, 95));
-                const borderStrongRgb = hslToRgb(borderHsl.h, borderHsl.s, Math.max(borderHsl.l - 10, 30));
-                root.style.setProperty('--color-border-light', rgbToHex(borderLightRgb.r, borderLightRgb.g, borderLightRgb.b));
-                root.style.setProperty('--color-border-strong', rgbToHex(borderStrongRgb.r, borderStrongRgb.g, borderStrongRgb.b));
+                const bl = hslToRgb(borderHsl.h, borderHsl.s, Math.min(borderHsl.l + 7, 95));
+                const bs = hslToRgb(borderHsl.h, borderHsl.s, Math.max(borderHsl.l - 10, 30));
+                root.style.setProperty('--color-border-light', rgbToHex(bl.r, bl.g, bl.b));
+                root.style.setProperty('--color-border-strong', rgbToHex(bs.r, bs.g, bs.b));
             }
             root.style.setProperty('--color-border-focus', accent['500']);
 
@@ -3766,10 +3923,7 @@
             root.style.setProperty('--border-light', bw ? `${bw}px solid var(--color-border-light)` : 'none');
             root.style.setProperty('--border-strong', bw ? `${bw}px solid var(--color-border-strong)` : 'none');
 
-            // Hover surface
             root.style.setProperty('--color-hover-surface', dark ? neutrals['300'] : neutrals['100']);
-
-            // Disabled states — auto-derived
             root.style.setProperty('--disabled-bg', dark ? neutrals['300'] : neutrals['200']);
             root.style.setProperty('--disabled-fg', neutrals['400']);
             root.style.setProperty('--disabled-border', dark ? neutrals['400'] : neutrals['300']);
@@ -3781,10 +3935,9 @@
             root.style.setProperty('--radius-lg', `${Math.round(r * 1.67)}px`);
             root.style.setProperty('--radius-xl', `${Math.round(r * 2.33)}px`);
 
-            // 8. Shadows — adapt to dark theme (use lighter shadow on dark)
+            // 8. Shadows
             let shadows = SHADOW_PRESETS[cfg.shadow] || SHADOW_PRESETS.soft;
             if (dark && cfg.shadow !== 'none') {
-                // On dark themes, shadows are less visible, so increase opacity
                 shadows = Object.fromEntries(
                     Object.entries(shadows).map(([k, v]) => [k, v.replace(/rgba\(([^)]+),\s*([\d.]+)\)/, (_, rgb, a) =>
                         `rgba(0,0,0,${Math.min(parseFloat(a) * 2.5, 0.5).toFixed(2)})`
@@ -3794,7 +3947,6 @@
             for (const [size, val] of Object.entries(shadows)) {
                 root.style.setProperty(`--shadow-${size}`, val);
             }
-            // Elevation tokens (always reference current shadow values)
             root.style.setProperty('--elevation-0', 'none');
             root.style.setProperty('--elevation-1', shadows.xs);
             root.style.setProperty('--elevation-2', shadows.sm);
@@ -3802,91 +3954,116 @@
             root.style.setProperty('--elevation-4', shadows.lg);
             root.style.setProperty('--elevation-5', shadows.xl);
 
-            // 9. Typography
+            // 9. Contrast Checker UI
+            updateContrastChecker(cfg, effectiveSurface, effectiveSurfaceRaised, effectiveTextColor, neutrals, dark);
+
+            // 10. Typography
             root.style.setProperty('--font-sans', `'${cfg.fontSans}', system-ui, -apple-system, sans-serif`);
             root.style.setProperty('--font-mono', `'${cfg.fontMono}', ui-monospace, monospace`);
             root.style.fontSize = `${cfg.fontSize}px`;
 
-            // 10. Focus ring adapts to accent
+            // 11. Focus ring adapts to accent
             root.style.setProperty('--focus-ring', `0 0 0 2px ${accent['500']}`);
             root.style.setProperty('--focus-ring-inset', `inset 0 0 0 2px ${accent['500']}`);
             root.style.setProperty('--focus-ring-error', `0 0 0 2px ${cfg.red}`);
 
-            // 11. Status Semantic Variants & Switcher Contrast
+            // 12. Status Semantic Variants
             const statusMap = { accent: cfg.accent, red: cfg.red, green: cfg.green, blue: cfg.blue, yellow: cfg.yellow };
             const semanticMap = { accent: 'accent', red: 'error', green: 'success', blue: 'info', yellow: 'warning' };
+            const effectiveStatusStyle = derived.statusStyle || cfg.statusStyle;
 
             Object.entries(statusMap).forEach(([name, baseColor]) => {
-                const style = cfg.statusStyle[name];
+                const style = effectiveStatusStyle[name];
                 const variants = generateAccentVariants(baseColor, dark);
                 const semanticName = semanticMap[name];
 
-                // Update Sidebar Switcher contrast & color
-                const container = document.querySelector(`.sb-segmented[data-key="${name}"]`);
-                if (container) {
-                    container.style.setProperty('--sb-active-bg', variants['500']);
-                    container.style.setProperty('--sb-active-fg', getContrastColor(baseColor, dark));
+                const bg = style === 'solid' ? variants['500'] : variants['100'];
+                const fg = style === 'solid' 
+                    ? getBestCompliantFG(variants['500'], '#FFFFFF', neutrals)
+                    : getBestCompliantFG(variants['100'], variants['700'], neutrals);
+
+                root.style.setProperty(`--status-${semanticName}-bg`, bg);
+                root.style.setProperty(`--status-${semanticName}-fg`, fg);
+                
+                if (name !== semanticName) {
+                    root.style.setProperty(`--status-${name}-bg`, bg);
+                    root.style.setProperty(`--status-${name}-fg`, fg);
                 }
 
-                if (style === 'solid') {
-                    root.style.setProperty(`--status-${semanticName}-bg`, variants['500']);
-                    root.style.setProperty(`--status-${semanticName}-fg`, getContrastColor(baseColor, dark));
-                    // Also set the color-key based ones for backward compat
-                    if (name !== semanticName) {
-                        root.style.setProperty(`--status-${name}-bg`, variants['500']);
-                        root.style.setProperty(`--status-${name}-fg`, getContrastColor(baseColor, dark));
-                    }
-                } else {
-                    root.style.setProperty(`--status-${semanticName}-bg`, variants['100']);
-                    root.style.setProperty(`--status-${semanticName}-fg`, dark ? variants['700'] : (relativeLuminance(variants['500']) > 0.8 ? getContrastColor(variants['100'], false) : variants['500']));
-                    if (name !== semanticName) {
-                        root.style.setProperty(`--status-${name}-bg`, variants['100']);
-                        root.style.setProperty(`--status-${name}-fg`, dark ? variants['700'] : (relativeLuminance(variants['500']) > 0.8 ? getContrastColor(variants['100'], false) : variants['500']));
+                const container = document.querySelector(`.sb-segmented[data-key="${name}"]`);
+                if (container) {
+                    container.style.setProperty('--sb-active-bg', bg);
+                    container.style.setProperty('--sb-active-fg', fg);
+                    
+                    // Update active button in the UI if it was auto-switched
+                    const activeBtn = container.querySelector(`.sb-segmented__btn[data-val="${style}"]`);
+                    if (activeBtn && !activeBtn.classList.contains('is-active')) {
+                        container.querySelectorAll('.sb-segmented__btn').forEach(b => b.classList.remove('is-active'));
+                        activeBtn.classList.add('is-active');
                     }
                 }
             });
 
-            // Neutral status
             root.style.setProperty('--status-neutral-bg', dark ? neutrals['300'] : neutrals['200']);
             root.style.setProperty('--status-neutral-fg', neutrals['700']);
 
-            // CTA adapts to accent status style
-            const ctaAccent = generateAccentVariants(cfg.accent, dark);
-            if (cfg.statusStyle.accent === 'solid') {
-                root.style.setProperty('--cta-bg', ctaAccent['500']);
-                root.style.setProperty('--cta-fg', getContrastColor(cfg.accent, dark));
-                root.style.setProperty('--cta-bg-live', ctaAccent['500']);
-                root.style.setProperty('--cta-fg-live', getContrastColor(cfg.accent, dark));
+            // 12. CTA synchronization
+            if (effectiveStatusStyle.accent === 'solid') {
+                const bg = accent['500'];
+                const fg = getBestCompliantFG(bg, '#FFFFFF', neutrals);
+                root.style.setProperty('--cta-bg', bg);
+                root.style.setProperty('--cta-fg', fg);
+                root.style.setProperty('--cta-bg-live', bg);
+                root.style.setProperty('--cta-fg-live', fg);
             } else {
-                root.style.setProperty('--cta-bg', ctaAccent['100']);
-                root.style.setProperty('--cta-fg', dark ? ctaAccent['700'] : (relativeLuminance(ctaAccent['500']) > 0.8 ? getContrastColor(ctaAccent['100'], false) : ctaAccent['500']));
-                root.style.setProperty('--cta-bg-live', ctaAccent['100']);
-                root.style.setProperty('--cta-fg-live', dark ? ctaAccent['700'] : (relativeLuminance(ctaAccent['500']) > 0.8 ? getContrastColor(ctaAccent['100'], false) : ctaAccent['500']));
+                const bg = accent['100'];
+                const fg = getBestCompliantFG(bg, accent['700'], neutrals);
+                root.style.setProperty('--cta-bg', bg);
+                root.style.setProperty('--cta-fg', fg);
+                root.style.setProperty('--cta-bg-live', bg);
+                root.style.setProperty('--cta-fg-live', fg);
             }
-            root.style.setProperty('--cta-hover-bg', ctaAccent['500']);
-            root.style.setProperty('--cta-hover-fg', getContrastColor(cfg.accent, dark));
-            root.style.setProperty('--cta-active-bg', ctaAccent['700']);
-            root.style.setProperty('--cta-active-fg', getContrastColor(ctaAccent['700'], dark));
+            root.style.setProperty('--cta-hover-bg', accent['500']);
+            root.style.setProperty('--cta-hover-fg', getBestCompliantFG(accent['500'], '#FFFFFF', neutrals));
+            root.style.setProperty('--cta-active-bg', accent['700']);
+            root.style.setProperty('--cta-active-fg', getBestCompliantFG(accent['700'], '#FFFFFF', neutrals));
             root.style.setProperty('--cta-disabled-bg', neutrals['200']);
             root.style.setProperty('--cta-disabled-fg', neutrals['400']);
 
-            // 12. Overlay — adapt to dark mode
+            // 13. Overlay & UI
             root.style.setProperty('--color-overlay', dark ? 'rgba(0,0,0,0.6)' : 'rgba(28,26,27,0.45)');
-
-            // Update dark mode indicator
             const indicator = document.getElementById('darkModeIndicator');
             if (indicator) {
-                if (dark) {
-                    indicator.className = 'sb-dark-indicator sb-dark-indicator--dark';
-                    indicator.textContent = '🌙 Dark theme detected';
-                } else {
-                    indicator.className = 'sb-dark-indicator sb-dark-indicator--light';
-                    indicator.textContent = '☀️ Light theme detected';
-                }
+                indicator.className = `sb-dark-indicator sb-dark-indicator--${dark ? 'dark' : 'light'}`;
+                indicator.textContent = dark ? '🌙 Dark theme detected' : '☀️ Light theme detected';
             }
-
-            // Update revert button visibility
             updateRevertStates();
+        }
+
+        /** Update the WCAG contrast checker section in the kitchen sink */
+        function updateContrastChecker(cfg, surface, raised, text, neutrals, dark) {
+            const sunken = dark ? neutrals['50'] : neutrals['300'];
+            const backgrounds = {
+                page: cfg.pageBg,
+                surface: surface,
+                raised: raised,
+                sunken: sunken
+            };
+
+            const variants = generateTextVariants(text, cfg.pageBg, surface, raised);
+            const muted = variants.muted;
+
+            Object.entries(backgrounds).forEach(([key, bg]) => {
+                const badge = document.getElementById(`contrast-badge-${key}`);
+                if (!badge) return;
+
+                const ratio = getContrastRatio(text, bg);
+                const mutedRatio = getContrastRatio(muted, bg);
+                const pass = ratio >= 4.5 && mutedRatio >= 4.5;
+
+                badge.className = `badge ${pass ? 'badge--success' : 'badge--error'}`;
+                badge.innerHTML = `${pass ? 'AA Pass' : 'AA Fail'} ${ratio.toFixed(2)}:1`;
+            });
         }
 
 
@@ -4190,14 +4367,8 @@
             const eSubtle = textVariants.subtle;
             const eDisabledFg = textVariants.disabled;
 
-            // Contrast helper for export
-            const contrastHex = (hex) => {
-                if (!hex) return n['50'];
-                if (dark) {
-                    return relativeLuminance(hex) > 0.5 ? n['50'] : n['900'];
-                }
-                return relativeLuminance(hex) > 0.5 ? n['900'] : n['50'];
-            };
+            // Contrast helper for export (matches live getBestCompliantFG logic)
+            const getExportFG = (bg, pref) => getBestCompliantFG(bg, pref, n);
 
             // Generate status blocks
             // Generate status blocks & semantic shorthand
@@ -4209,6 +4380,8 @@
                 red: { cssVar: 'red', semantic: 'error' },
             };
 
+            const eStatusStyle = derived.statusStyle || cfg.statusStyle;
+
             let statusTokens = '';
             for (const [key, { cssVar, semantic }] of Object.entries(statusData)) {
                 if (semantic !== 'accent') {
@@ -4218,12 +4391,12 @@
                 } else {
                     statusTokens += `  /* Accent (brand status) */\n`;
                 }
-                const style = cfg.statusStyle[key];
+                const style = eStatusStyle[key];
                 const bg = style === 'solid' ? `var(--${cssVar}-500)` : `var(--${cssVar}-100)`;
                 const fg = style === 'solid' ? `var(--${cssVar}-500-fg)` : `var(--${cssVar}-100-fg)`;
                 statusTokens += `  --status-${semantic}-bg: ${bg.padEnd(21, ' ')};\n  --status-${semantic}-fg: ${fg.padEnd(21, ' ')};\n\n`;
             }
-            statusTokens += `  /* Neutral status */\n  --status-neutral-bg:  var(--gray-200);\n  --status-neutral-fg:  var(--gray-700);`;
+            statusTokens += `  /* Neutral status */\n  --status-neutral-bg:  var(--gray-${dark ? '300' : '200'});\n  --status-neutral-fg:  var(--gray-700);`;
 
             const css = `/* ============================================================
    tokens.css — Generated by Agentic Blueprint v3.1
@@ -4253,16 +4426,16 @@
      ========================================================== */
 
   /* Neutrals */
-  --gray-50:  ${n['50']};   --gray-50-fg:  ${contrastHex(n['50'])};
-  --gray-100: ${n['100']};  --gray-100-fg: ${contrastHex(n['100'])};
-  --gray-200: ${n['200']};  --gray-200-fg: ${contrastHex(n['200'])};
-  --gray-300: ${n['300']};  --gray-300-fg: ${contrastHex(n['300'])};
-  --gray-400: ${n['400']};  --gray-400-fg: ${contrastHex(n['400'])};
-  --gray-500: ${n['500']};  --gray-500-fg: ${contrastHex(n['500'])};
-  --gray-600: ${n['600']};  --gray-600-fg: ${contrastHex(n['600'])};
-  --gray-700: ${n['700']};  --gray-700-fg: ${contrastHex(n['700'])};
-  --gray-800: ${n['800']};  --gray-800-fg: ${contrastHex(n['800'])};
-  --gray-900: ${n['900']};  --gray-900-fg: ${contrastHex(n['900'])};
+  --gray-50:  ${n['50']};   --gray-50-fg:  ${getExportFG(n['50'], null)};
+  --gray-100: ${n['100']};  --gray-100-fg: ${getExportFG(n['100'], null)};
+  --gray-200: ${n['200']};  --gray-200-fg: ${getExportFG(n['200'], null)};
+  --gray-300: ${n['300']};  --gray-300-fg: ${getExportFG(n['300'], null)};
+  --gray-400: ${n['400']};  --gray-400-fg: ${getExportFG(n['400'], null)};
+  --gray-500: ${n['500']};  --gray-500-fg: ${getExportFG(n['500'], null)};
+  --gray-600: ${n['600']};  --gray-600-fg: ${getExportFG(n['600'], null)};
+  --gray-700: ${n['700']};  --gray-700-fg: ${getExportFG(n['700'], null)};
+  --gray-800: ${n['800']};  --gray-800-fg: ${getExportFG(n['800'], null)};
+  --gray-900: ${n['900']};  --gray-900-fg: ${getExportFG(n['900'], null)};
 
   /* Accent */
   --accent-500: ${a['500']};   --accent-100: ${a['100']};   --accent-700: ${a['700']};
@@ -4280,25 +4453,25 @@
   --red-500:    ${red['500']};   --red-100:    ${red['100']};   --red-700:    ${red['700']};
 
   /* Contrast-aware foregrounds */
-  --accent-100-fg: ${dark ? a['700'] : (relativeLuminance(a['500']) > 0.8 ? contrastHex(a['100']) : a['500'])};
-  --accent-500-fg: ${contrastHex(a['500'])};
-  --accent-700-fg: ${contrastHex(a['700'])};
+  --accent-100-fg: ${getExportFG(a['100'], a['700'])};
+  --accent-500-fg: ${getExportFG(a['500'], '#FFFFFF')};
+  --accent-700-fg: ${getExportFG(a['700'], '#FFFFFF')};
 
-  --blue-100-fg:   ${dark ? blu['700'] : (relativeLuminance(blu['500']) > 0.8 ? contrastHex(blu['100']) : blu['500'])};
-  --blue-500-fg:   ${contrastHex(blu['500'])};
-  --blue-700-fg:   ${contrastHex(blu['700'])};
+  --blue-100-fg:   ${getExportFG(blu['100'], blu['700'])};
+  --blue-500-fg:   ${getExportFG(blu['500'], '#FFFFFF')};
+  --blue-700-fg:   ${getExportFG(blu['700'], '#FFFFFF')};
 
-  --green-100-fg:  ${dark ? grn['700'] : (relativeLuminance(grn['500']) > 0.8 ? contrastHex(grn['100']) : grn['500'])};
-  --green-500-fg:  ${contrastHex(grn['500'])};
-  --green-700-fg:  ${contrastHex(grn['700'])};
+  --green-100-fg:  ${getExportFG(grn['100'], grn['700'])};
+  --green-500-fg:  ${getExportFG(grn['500'], '#FFFFFF')};
+  --green-700-fg:  ${getExportFG(grn['700'], '#FFFFFF')};
 
-  --yellow-100-fg: ${dark ? yel['700'] : (relativeLuminance(yel['500']) > 0.8 ? contrastHex(yel['100']) : yel['500'])};
-  --yellow-500-fg: ${contrastHex(yel['500'])};
-  --yellow-700-fg: ${contrastHex(yel['700'])};
+  --yellow-100-fg: ${getExportFG(yel['100'], yel['700'])};
+  --yellow-500-fg: ${getExportFG(yel['500'], '#FFFFFF')};
+  --yellow-700-fg: ${getExportFG(yel['700'], '#FFFFFF')};
 
-  --red-100-fg:    ${dark ? red['700'] : (relativeLuminance(red['500']) > 0.8 ? contrastHex(red['100']) : red['500'])};
-  --red-500-fg:    ${contrastHex(red['500'])};
-  --red-700-fg:    ${contrastHex(red['700'])};
+  --red-100-fg:    ${getExportFG(red['100'], red['700'])};
+  --red-500-fg:    ${getExportFG(red['500'], '#FFFFFF')};
+  --red-700-fg:    ${getExportFG(red['700'], '#FFFFFF')};
 
   /* ==========================================================
      2. SEMANTIC COLORS
