@@ -2280,7 +2280,7 @@
                     <span class="badge badge--accent">CC BY-NC 4.0</span>
                     <span class="badge badge--success">Easy to use</span>
                     <span class="badge badge--info">Sloth friendly</span>
-                    <span class="badge badge--warning">WCAG Level AA compliant</span>
+                    <span class="badge badge--warning" id="heroWcagBadge">WCAG Level AA compliant</span>
                     <span class="badge badge--error">Made with 🩶</span>
                 </div>
 
@@ -3315,6 +3315,17 @@
                 <button class="sb-segmented__btn" onclick="setStatusStyle('accent', 'solid')"
                     data-val="solid">Solid</button>
             </div>
+
+            <div style="margin-top: var(--space-4);">
+                <label class="toggle">
+                    <input type="checkbox" id="ctrl-disableWcag">
+                    <span class="toggle__track"></span>
+                    <span class="toggle__label">Partially Disable WCAG Engine</span>
+                </label>
+                <p style="font-size: 10px; color: var(--color-text-subtle); margin-top: var(--space-2); line-height: 1.4;">
+                    Disabling this removes accessibility constraints for accent and status colors, allowing for more "trendy" 500 and 100 variants FG/BG. Trade-off between visual aesthetics and accessibility.
+                </p>
+            </div>
             <!-- Dark mode auto-detection indicator -->
             <div class="sb-dark-indicator sb-dark-indicator--light" id="darkModeIndicator">
                 ☀️ Light theme detected
@@ -3541,6 +3552,7 @@
             fontSans: 'Inter',
             fontMono: 'JetBrains Mono',
             fontSize: 16,
+            disableWcag: false,
             statusStyle: {
                 accent: 'soft',
                 red: 'soft',
@@ -3953,8 +3965,8 @@
             root.style.setProperty('--accent-500', accent['500']);
             root.style.setProperty('--accent-700', accent['700']);
 
-            const acc100fg = getBestCompliantFG(accent['100'], accent['700'], neutrals);
-            const acc500fg = getBestCompliantFG(accent['500'], '#FFFFFF', neutrals);
+            const acc100fg = cfg.disableWcag ? accent['500'] : getBestCompliantFG(accent['100'], accent['700'], neutrals);
+            const acc500fg = cfg.disableWcag ? (relativeLuminance(accent['500']) < 0.45 ? '#FFFFFF' : '#000000') : getBestCompliantFG(accent['500'], '#FFFFFF', neutrals);
             const acc700fg = getBestCompliantFG(accent['700'], '#FFFFFF', neutrals);
             
             root.style.setProperty('--accent-100-fg', acc100fg);
@@ -3978,8 +3990,8 @@
                 root.style.setProperty(`--${name}-500`, v['500']);
                 root.style.setProperty(`--${name}-700`, v['700']);
 
-                const f100 = getBestCompliantFG(v['100'], v['700'], neutrals);
-                const f500 = getBestCompliantFG(v['500'], '#FFFFFF', neutrals);
+                const f100 = cfg.disableWcag ? v['500'] : getBestCompliantFG(v['100'], v['700'], neutrals);
+                const f500 = cfg.disableWcag ? (relativeLuminance(v['500']) < 0.45 ? '#FFFFFF' : '#000000') : getBestCompliantFG(v['500'], '#FFFFFF', neutrals);
                 const f700 = getBestCompliantFG(v['700'], '#FFFFFF', neutrals);
 
                 root.style.setProperty(`--${name}-100-fg`, f100);
@@ -4083,10 +4095,21 @@
                 const variants = generateAccentVariants(baseColor, dark);
                 const semanticName = semanticMap[name];
 
-                const bg = style === 'solid' ? variants['500'] : variants['100'];
-                const fg = style === 'solid' 
-                    ? getBestCompliantFG(variants['500'], '#FFFFFF', neutrals)
-                    : getBestCompliantFG(variants['100'], variants['700'], neutrals);
+                let bg, fg;
+                if (cfg.disableWcag) {
+                    if (style === 'solid') {
+                        bg = variants['500'];
+                        fg = relativeLuminance(bg) < 0.45 ? '#FFFFFF' : '#000000';
+                    } else {
+                        bg = variants['100'];
+                        fg = variants['500'];
+                    }
+                } else {
+                    bg = style === 'solid' ? variants['500'] : variants['100'];
+                    fg = style === 'solid' 
+                        ? getBestCompliantFG(variants['500'], '#FFFFFF', neutrals)
+                        : getBestCompliantFG(variants['100'], variants['700'], neutrals);
+                }
 
                 root.style.setProperty(`--status-${semanticName}-bg`, bg);
                 root.style.setProperty(`--status-${semanticName}-fg`, fg);
@@ -4114,25 +4137,32 @@
             root.style.setProperty('--status-neutral-fg', neutrals['700']);
 
             // 12. CTA synchronization
-            if (effectiveStatusStyle.accent === 'solid') {
-                const bg = accent['500'];
-                const fg = getBestCompliantFG(bg, '#FFFFFF', neutrals);
-                root.style.setProperty('--cta-bg', bg);
-                root.style.setProperty('--cta-fg', fg);
-                root.style.setProperty('--cta-bg-live', bg);
-                root.style.setProperty('--cta-fg-live', fg);
+            let ctaBg, ctaFg;
+            if (cfg.disableWcag) {
+                if (effectiveStatusStyle.accent === 'solid') {
+                    ctaBg = accent['500'];
+                    ctaFg = relativeLuminance(ctaBg) < 0.45 ? '#FFFFFF' : '#000000';
+                } else {
+                    ctaBg = accent['100'];
+                    ctaFg = accent['500'];
+                }
             } else {
-                const bg = accent['100'];
-                const fg = getBestCompliantFG(bg, accent['700'], neutrals);
-                root.style.setProperty('--cta-bg', bg);
-                root.style.setProperty('--cta-fg', fg);
-                root.style.setProperty('--cta-bg-live', bg);
-                root.style.setProperty('--cta-fg-live', fg);
+                if (effectiveStatusStyle.accent === 'solid') {
+                    ctaBg = accent['500'];
+                    ctaFg = getBestCompliantFG(ctaBg, '#FFFFFF', neutrals);
+                } else {
+                    ctaBg = accent['100'];
+                    ctaFg = getBestCompliantFG(ctaBg, accent['700'], neutrals);
+                }
             }
+            root.style.setProperty('--cta-bg', ctaBg);
+            root.style.setProperty('--cta-fg', ctaFg);
+            root.style.setProperty('--cta-bg-live', ctaBg);
+            root.style.setProperty('--cta-fg-live', ctaFg);
             root.style.setProperty('--cta-hover-bg', accent['500']);
-            root.style.setProperty('--cta-hover-fg', getBestCompliantFG(accent['500'], '#FFFFFF', neutrals));
+            root.style.setProperty('--cta-hover-fg', acc500fg);
             root.style.setProperty('--cta-active-bg', accent['700']);
-            root.style.setProperty('--cta-active-fg', getBestCompliantFG(accent['700'], '#FFFFFF', neutrals));
+            root.style.setProperty('--cta-active-fg', acc700fg);
             root.style.setProperty('--cta-disabled-bg', neutrals['200']);
             root.style.setProperty('--cta-disabled-fg', neutrals['400']);
 
@@ -4143,6 +4173,19 @@
                 indicator.className = `sb-dark-indicator sb-dark-indicator--${dark ? 'dark' : 'light'}`;
                 indicator.textContent = dark ? '🌙 Dark theme detected' : '☀️ Light theme detected';
             }
+
+            // 14. Update Hero WCAG Badge
+            const heroBadge = document.getElementById('heroWcagBadge');
+            if (heroBadge) {
+                if (cfg.disableWcag) {
+                    heroBadge.textContent = 'WCAG toggle OFF';
+                    heroBadge.className = 'badge badge--warning';
+                } else {
+                    heroBadge.textContent = 'WCAG Level AA compliant';
+                    heroBadge.className = 'badge badge--warning';
+                }
+            }
+
             updateRevertStates();
         }
 
@@ -4271,6 +4314,12 @@
         const toggleContrast = document.getElementById('toggleContrastRatios');
         toggleContrast.addEventListener('change', () => {
             document.body.classList.toggle('show-ratios', toggleContrast.checked);
+        });
+
+        const toggleDisableWcag = document.getElementById('ctrl-disableWcag');
+        toggleDisableWcag.addEventListener('change', () => {
+            currentConfig.disableWcag = toggleDisableWcag.checked;
+            applyConfig(currentConfig);
         });
 
 
@@ -4414,6 +4463,7 @@
             document.getElementById('ctrl-fontMono').value = cfg.fontMono;
             document.getElementById('ctrl-fontSize').value = cfg.fontSize;
             document.getElementById('val-fontSize').textContent = cfg.fontSize + 'px';
+            document.getElementById('ctrl-disableWcag').checked = cfg.disableWcag || false;
 
             // Sync segmented toggles
             if (cfg.statusStyle) {
@@ -4512,6 +4562,7 @@
 
             const css = `/* ============================================================
    tokens.css — Generated by Agentic Blueprint v3.1
+   WCAG Engine: ${cfg.disableWcag ? 'DISABLED (Manual Override for Accents & Status)' : 'ENABLED (AA Compliant)'}
    ============================================================
    Production-ready design token system.
    
@@ -4565,24 +4616,24 @@
   --red-500:    ${red['500']};   --red-100:    ${red['100']};   --red-700:    ${red['700']};
 
   /* Contrast-aware foregrounds */
-  --accent-100-fg: ${getExportFG(a['100'], a['700'])};
-  --accent-500-fg: ${getExportFG(a['500'], '#FFFFFF')};
+  --accent-100-fg: ${cfg.disableWcag ? a['500'] : getExportFG(a['100'], a['700'])};
+  --accent-500-fg: ${cfg.disableWcag ? (relativeLuminance(a['500']) < 0.45 ? '#FFFFFF' : '#000000') : getExportFG(a['500'], '#FFFFFF')};
   --accent-700-fg: ${getExportFG(a['700'], '#FFFFFF')};
 
-  --blue-100-fg:   ${getExportFG(blu['100'], blu['700'])};
-  --blue-500-fg:   ${getExportFG(blu['500'], '#FFFFFF')};
+  --blue-100-fg:   ${cfg.disableWcag ? blu['500'] : getExportFG(blu['100'], blu['700'])};
+  --blue-500-fg:   ${cfg.disableWcag ? (relativeLuminance(blu['500']) < 0.45 ? '#FFFFFF' : '#000000') : getExportFG(blu['500'], '#FFFFFF')};
   --blue-700-fg:   ${getExportFG(blu['700'], '#FFFFFF')};
 
-  --green-100-fg:  ${getExportFG(grn['100'], grn['700'])};
-  --green-500-fg:  ${getExportFG(grn['500'], '#FFFFFF')};
+  --green-100-fg:  ${cfg.disableWcag ? grn['500'] : getExportFG(grn['100'], grn['700'])};
+  --green-500-fg:  ${cfg.disableWcag ? (relativeLuminance(grn['500']) < 0.45 ? '#FFFFFF' : '#000000') : getExportFG(grn['500'], '#FFFFFF')};
   --green-700-fg:  ${getExportFG(grn['700'], '#FFFFFF')};
 
-  --yellow-100-fg: ${getExportFG(yel['100'], yel['700'])};
-  --yellow-500-fg: ${getExportFG(yel['500'], '#FFFFFF')};
+  --yellow-100-fg: ${cfg.disableWcag ? yel['500'] : getExportFG(yel['100'], yel['700'])};
+  --yellow-500-fg: ${cfg.disableWcag ? (relativeLuminance(yel['500']) < 0.45 ? '#FFFFFF' : '#000000') : getExportFG(yel['500'], '#FFFFFF')};
   --yellow-700-fg: ${getExportFG(yel['700'], '#FFFFFF')};
 
-  --red-100-fg:    ${getExportFG(red['100'], red['700'])};
-  --red-500-fg:    ${getExportFG(red['500'], '#FFFFFF')};
+  --red-100-fg:    ${cfg.disableWcag ? red['500'] : getExportFG(red['100'], red['700'])};
+  --red-500-fg:    ${cfg.disableWcag ? (relativeLuminance(red['500']) < 0.45 ? '#FFFFFF' : '#000000') : getExportFG(red['500'], '#FFFFFF')};
   --red-700-fg:    ${getExportFG(red['700'], '#FFFFFF')};
 
   /* ==========================================================
