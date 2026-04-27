@@ -675,7 +675,7 @@
             align-items: flex-end;
             justify-content: space-between;
             padding: var(--space-2) var(--space-3);
-            font-size: var(--text-md);
+            font-size: var(--text-base);
             font-family: var(--font-mono);
             font-weight: var(--weight-bold);
             transition: var(--transition-all);
@@ -2243,6 +2243,7 @@
             <a href="#section-lists" class="quick-nav__item">List Items</a>
             <a href="#section-modal" class="quick-nav__item">Modal / Dialog</a>
             <a href="#section-code" class="quick-nav__item">Code</a>
+            <a href="#section-links" class="quick-nav__item">Links</a>
             <a href="#section-tooltips" class="quick-nav__item">Tooltips</a>
             <a href="#section-skeleton" class="quick-nav__item">Skeletons</a>
             <a href="#section-elevation" class="quick-nav__item">Elevation</a>
@@ -2916,6 +2917,35 @@
                     <span class="kw">box-shadow</span>: <span class="fn">var</span>(<span
                         class="str">--elevation-2</span>);
                     }
+                </div>
+            </section>
+
+            <!-- LINKS -->
+            <section class="ks-section" id="section-links">
+                <h2 class="ks-section__title">Links</h2>
+                <div class="card card--raised" style="padding: var(--space-8);">
+                    <p style="font-size: var(--text-sm); margin-bottom: var(--space-4);">
+                        Link tokens adapt automatically from the accent color.
+                        <a href="#" style="color: var(--color-link); font-weight: var(--weight-medium); transition: var(--transition-colors); border-bottom: 1px solid currentColor; padding-bottom: 1px;"
+                           onmouseover="this.style.color='var(--color-link-hover)'" onmouseout="this.style.color='var(--color-link)'">This is a styled link</a> using
+                        <code>--color-link</code> and <code>--color-link-hover</code>.
+                    </p>
+                    <div style="display: flex; gap: var(--space-6); flex-wrap: wrap; margin-top: var(--space-4);">
+                        <div style="display: flex; align-items: center; gap: var(--space-3);">
+                            <div style="width: 28px; height: 28px; border-radius: var(--radius-sm); background: var(--color-link); border: var(--border-thin);"></div>
+                            <div style="display: flex; flex-direction: column;">
+                                <span style="font-size: var(--text-xs); font-weight: var(--weight-semi); text-transform: uppercase; letter-spacing: var(--tracking-caps); color: var(--color-text-muted);">Default</span>
+                                <span style="font-size: var(--text-sm); font-family: var(--font-mono); color: var(--color-link);">--color-link</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: var(--space-3);">
+                            <div style="width: 28px; height: 28px; border-radius: var(--radius-sm); background: var(--color-link-hover); border: var(--border-thin);"></div>
+                            <div style="display: flex; flex-direction: column;">
+                                <span style="font-size: var(--text-xs); font-weight: var(--weight-semi); text-transform: uppercase; letter-spacing: var(--tracking-caps); color: var(--color-text-muted);">Hover</span>
+                                <span style="font-size: var(--text-sm); font-family: var(--font-mono); color: var(--color-link-hover);">--color-link-hover</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -4085,6 +4115,14 @@
             root.style.setProperty('--focus-ring-inset', `inset 0 0 0 2px ${accent['500']}`);
             root.style.setProperty('--focus-ring-error', `0 0 0 2px ${cfg.red}`);
 
+            // 11b. Link colors
+            root.style.setProperty('--color-link', accent['700']);
+            root.style.setProperty('--color-link-hover', accent['500']);
+
+            // 11c. Accent semantic shortcut
+            root.style.setProperty('--color-accent', accent['500']);
+            root.style.setProperty('--color-accent-soft', accent['100']);
+
             // 12. Status Semantic Variants
             const statusMap = { accent: cfg.accent, red: cfg.red, green: cfg.green, blue: cfg.blue, yellow: cfg.yellow };
             const semanticMap = { accent: 'accent', red: 'error', green: 'success', blue: 'info', yellow: 'warning' };
@@ -4524,10 +4562,18 @@
             }
 
             // Derive text hierarchy using contrast-aware utility
-            const textVariants = generateTextVariants(eTextColor, cfg.pageBg, eSurface);
+            const textVariants = generateTextVariants(eTextColor, cfg.pageBg, eSurface, eSurfaceRaised);
             const eMuted = textVariants.muted;
             const eSubtle = textVariants.subtle;
             const eDisabledFg = textVariants.disabled;
+
+            // Derived raised-alpha for glassmorphism
+            const { r: raR, g: raG, b: raB } = hexToRgb(eSurfaceRaised);
+            const raisedAlpha = `rgba(${raR}, ${raG}, ${raB}, 0.88)`;
+
+            // Link colors
+            const linkColor = a['700'];
+            const linkHover = a['500'];
 
             // Contrast helper for export (matches live getBestCompliantFG logic)
             const getExportFG = (bg, pref) => getBestCompliantFG(bg, pref, n);
@@ -4552,6 +4598,8 @@
                     statusTokens += `  --color-${semantic}-soft:    var(--${cssVar}-100);\n`;
                 } else {
                     statusTokens += `  /* Accent (brand status) */\n`;
+                    statusTokens += `  --color-accent:         var(--accent-500);\n`;
+                    statusTokens += `  --color-accent-soft:    var(--accent-100);\n`;
                 }
                 const style = eStatusStyle[key];
                 const bg = style === 'solid' ? `var(--${cssVar}-500)` : `var(--${cssVar}-100)`;
@@ -4641,10 +4689,11 @@
      ========================================================== */
 
   /* Surfaces */
-  --color-page-bg:        ${cfg.pageBg};
-  --color-surface:        ${eSurface};
-  --color-surface-raised: ${eSurfaceRaised};
-  --color-surface-sunken: var(--gray-${dark ? '50' : '300'});
+  --color-page-bg:              ${cfg.pageBg};
+  --color-surface:              ${eSurface};
+  --color-surface-raised:       ${eSurfaceRaised};
+  --color-surface-raised-alpha: ${raisedAlpha};
+  --color-surface-sunken:       var(--gray-${dark ? '50' : '300'});
   --color-overlay:        ${dark ? 'rgba(0,0,0,0.6)' : 'rgba(28,26,27,0.45)'};
 
   /* Text hierarchy: text > muted > subtle > disabled */
@@ -4653,6 +4702,10 @@
   --color-text-subtle:   ${eSubtle};
   --color-text-disabled: ${eDisabledFg};
   --color-text-invert:   var(--gray-50);
+
+  /* Links */
+  --color-link:          ${linkColor};
+  --color-link-hover:    ${linkHover};
 
   /* Borders: light < default < strong */
   --color-border:        ${eBorderColor};
@@ -4686,7 +4739,7 @@
 
   /* Destructive — default / hover / active / disabled */
   --destructive-bg:           var(--red-100);
-  --destructive-fg:           var(--red-500);
+  --destructive-fg:           var(--red-100-fg);
   --destructive-hover-bg:     var(--red-500);
   --destructive-hover-fg:     var(--red-500-fg);
   --destructive-active-bg:    var(--red-700);
@@ -4731,6 +4784,7 @@ ${statusTokens}
 
   --text-xs:      0.75rem;
   --text-sm:      0.875rem;
+  --text-md:      1rem;
   --text-base:    1rem;
   --text-lg:      1.125rem;
   --text-xl:      1.25rem;
@@ -4771,6 +4825,8 @@ ${statusTokens}
   --space-12: 48px;
   --space-16: 64px;
   --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
 
   /* ==========================================================
      8. GEOMETRY
@@ -4783,9 +4839,9 @@ ${statusTokens}
   --radius-full: 999px;
 
   /* Border widths */
-  --border-width-thin:   ${cfg.borderWidth}px;
-  --border-width-medium: ${cfg.borderWidth * 2}px;
-  --border-width-thick:  ${cfg.borderWidth * 3}px;
+  --border-width-thin:   ${Math.max(cfg.borderWidth, 0)}px;
+  --border-width-medium: ${Math.max(Math.round(cfg.borderWidth * 2), 0)}px;
+  --border-width-thick:  ${Math.max(Math.round(cfg.borderWidth * 3), 0)}px;
 
   /* Composed borders */
   --border-thin:   ${cfg.borderWidth ? cfg.borderWidth + 'px solid var(--color-border)' : 'none'};
