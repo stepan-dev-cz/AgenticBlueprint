@@ -9,11 +9,7 @@
         content="Agentic Blueprint — Free Design Token Studio. Build, preview, and export your design system.">
     <title>Agentic Blueprint — Design Token Studio</title>
     <link rel="stylesheet" href="tokens.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="fonts/fonts.css">
     <style>
         /* ================================================================
        APP LAYOUT
@@ -3541,6 +3537,16 @@
                 </div>
                 <input type="range" class="sb-range" id="ctrl-fontSize" min="12" max="22" value="16" step="1">
             </div>
+            <div style="margin-top: var(--space-4);">
+                <label class="toggle">
+                    <input type="checkbox" id="ctrl-allowGoogleFonts">
+                    <span class="toggle__track"></span>
+                    <span class="toggle__label">Allow Google Fonts CDN</span>
+                </label>
+                <p style="font-size: 10px; color: var(--color-text-subtle); margin-top: var(--space-2); line-height: 1.4;">
+                    Default fonts (Inter, JetBrains Mono) are hosted locally. Enabling CDN permits downloading external fonts dynamically (transmits IP address to Google LLC).
+                </p>
+            </div>
         </div>
 
         <!-- EXPORT -->
@@ -3583,6 +3589,7 @@
             fontMono: 'JetBrains Mono',
             fontSize: 16,
             disableWcag: false,
+            allowGoogleFonts: false,
             statusStyle: {
                 accent: 'soft',
                 red: 'soft',
@@ -4329,8 +4336,15 @@
             el.addEventListener('input', () => {
                 clearTimeout(fontTimer);
                 fontTimer = setTimeout(() => {
-                    currentConfig[key] = el.value.trim() || DEFAULT_CONFIG[key];
-                    loadGoogleFont(currentConfig[key]);
+                    const candidateFont = el.value.trim() || DEFAULT_CONFIG[key];
+                    if (candidateFont === currentConfig[key]) return;
+
+                    const allowed = loadGoogleFont(candidateFont);
+                    if (allowed === false) {
+                        el.value = currentConfig[key];
+                        return;
+                    }
+                    currentConfig[key] = candidateFont;
                     applyConfig(currentConfig);
                 }, 600);
             });
@@ -4360,6 +4374,17 @@
             applyConfig(currentConfig);
         });
 
+        const toggleGoogleFonts = document.getElementById('ctrl-allowGoogleFonts');
+        if (toggleGoogleFonts) {
+            toggleGoogleFonts.addEventListener('change', () => {
+                currentConfig.allowGoogleFonts = toggleGoogleFonts.checked;
+                if (toggleGoogleFonts.checked) {
+                    if (currentConfig.fontSans) loadGoogleFont(currentConfig.fontSans);
+                    if (currentConfig.fontMono) loadGoogleFont(currentConfig.fontMono);
+                }
+            });
+        }
+
 
         /* ============================================================
            GOOGLE FONTS LOADER
@@ -4367,14 +4392,29 @@
         const loadedFonts = new Set(['Inter', 'JetBrains Mono']);
 
         function loadGoogleFont(fontName) {
-            if (!fontName || loadedFonts.has(fontName)) return;
-            loadedFonts.add(fontName);
+            if (!fontName) return true;
+            if (loadedFonts.has(fontName)) return true;
 
+            const toggle = document.getElementById('ctrl-allowGoogleFonts');
+            if (!toggle?.checked) {
+                const userApproved = confirm(
+                    `To preview the custom font "${fontName}", it needs to be loaded from Google Fonts CDN (Google LLC).\n\nUnder GDPR, this requires transferring your IP address to Google servers in the USA.\n\nDo you want to allow loading fonts from Google Fonts?`
+                );
+                if (userApproved) {
+                    if (toggle) toggle.checked = true;
+                    currentConfig.allowGoogleFonts = true;
+                } else {
+                    return false;
+                }
+            }
+
+            loadedFonts.add(fontName);
             const link = document.createElement('link');
             link.rel = 'stylesheet';
             link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, '+')
                 }:wght@400;500;600;700;800&display=swap`;
             document.head.appendChild(link);
+            return true;
         }
 
 
@@ -4461,10 +4501,18 @@
                     referenceConfig = JSON.parse(JSON.stringify(currentConfig));
                     syncUIFromConfig(currentConfig);
                     if (currentConfig.fontSans !== DEFAULT_CONFIG.fontSans) {
-                        loadGoogleFont(currentConfig.fontSans);
+                        const ok = loadGoogleFont(currentConfig.fontSans);
+                        if (!ok) {
+                            currentConfig.fontSans = DEFAULT_CONFIG.fontSans;
+                            document.getElementById('ctrl-fontSans').value = DEFAULT_CONFIG.fontSans;
+                        }
                     }
                     if (currentConfig.fontMono !== DEFAULT_CONFIG.fontMono) {
-                        loadGoogleFont(currentConfig.fontMono);
+                        const ok = loadGoogleFont(currentConfig.fontMono);
+                        if (!ok) {
+                            currentConfig.fontMono = DEFAULT_CONFIG.fontMono;
+                            document.getElementById('ctrl-fontMono').value = DEFAULT_CONFIG.fontMono;
+                        }
                     }
                     applyConfig(currentConfig);
                 } catch (err) {
@@ -4502,6 +4550,8 @@
             document.getElementById('ctrl-fontSize').value = cfg.fontSize;
             document.getElementById('val-fontSize').textContent = cfg.fontSize + 'px';
             document.getElementById('ctrl-disableWcag').checked = cfg.disableWcag || false;
+            const toggleGF = document.getElementById('ctrl-allowGoogleFonts');
+            if (toggleGF) toggleGF.checked = cfg.allowGoogleFonts || false;
 
             // Sync segmented toggles
             if (cfg.statusStyle) {
